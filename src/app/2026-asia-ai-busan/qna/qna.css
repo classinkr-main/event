@@ -1,70 +1,413 @@
-/* QnA route — Apple-style cyan/dark tone borrowed from the deck.
-   Scoped via `.qna-page` wrapper. */
+/* QnA route — direct port of the static prototype design.
+ * All selectors are scoped under `.qna-page` so they don't leak to the rest of the site. */
 
 .qna-page {
-  --accent-from: #5fd0e3;
-  --accent-to: #a8e6f0;
+  --qna-bg: #000000;
+  --qna-bg-soft: #050811;
+  --qna-text: #f5f5f7;
+  --qna-text-soft: rgba(245, 245, 247, 0.85);
+  --qna-text-mute: rgba(245, 245, 247, 0.65);
+  --qna-hair: rgba(245, 245, 247, 0.12);
+  --qna-hair-strong: rgba(245, 245, 247, 0.22);
+  --qna-accent: #5fd0e3;
+  --qna-accent-bright: #a8e6f0;
+  --qna-danger: #ff6b6b;
+  --qna-font: "Pretendard", "Pretendard Variable", "Inter", -apple-system,
+    BlinkMacSystemFont, "SF Pro Display", "Noto Sans KR", "Apple SD Gothic Neo",
+    system-ui, sans-serif;
+  --qna-pad-x: clamp(20px, 5vw, 80px);
+  --qna-max-w: 880px;
+  --qna-radius: 10px;
+
+  position: relative;
+  z-index: 1;
+  color: var(--qna-text);
+  font-family: var(--qna-font);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11", "tnum";
 }
 
 /* Replace the site-wide blue/purple body glow with the deck's starry sky */
 body:has(.qna-page) {
-  background-image: url("/qna-bg.png");
-  background-size: cover;
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-color: #000;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 8%, rgba(95, 208, 227, 0.12) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(5, 8, 17, 0.75) 60%, rgba(5, 8, 17, 0.92) 100%),
+    url("/qna-bg.png");
+  background-size: auto, auto, cover;
+  background-position: top center, top center, center;
+  background-attachment: fixed, fixed, fixed;
+  background-repeat: no-repeat, no-repeat, no-repeat;
 }
 body:has(.qna-page)::before {
   background:
-    radial-gradient(70% 45% at 50% 0%, rgba(95, 208, 227, 0.13), transparent 70%),
-    radial-gradient(50% 35% at 80% 22%, rgba(168, 230, 240, 0.07), transparent 70%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(2, 6, 15, 0.78) 65%, rgba(2, 6, 15, 0.94) 100%);
+    radial-gradient(ellipse 80% 30% at 50% 0%, rgba(95, 208, 227, 0.06) 0%, transparent 70%),
+    linear-gradient(180deg, transparent 60%, rgba(0, 0, 0, 0.35) 100%);
 }
 
-/* Hero title — Apple-style white→silver gradient (no partial accent) */
-.qna-page .qna-title {
-  background: linear-gradient(178deg, #ffffff 0%, #e8e8ea 28%, #c4c4ca 70%, #8e8e95 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 2px 60px rgba(255, 255, 255, 0.04);
-  letter-spacing: -0.025em;
+/* ── Page wrapper ─────────────────────────────────────────── */
+.qna-page .qna-wrap {
+  max-width: var(--qna-max-w);
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 96px) var(--qna-pad-x) 96px;
 }
 
-/* Eyebrow — short accent line trailing the label */
+/* ── Header / hero ─────────────────────────────────────────── */
+.qna-page .qna-markmark {
+  color: var(--qna-text-mute);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  margin-bottom: 56px;
+}
+.qna-page .qna-markmark .qna-brand { color: var(--qna-text); font-weight: 600; }
+.qna-page .qna-markmark .qna-sep { margin: 0 10px; font-weight: 300; }
+
 .qna-page .qna-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  color: var(--accent-from);
+  font-size: 13px;
   letter-spacing: 0.5em;
+  color: var(--qna-accent);
   text-transform: uppercase;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 20px;
 }
 .qna-page .qna-eyebrow::after {
   content: "";
-  width: 60px;
+  flex: 0 0 60px;
   height: 1px;
-  background: linear-gradient(90deg, var(--accent-from), transparent);
+  background: linear-gradient(90deg, var(--qna-accent), transparent);
 }
 
-/* Speaker lineup label — same eyebrow treatment, centered */
+.qna-page h1.qna-title {
+  font-size: clamp(34px, 5.4vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  background: linear-gradient(178deg, #ffffff 0%, #e8e8ea 32%, #c0c0c6 78%, #8e8e96 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.qna-page .qna-subtitle {
+  color: var(--qna-text-soft);
+  font-size: clamp(17px, 1.8vw, 20px);
+  line-height: 1.55;
+  margin: 0 0 14px;
+  font-weight: 400;
+}
+.qna-page .qna-meta {
+  color: var(--qna-text-mute);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  margin-bottom: 64px;
+}
+
+/* ── Speaker lineup ────────────────────────────────────────── */
+.qna-page .qna-lineup {
+  margin: 0 0 72px;
+  padding: 32px 0;
+  border-top: 1px solid var(--qna-hair);
+  border-bottom: 1px solid var(--qna-hair);
+}
 .qna-page .qna-lineup-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  color: var(--accent-from);
-  letter-spacing: 0.5em;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: var(--qna-text-mute);
   text-transform: uppercase;
   font-weight: 500;
+  margin-bottom: 24px;
 }
-.qna-page .qna-lineup-label::before,
-.qna-page .qna-lineup-label::after {
-  content: "";
-  width: 40px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-from));
+.qna-page .qna-speakers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+  row-gap: 0;
 }
-.qna-page .qna-lineup-label::after {
-  background: linear-gradient(90deg, var(--accent-from), transparent);
+@media (max-width: 620px) {
+  .qna-page .qna-speakers { grid-template-columns: 1fr; }
 }
+.qna-page .qna-speaker {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 18px;
+  align-items: start;
+  padding: 24px 0;
+  border-top: 1px solid var(--qna-hair);
+}
+.qna-page .qna-speaker:nth-child(-n+2) { border-top: none; padding-top: 8px; }
+@media (max-width: 620px) {
+  .qna-page .qna-speaker:nth-child(-n+2) { border-top: 1px solid var(--qna-hair); padding-top: 24px; }
+  .qna-page .qna-speaker:first-child { border-top: none; padding-top: 8px; }
+}
+
+.qna-page .qna-photo {
+  width: 88px;
+  aspect-ratio: 4 / 5;
+  position: relative;
+}
+@media (max-width: 520px) { .qna-page .qna-photo { width: 76px; } }
+.qna-page .qna-photo img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4));
+}
+.qna-page .qna-initials {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 600;
+  color: var(--qna-text-mute);
+  letter-spacing: 0.04em;
+}
+
+.qna-page .qna-info { display: flex; flex-direction: column; min-width: 0; }
+
+.qna-page .qna-topic-kr {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.018em;
+  margin: 0;
+  background: linear-gradient(178deg, #ffffff 0%, #ececef 28%, #b8b8c0 76%, #8e8e95 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+.qna-page .qna-topic-sub {
+  font-size: 14px;
+  color: var(--qna-text-soft);
+  line-height: 1.5;
+  margin-top: 8px;
+  font-weight: 400;
+  text-wrap: balance;
+  word-break: keep-all;
+}
+.qna-page .qna-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, var(--qna-accent), transparent);
+  margin: 14px 0 12px;
+}
+.qna-page .qna-name {
+  font-size: 15px;
+  color: var(--qna-text);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.35;
+}
+.qna-page .qna-name .qna-aux {
+  color: var(--qna-text-mute);
+  font-weight: 400;
+  margin-left: 8px;
+  font-size: 13px;
+}
+.qna-page .qna-role {
+  font-size: 13px;
+  color: var(--qna-text-mute);
+  margin-top: 3px;
+  line-height: 1.45;
+}
+
+/* ── Form ──────────────────────────────────────────────────── */
+.qna-page .qna-form { display: flex; flex-direction: column; gap: 40px; }
+.qna-page .qna-field { display: flex; flex-direction: column; gap: 10px; }
+.qna-page .qna-field-label {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--qna-text);
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+}
+.qna-page .qna-req {
+  color: var(--qna-accent);
+  margin-left: 4px;
+  font-weight: 500;
+}
+.qna-page .qna-field-help {
+  font-size: 14px;
+  color: var(--qna-text-mute);
+  line-height: 1.6;
+  font-weight: 400;
+}
+.qna-page .qna-field-help.qna-example {
+  margin-top: 6px;
+  padding: 14px 16px;
+  background: rgba(245, 245, 247, 0.03);
+  border-left: 2px solid var(--qna-hair-strong);
+  border-radius: 0 6px 6px 0;
+  color: var(--qna-text-soft);
+  font-style: normal;
+}
+
+/* Inputs — scoped to .qna-page so they override global .field rule */
+.qna-page input[type="text"],
+.qna-page textarea {
+  background: rgba(245, 245, 247, 0.04);
+  border: 1px solid var(--qna-hair);
+  border-radius: var(--qna-radius);
+  color: var(--qna-text);
+  font-family: var(--qna-font);
+  font-size: 16px;
+  padding: 14px 16px;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+  box-shadow: none;
+}
+.qna-page input[type="text"]:focus,
+.qna-page textarea:focus {
+  outline: none;
+  border-color: var(--qna-accent);
+  background: rgba(95, 208, 227, 0.04);
+  box-shadow: none;
+}
+.qna-page input[type="text"]::placeholder,
+.qna-page textarea::placeholder { color: var(--qna-text-mute); }
+.qna-page textarea { min-height: 180px; resize: vertical; line-height: 1.6; }
+
+.qna-page .qna-topics { display: flex; flex-direction: column; gap: 10px; }
+.qna-page .qna-topic {
+  display: flex;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--qna-hair);
+  border-radius: var(--qna-radius);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.qna-page .qna-topic:hover {
+  border-color: var(--qna-hair-strong);
+  background: rgba(245, 245, 247, 0.02);
+}
+.qna-page .qna-topic input { margin: 3px 0 0; accent-color: var(--qna-accent); flex: 0 0 auto; }
+.qna-page .qna-topic-text { display: flex; flex-direction: column; gap: 3px; line-height: 1.45; }
+.qna-page .qna-topic-tag {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--qna-accent);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.qna-page .qna-topic-body { color: var(--qna-text-soft); font-size: 15px; line-height: 1.5; }
+.qna-page .qna-topic.qna-checked { border-color: var(--qna-accent); background: rgba(95, 208, 227, 0.06); }
+.qna-page .qna-topic.qna-checked .qna-topic-body { color: var(--qna-text); }
+
+.qna-page .qna-picks { display: grid; grid-template-columns: 1fr; gap: 8px; }
+@media (min-width: 640px) { .qna-page .qna-picks { grid-template-columns: 1fr 1fr; } }
+.qna-page .qna-pick {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--qna-hair);
+  border-radius: var(--qna-radius);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.qna-page .qna-pick:hover {
+  border-color: var(--qna-hair-strong);
+  background: rgba(245, 245, 247, 0.02);
+}
+.qna-page .qna-pick input { margin: 0; accent-color: var(--qna-accent); flex: 0 0 auto; }
+.qna-page .qna-pick-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.qna-page .qna-pick-name { font-size: 15px; color: var(--qna-text); font-weight: 600; letter-spacing: -0.005em; }
+.qna-page .qna-pick-org { font-size: 13px; color: var(--qna-text-mute); }
+.qna-page .qna-pick.qna-checked { border-color: var(--qna-accent); background: rgba(95, 208, 227, 0.06); }
+
+/* ── Submit / status ───────────────────────────────────────── */
+.qna-page .qna-actions { display: flex; flex-direction: column; gap: 18px; align-items: stretch; }
+.qna-page button.qna-submit {
+  background: var(--qna-text);
+  color: #000;
+  border: none;
+  border-radius: 999px;
+  padding: 17px 30px;
+  font-family: var(--qna-font);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  transition: transform 0.06s ease, opacity 0.15s ease;
+}
+.qna-page button.qna-submit:hover { opacity: 0.9; }
+.qna-page button.qna-submit:active { transform: scale(0.99); }
+.qna-page button.qna-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.qna-page button.qna-ghost {
+  background: transparent;
+  color: var(--qna-text);
+  border: 1px solid var(--qna-hair-strong);
+  border-radius: 999px;
+  padding: 14px 26px;
+  font-family: var(--qna-font);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.qna-page button.qna-ghost:hover { border-color: var(--qna-accent); background: rgba(95, 208, 227, 0.06); }
+
+.qna-page .qna-status {
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+.qna-page .qna-status.qna-ok {
+  background: rgba(95, 208, 227, 0.08);
+  color: var(--qna-accent-bright);
+  border: 1px solid rgba(95, 208, 227, 0.25);
+}
+.qna-page .qna-status.qna-err {
+  background: rgba(255, 107, 107, 0.06);
+  color: var(--qna-danger);
+  border: 1px solid rgba(255, 107, 107, 0.22);
+}
+.qna-page .qna-status.qna-loading {
+  background: rgba(245, 245, 247, 0.04);
+  color: var(--qna-text-soft);
+  border: 1px solid var(--qna-hair);
+}
+
+.qna-page .qna-success-card {
+  padding: 32px;
+  border: 1px solid var(--qna-hair-strong);
+  border-radius: 14px;
+  background: rgba(245, 245, 247, 0.02);
+  text-align: center;
+}
+.qna-page .qna-success-card .qna-ok-eyebrow {
+  font-size: 12px; letter-spacing: 0.4em; color: var(--qna-accent);
+  text-transform: uppercase; font-weight: 600; margin-bottom: 16px;
+}
+.qna-page .qna-success-card .qna-ok-title {
+  font-size: 24px; font-weight: 600; color: var(--qna-text); margin-bottom: 12px;
+}
+.qna-page .qna-success-card .qna-ok-body {
+  color: var(--qna-text-soft); font-size: 15px; line-height: 1.6;
+}
+.qna-page .qna-success-card .qna-ok-actions {
+  margin-top: 24px;
+  display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+}
+
+/* ── Footer ────────────────────────────────────────────────── */
+.qna-page .qna-footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--qna-hair);
+  color: var(--qna-text-mute);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.qna-page .qna-footer a { color: var(--qna-text-soft); text-decoration: none; }
+.qna-page .qna-footer a:hover { color: var(--qna-accent); }

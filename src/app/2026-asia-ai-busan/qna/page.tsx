@@ -1,5 +1,4 @@
 import QnAForm from "./QnAForm";
-import Footer from "@/components/Footer";
 import "./qna.css";
 
 export const metadata = {
@@ -90,105 +89,62 @@ export const SPEAKERS: Speaker[] = [
 
 export default function QnAPage() {
   return (
-    <main className="qna-page relative">
-      {/* Top bar — back link + eyebrow */}
-      <div className="border-b border-white/5 relative z-10">
-        <div className="max-w-6xl mx-auto px-6 sm:px-10 h-14 sm:h-16 flex items-center justify-between gap-4">
-          <a
-            href="/2026-asia-ai-busan"
-            className="group inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors"
-          >
-            <span className="text-base leading-none group-hover:-translate-x-0.5 transition-transform">
-              ←
-            </span>
-            이벤트 페이지로
-          </a>
-          <span className="hidden sm:inline-block text-[11px] tracking-[0.3em] text-white/40 uppercase font-medium">
-            Pre-stage · Busan 2026
-          </span>
+    <main className="qna-page">
+      <div className="qna-wrap">
+        <div className="qna-markmark">
+          <span className="qna-brand">ClassIn</span>
+          <span className="qna-sep">/</span>
+          <span>Asia AI Education Forum</span>
         </div>
-      </div>
 
-      {/* Hero */}
-      <section className="relative pt-16 sm:pt-24 md:pt-32 pb-8 sm:pb-12">
-        <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
-          <p className="qna-eyebrow text-[11px] sm:text-xs mb-5 sm:mb-7">
-            Pre-stage · Busan 2026
-          </p>
-          <h1 className="qna-title text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
-            연사에게 직접 듣는 솔루션
-          </h1>
-          <p className="mt-5 sm:mt-7 text-base sm:text-lg md:text-xl text-white/75 leading-relaxed">
-            현장 Q&amp;A 및 네트워킹을 위한 사전 설문
-          </p>
-        </div>
-      </section>
+        <div className="qna-eyebrow">Pre-stage · Busan 2026</div>
+        <h1 className="qna-title">연사에게 직접 듣는 솔루션</h1>
+        <p className="qna-subtitle">현장 Q&amp;A 및 네트워킹을 위한 사전 설문</p>
+        <div className="qna-meta">2026 · BUSAN · ASIA AI EDUCATION FORUM</div>
 
-      {/* Speaker lineup */}
-      <section className="relative py-10 sm:py-16">
-        <div className="max-w-5xl mx-auto px-6 sm:px-10">
-          <div className="text-center mb-10 sm:mb-14">
-            <span className="qna-lineup-label text-[10px] sm:text-[11px]">
-              Speaker Lineup
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-10 sm:gap-y-12">
+        <section className="qna-lineup" aria-label="연사 라인업">
+          <div className="qna-lineup-label">Speaker Lineup</div>
+          <div className="qna-speakers">
             {SPEAKERS.map((s) => (
               <SpeakerCard key={s.slug} speaker={s} />
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Form */}
-      <section id="form" className="relative py-12 sm:py-20 md:py-24">
-        <div className="max-w-3xl mx-auto px-6 sm:px-10">
-          <QnAForm speakers={SPEAKERS} />
-        </div>
-      </section>
+        <QnAForm speakers={SPEAKERS} />
 
-      <Footer />
+        <footer className="qna-footer">
+          <span>© 2026 ClassIn · Asia AI Education Forum</span>
+          <a href="/2026-asia-ai-busan">← 이벤트 페이지로</a>
+        </footer>
+      </div>
     </main>
   );
 }
 
 function SpeakerCard({ speaker }: { speaker: Speaker }) {
   return (
-    <div className="flex gap-5 sm:gap-6">
-      <div className="relative w-20 sm:w-24 flex-shrink-0 aspect-[4/5]">
-        {speaker.photo ? (
+    <div className="qna-speaker">
+      <div className="qna-photo">
+        {speaker.photo && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={speaker.photo}
-            alt={speaker.nameMain}
-            className="w-full h-full object-contain object-bottom drop-shadow-[0_8px_18px_rgba(0,0,0,0.4)]"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-2xl text-white/45 font-semibold">
-            {speaker.initial}
-          </div>
+          <img src={speaker.photo} alt={speaker.nameMain} />
+        )}
+        {!speaker.photo && (
+          <span className="qna-initials">{speaker.initial}</span>
         )}
       </div>
-
-      <div className="flex-1 min-w-0">
-        <h3 className="text-lg sm:text-xl font-bold leading-snug tracking-tight bg-gradient-to-b from-white via-white to-white/55 bg-clip-text text-transparent">
-          {speaker.topic}
-        </h3>
+      <div className="qna-info">
+        <h3 className="qna-topic-kr">{speaker.topic}</h3>
         {speaker.topicSub && (
-          <p className="mt-2 text-[13px] sm:text-sm text-white/65 leading-relaxed">
-            {speaker.topicSub}
-          </p>
+          <div className="qna-topic-sub">{speaker.topicSub}</div>
         )}
-        <div className="w-10 h-px bg-gradient-to-r from-[var(--accent-from)] to-transparent my-3 sm:my-4" />
-        <div className="text-sm sm:text-[15px] font-semibold text-white">
+        <div className="qna-divider" />
+        <div className="qna-name">
           {speaker.nameMain}
-          <span className="ml-2 text-[12px] sm:text-xs text-white/55 font-normal">
-            {speaker.nameAux}
-          </span>
+          <span className="qna-aux">{speaker.nameAux}</span>
         </div>
-        <div className="text-[12px] sm:text-[13px] text-white/55 mt-1">
-          {speaker.role}
-        </div>
+        <div className="qna-role">{speaker.role}</div>
       </div>
     </div>
   );
