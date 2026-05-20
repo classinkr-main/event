@@ -65,7 +65,7 @@ export const SPEAKERS: Speaker[] = [
   },
   {
     slug: "zuo",
-    photo: null,
+    photo: "/speakers/zuo.png",
     initial: "左",
     topic: "선도 교육기관의 실전 성장 전략",
     topicSub: "캠퍼스 표준화 운영과 스타 강사진 육성 가이드",
