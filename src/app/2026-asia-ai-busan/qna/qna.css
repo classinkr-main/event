@@ -1,0 +1,70 @@
+/* QnA route — Apple-style cyan/dark tone borrowed from the deck.
+   Scoped via `.qna-page` wrapper. */
+
+.qna-page {
+  --accent-from: #5fd0e3;
+  --accent-to: #a8e6f0;
+}
+
+/* Replace the site-wide blue/purple body glow with the deck's starry sky */
+body:has(.qna-page) {
+  background-image: url("/qna-bg.png");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+body:has(.qna-page)::before {
+  background:
+    radial-gradient(70% 45% at 50% 0%, rgba(95, 208, 227, 0.13), transparent 70%),
+    radial-gradient(50% 35% at 80% 22%, rgba(168, 230, 240, 0.07), transparent 70%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(2, 6, 15, 0.78) 65%, rgba(2, 6, 15, 0.94) 100%);
+}
+
+/* Hero title — Apple-style white→silver gradient (no partial accent) */
+.qna-page .qna-title {
+  background: linear-gradient(178deg, #ffffff 0%, #e8e8ea 28%, #c4c4ca 70%, #8e8e95 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 60px rgba(255, 255, 255, 0.04);
+  letter-spacing: -0.025em;
+}
+
+/* Eyebrow — short accent line trailing the label */
+.qna-page .qna-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--accent-from);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.qna-page .qna-eyebrow::after {
+  content: "";
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-from), transparent);
+}
+
+/* Speaker lineup label — same eyebrow treatment, centered */
+.qna-page .qna-lineup-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--accent-from);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.qna-page .qna-lineup-label::before,
+.qna-page .qna-lineup-label::after {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-from));
+}
+.qna-page .qna-lineup-label::after {
+  background: linear-gradient(90deg, var(--accent-from), transparent);
+}

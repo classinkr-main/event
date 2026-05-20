@@ -1,5 +1,6 @@
 import QnAForm from "./QnAForm";
 import Footer from "@/components/Footer";
+import "./qna.css";
 
 export const metadata = {
   title: "사전 질문 — 2026 Asia AI Education Forum Busan",
@@ -89,7 +90,7 @@ export const SPEAKERS: Speaker[] = [
 
 export default function QnAPage() {
   return (
-    <main className="relative">
+    <main className="qna-page relative">
       {/* Top bar — back link + eyebrow */}
       <div className="border-b border-white/5 relative z-10">
         <div className="max-w-6xl mx-auto px-6 sm:px-10 h-14 sm:h-16 flex items-center justify-between gap-4">
@@ -111,14 +112,13 @@ export default function QnAPage() {
       {/* Hero */}
       <section className="relative pt-16 sm:pt-24 md:pt-32 pb-8 sm:pb-12">
         <div className="max-w-3xl mx-auto px-6 sm:px-10 text-center">
-          <p className="text-xs sm:text-sm tracking-[0.3em] text-white/50 mb-4 sm:mb-5">
-            PRE-STAGE QUESTIONS
+          <p className="qna-eyebrow text-[11px] sm:text-xs mb-5 sm:mb-7">
+            Pre-stage · Busan 2026
           </p>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
-            연사에게 직접 듣는{" "}
-            <span className="text-gradient">솔루션</span>
+          <h1 className="qna-title text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.1]">
+            연사에게 직접 듣는 솔루션
           </h1>
-          <p className="mt-5 sm:mt-7 text-base sm:text-lg md:text-xl text-white/70 leading-relaxed">
+          <p className="mt-5 sm:mt-7 text-base sm:text-lg md:text-xl text-white/75 leading-relaxed">
             현장 Q&amp;A 및 네트워킹을 위한 사전 설문
           </p>
         </div>
@@ -127,9 +127,11 @@ export default function QnAPage() {
       {/* Speaker lineup */}
       <section className="relative py-10 sm:py-16">
         <div className="max-w-5xl mx-auto px-6 sm:px-10">
-          <p className="text-xs sm:text-sm tracking-[0.3em] text-white/50 mb-8 sm:mb-12 text-center">
-            SPEAKER LINEUP
-          </p>
+          <div className="text-center mb-10 sm:mb-14">
+            <span className="qna-lineup-label text-[10px] sm:text-[11px]">
+              Speaker Lineup
+            </span>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-10 sm:gap-y-12">
             {SPEAKERS.map((s) => (
               <SpeakerCard key={s.slug} speaker={s} />
