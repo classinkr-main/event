@@ -7,6 +7,7 @@ type Payload = {
   phone?: string;
   email?: string;
   dinner?: string;
+  session?: string;
   source?: string;
 };
 
@@ -66,6 +67,7 @@ export async function POST(request: Request) {
         phone: body.phone,
         email: body.email,
         dinner: body.dinner ?? "",
+        session: body.session ?? "",
         source: body.source ?? "",
       }),
     });
