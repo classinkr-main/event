@@ -46,10 +46,15 @@ export async function POST(request: Request) {
     );
   }
 
-  const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const isIncheon = (body.source ?? "").startsWith("0709-10incheon");
+  const sheetsUrl = isIncheon
+    ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
+      process.env.GOOGLE_SHEETS_WEBHOOK_URL
+    : process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+
   if (!sheetsUrl) {
     console.warn(
-      "[register] GOOGLE_SHEETS_WEBHOOK_URL not set. Submission was received but not stored.",
+      "[register] No webhook URL configured for this submission. Received but not stored.",
       body
     );
     return NextResponse.json({ ok: true, stored: false });
