@@ -11,7 +11,7 @@ const sessions: Session[] = [
   {
     badge: "청 라",
     region: "Cheongna",
-    date: "7월 9일 (수)",
+    date: "7월 9일 (목)",
     weekday: "2026",
     venue: "청라 캐슬학원",
     venueDetail: "인천 서구 청라에메랄드로 94",
@@ -19,7 +19,7 @@ const sessions: Session[] = [
   {
     badge: "송 도",
     region: "Songdo",
-    date: "7월 10일 (목)",
+    date: "7월 10일 (금)",
     weekday: "2026",
     venue: "송도 엔에스과학수학학원",
     venueDetail: "인천 연수구 신송로 154",
