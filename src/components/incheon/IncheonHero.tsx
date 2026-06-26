@@ -36,7 +36,7 @@ export default function IncheonHero() {
             <br className="hidden sm:inline" />{" "}
             수업 자동화부터 마케팅, 교실 전환까지—
             <br className="hidden sm:inline" />{" "}
-            인천 송도·청라 학원장님들을 위한
+            인천 청라·송도 학원장님들을 위한
             <br className="hidden sm:inline" />{" "}
             현장 중심의 실전 설명회를 준비했습니다.
           </p>

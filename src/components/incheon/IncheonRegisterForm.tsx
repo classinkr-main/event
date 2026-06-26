@@ -175,15 +175,15 @@ export default function IncheonRegisterForm({ source }: { source?: string }) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <RadioCard
               name="session"
-              value="송도 · 7월 9일 (수)"
-              label="송도"
+              value="청라 · 7월 9일 (수)"
+              label="청라"
               sub="7월 9일 (수)"
               defaultChecked
             />
             <RadioCard
               name="session"
-              value="청라 · 7월 10일 (목)"
-              label="청라"
+              value="송도 · 7월 10일 (목)"
+              label="송도"
               sub="7월 10일 (목)"
             />
           </div>

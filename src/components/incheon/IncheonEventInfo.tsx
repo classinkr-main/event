@@ -9,20 +9,20 @@ type Session = {
 
 const sessions: Session[] = [
   {
-    badge: "송 도",
-    region: "Songdo",
-    date: "7월 9일 (수)",
-    weekday: "2026",
-    venue: "장소: 추후 공지 예정",
-    venueDetail: "인천 연수구 송도동",
-  },
-  {
     badge: "청 라",
     region: "Cheongna",
+    date: "7월 9일 (수)",
+    weekday: "2026",
+    venue: "청라 캐슬학원",
+    venueDetail: "인천 서구 청라에메랄드로 94",
+  },
+  {
+    badge: "송 도",
+    region: "Songdo",
     date: "7월 10일 (목)",
     weekday: "2026",
-    venue: "장소: 추후 공지 예정",
-    venueDetail: "인천 서구 청라동",
+    venue: "송도 엔에스과학수학학원",
+    venueDetail: "인천 연수구 신송로 154",
   },
 ];
 
@@ -98,7 +98,7 @@ export default function IncheonEventInfo() {
             <span className="text-sm font-medium">참가 안내</span>
           </div>
           <p className="text-sm text-white/60">
-            인천 송도·청라 지역 학원장 및 운영진을 위한 초청 설명회입니다. 정확한 장소와 시간은 신청자에게 개별 안내됩니다.
+            인천 청라·송도 지역 학원장 및 운영진을 위한 초청 설명회입니다. 세부 시간은 신청자에게 개별 안내됩니다.
           </p>
         </div>
       </div>

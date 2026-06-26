@@ -62,7 +62,7 @@ export default function IncheonFloatingCTA() {
           </div>
           <div className="min-w-0">
             <div className="text-[11px] tracking-[0.2em] text-white/50">
-              송도 7/9 · 청라 7/10
+              청라 7/9 · 송도 7/10
             </div>
             <div className="text-sm sm:text-base font-semibold text-white truncate">
               학원장 설명회 신청 받는 중
