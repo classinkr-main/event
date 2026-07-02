@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
-
-const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 export const metadata: Metadata = {
   title: "2026 ASIA AI EDUCATION IN BUSAN",
@@ -25,7 +22,6 @@ export default function RootLayout({
       <body className="relative min-h-full flex flex-col antialiased">
         <div className="relative z-10">{children}</div>
       </body>
-      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }
