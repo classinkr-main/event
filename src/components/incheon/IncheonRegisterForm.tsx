@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { getStoredChannel } from "@/lib/inflow";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -43,6 +44,9 @@ export default function IncheonRegisterForm({ source }: { source?: string }) {
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload = Object.fromEntries(formData.entries());
+    if (typeof payload.source === "string" && payload.source) {
+      payload.source = `${payload.source}/${getStoredChannel()}`;
+    }
 
     try {
       const res = await fetch("/api/register", {

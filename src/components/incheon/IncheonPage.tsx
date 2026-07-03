@@ -6,10 +6,12 @@ import IncheonProgram from "./IncheonProgram";
 import IncheonRegister from "./IncheonRegister";
 import IncheonFooter from "./IncheonFooter";
 import IncheonFloatingCTA from "./IncheonFloatingCTA";
+import IncheonVisitTracker from "./IncheonVisitTracker";
 
 export default function IncheonPage({ source }: { source?: string }) {
   return (
     <main>
+      <IncheonVisitTracker />
       <IncheonHeader />
       <IncheonHero />
       <IncheonEventInfo />

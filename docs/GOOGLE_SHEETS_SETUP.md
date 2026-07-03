@@ -85,3 +85,82 @@ GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/AKfy.../exec
 Apps Script 코드를 바꿨으면:
 - **배포 → 배포 관리 → ✏️ 편집 → 버전 → 새 버전** 선택 후 다시 배포
 - URL은 같으니까 `.env.local`은 안 바꿔도 됨
+
+---
+
+# 인천(0709-10incheon) 방문 트래킹 추가 — 2026-07-03
+
+인천 페이지는 방문(페이지뷰)도 같은 스프레드시트의 **Visits 탭**에 기록됩니다. QR 스캔 수·인스타 유입 수를 여기서 집계합니다.
+
+## 인천 시트의 Apps Script를 아래로 교체
+
+**인천 전용 시트**(`GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`에 연결된 시트)의 Apps Script를 통째로 교체:
+
+```javascript
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = JSON.parse(e.postData.contents);
+
+  if (data.type === "visit") {
+    let sheet = ss.getSheetByName("Visits");
+    if (!sheet) {
+      sheet = ss.insertSheet("Visits");
+      sheet.appendRow([
+        "Timestamp", "Channel", "Referrer", "Device",
+        "FirstVisit", "Path", "UserAgent",
+      ]);
+    }
+    sheet.appendRow([
+      data.timestamp,
+      data.channel,
+      data.referrer,
+      data.device,
+      data.firstVisit,
+      data.path,
+      data.userAgent,
+    ]);
+  } else {
+    // 인천 신청자 시트 컬럼: Timestamp, Name, Organization, Position,
+    // Phone, Email, Session, Source (부산과 달리 Dinner 대신 Session)
+    const sheet = ss.getSheets()[0];
+    sheet.appendRow([
+      data.timestamp,
+      data.name,
+      data.organization,
+      data.position,
+      data.phone,
+      data.email,
+      data.session || "",
+      data.source || "",
+    ]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+교체 후 **배포 → 배포 관리 → ✏️ 편집 → 버전: 새 버전 → 배포** (URL은 그대로).
+
+> ⚠️ **순서 중요**: Apps Script를 먼저 교체·재배포한 뒤에 사이트를 배포(git push)해야 합니다. 순서가 바뀌면 방문 로그가 신청자 시트에 깨진 행으로 들어갑니다.
+
+## Channel 값 해석
+
+| Channel | 의미 |
+|---|---|
+| `qr-direct` | referrer 없이 진입 — 인쇄된 QR 스캔으로 추정 (주소 직접 입력 포함) |
+| `instagram` | 인스타그램 인앱 브라우저 UA 또는 instagram.com referrer |
+| `utm_source` 값 | 링크에 `?utm_source=...`를 붙인 경우 그 값이 그대로 기록 (가장 정확) |
+| 그 외 호스트명 | 다른 사이트에서 링크 타고 온 경우 |
+
+- **FirstVisit = Y** 행만 세면 순 방문자(같은 브라우저 재방문 제외), 전체 행은 세션 수입니다.
+- 신청자 시트의 Source 열에는 `0709-10incheon/qr-direct` 형태로 유입 채널이 붙어서, 채널별 신청 전환도 확인 가능합니다.
+
+## 인스타에 걸 때 권장 링크
+
+인스타 프로필/게시물에는 아래처럼 utm을 붙여 쓰면 추정 없이 정확하게 잡힙니다:
+
+```
+https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
+```
