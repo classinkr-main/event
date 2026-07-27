@@ -25,9 +25,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, stored: false });
   }
 
-  const sheetsUrl =
-    process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
-    process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const path = body.path ?? "";
+  const sheetsUrl = path.startsWith("/seoul-mokdong")
+    ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_SEOUL ??
+      process.env.GOOGLE_SHEETS_WEBHOOK_URL
+    : process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
+      process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!sheetsUrl) {
     console.warn("[track] No webhook URL configured. Visit not stored.", body);

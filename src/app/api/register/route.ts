@@ -46,11 +46,14 @@ export async function POST(request: Request) {
     );
   }
 
-  const isIncheon = (body.source ?? "").startsWith("0709-10incheon");
-  const sheetsUrl = isIncheon
+  const source = body.source ?? "";
+  const sheetsUrl = source.startsWith("0709-10incheon")
     ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
       process.env.GOOGLE_SHEETS_WEBHOOK_URL
-    : process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    : source.startsWith("seoul-mokdong")
+      ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_SEOUL ??
+        process.env.GOOGLE_SHEETS_WEBHOOK_URL
+      : process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!sheetsUrl) {
     console.warn(
