@@ -9,10 +9,10 @@ export default function SeoulRegister({ source }: { source?: string }) {
             REGISTRATION
           </p>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
-            사전 신청
+            참가 신청
           </h2>
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 leading-relaxed">
-            사전 신청하시면 일정·장소 확정 시 가장 먼저 개별 안내드립니다.
+            참가 신청 후 세부 시간을 개별 안내드립니다.
           </p>
         </div>
 

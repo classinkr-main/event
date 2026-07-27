@@ -77,7 +77,7 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
           { label: "직책", value: submitted.position },
           { label: "연락처", value: submitted.phone },
           { label: "이메일", value: submitted.email },
-          { label: "참가 지역", value: submitted.session || "-" },
+          { label: "참가 일정", value: submitted.session || "-" },
         ]
       : [];
 
@@ -95,12 +95,12 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
           </svg>
         </div>
         <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          사전 신청이 완료되었습니다
+          신청이 완료되었습니다
         </h3>
         <p className="mt-4 text-sm sm:text-base text-white/60 leading-relaxed">
-          일정과 장소가 확정되는 대로
+          세부 시간 안내를 위해
           <br />
-          담당자가 가장 먼저 개별 안내드릴 예정입니다.
+          담당자가 순차적으로 개별 연락드릴 예정입니다.
         </p>
 
         {summary.length > 0 && (
@@ -146,7 +146,7 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
   return (
     <form onSubmit={handleSubmit} className="glass-strong rounded-2xl sm:rounded-3xl p-5 sm:p-10">
       {source && <input type="hidden" name="source" value={source} />}
-      <input type="hidden" name="session" value="서울 목동 · 일정 추후 확정" />
+      <input type="hidden" name="session" value="서울 목동 · 8월 20일 (목)" />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <Field label="이름" name="name" placeholder="홍길동" required />
         <Field label="학원명" name="organization" placeholder="○○학원" required />
@@ -176,13 +176,13 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
         <div className="sm:col-span-2">
           <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 flex items-center justify-between gap-3">
             <div>
-              <div className="text-base font-semibold text-white/90">서울 목동</div>
+              <div className="text-base font-semibold text-white/90">클래스인코리아 · 8층</div>
               <div className="mt-0.5 text-xs text-white/50">
-                일정·장소 확정 시 개별 안내
+                서울시 양천구 목동동로 233-1
               </div>
             </div>
             <span className="shrink-0 text-[11px] tracking-[0.2em] rounded-full border border-white/15 px-3 py-1.5 text-white/60">
-              사전 신청
+              8/20 (목)
             </span>
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
         disabled={status === "submitting"}
         className="mt-8 w-full inline-flex items-center justify-center px-6 py-4 rounded-full bg-white text-black font-semibold text-base hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.01]"
       >
-        {status === "submitting" ? "신청 중..." : "사전 신청 제출하기"}
+        {status === "submitting" ? "신청 중..." : "신청 제출하기"}
       </button>
 
       <p className="mt-5 text-xs text-white/40 text-center leading-relaxed">

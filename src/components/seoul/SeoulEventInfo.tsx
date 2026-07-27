@@ -10,7 +10,7 @@ export default function SeoulEventInfo() {
             서울 목동에서 만납니다.
           </h2>
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto">
-            사전 신청하시면 일정과 장소가 확정되는 대로 가장 먼저 안내드립니다.
+            8월 20일 목요일, 클래스인코리아에서 진행됩니다.
           </p>
         </div>
 
@@ -27,10 +27,10 @@ export default function SeoulEventInfo() {
                   MOKDONG
                 </div>
                 <div className="text-lg sm:text-2xl font-semibold leading-snug">
-                  일정 추후 확정
+                  8월 20일 (목)
                 </div>
                 <div className="mt-1 text-xs sm:text-sm text-white/50">
-                  2026 · 신청자 개별 안내
+                  2026
                 </div>
               </div>
             </div>
@@ -47,9 +47,9 @@ export default function SeoulEventInfo() {
                   />
                 </svg>
                 <div>
-                  <div className="text-sm sm:text-base">서울 목동</div>
+                  <div className="text-sm sm:text-base">클래스인코리아</div>
                   <div className="mt-1 text-[11px] sm:text-xs text-white/40">
-                    상세 장소는 신청자에게 개별 안내됩니다
+                    서울시 양천구 목동동로 233-1, 8층
                   </div>
                 </div>
               </div>
@@ -65,7 +65,7 @@ export default function SeoulEventInfo() {
             <span className="text-sm font-medium">참가 안내</span>
           </div>
           <p className="text-sm text-white/60">
-            서울 목동 지역 학원장 및 운영진을 위한 초청 설명회입니다. 일정·장소·세부 시간은 신청자에게 개별 안내됩니다.
+            서울 목동 지역 학원장 및 운영진을 위한 초청 설명회입니다. 세부 시간은 신청자에게 개별 안내됩니다.
           </p>
         </div>
       </div>

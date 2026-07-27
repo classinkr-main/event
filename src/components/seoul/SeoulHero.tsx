@@ -46,7 +46,7 @@ export default function SeoulHero() {
               href="#register"
               className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-white text-black font-medium text-sm hover:bg-white/90 transition-all hover:scale-[1.02]"
             >
-              사전 신청하기
+              참가 신청하기
             </a>
             <a
               href="#program"

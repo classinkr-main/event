@@ -88,6 +88,12 @@ Apps Script 코드를 바꿨으면:
 
 ---
 
+# 서울 목동(seoul-mokdong) 추가 — 2026-07-27
+
+서울 목동 설명회(8/20 목, 클래스인코리아)는 **인천 시트를 그대로 공유**합니다. 새 시트·새 env 변수 없음:
+- 신청: `/api/register`가 source `seoul-mokdong`도 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 전송 → 아래 스크립트가 **"서울 목동" 탭**(없으면 자동 생성)에 기록
+- 방문: `/api/track`은 페이지 구분 없이 같은 웹훅 → Visits 탭, Path 컬럼(`/seoul-mokdong`)으로 구분
+
 # 인천(0709-10incheon) 방문 트래킹 추가 — 2026-07-03
 
 인천 페이지는 방문(페이지뷰)도 같은 스프레드시트의 **Visits 탭**에 기록됩니다. QR 스캔 수·인스타 유입 수를 여기서 집계합니다.
@@ -120,9 +126,22 @@ function doPost(e) {
       data.userAgent,
     ]);
   } else {
-    // 인천 신청자 시트 컬럼: Timestamp, Name, Organization, Position,
+    // 신청자 컬럼: Timestamp, Name, Organization, Position,
     // Phone, Email, Session, Source (부산과 달리 Dinner 대신 Session)
-    const sheet = ss.getSheets()[0];
+    // source가 seoul-mokdong이면 "서울 목동" 탭, 아니면 첫 번째 탭(인천)
+    let sheet;
+    if ((data.source || "").indexOf("seoul-mokdong") === 0) {
+      sheet = ss.getSheetByName("서울 목동");
+      if (!sheet) {
+        sheet = ss.insertSheet("서울 목동");
+        sheet.appendRow([
+          "Timestamp", "Name", "Organization", "Position",
+          "Phone", "Email", "Session", "Source",
+        ]);
+      }
+    } else {
+      sheet = ss.getSheets()[0];
+    }
     sheet.appendRow([
       data.timestamp,
       data.name,

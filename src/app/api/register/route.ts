@@ -46,14 +46,14 @@ export async function POST(request: Request) {
     );
   }
 
+  // 설명회 신청(인천·서울)은 같은 웹훅으로 — Apps Script가 source를 보고 탭을 분기
   const source = body.source ?? "";
-  const sheetsUrl = source.startsWith("0709-10incheon")
+  const isMeets =
+    source.startsWith("0709-10incheon") || source.startsWith("seoul-mokdong");
+  const sheetsUrl = isMeets
     ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
       process.env.GOOGLE_SHEETS_WEBHOOK_URL
-    : source.startsWith("seoul-mokdong")
-      ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_SEOUL ??
-        process.env.GOOGLE_SHEETS_WEBHOOK_URL
-      : process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    : process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!sheetsUrl) {
     console.warn(

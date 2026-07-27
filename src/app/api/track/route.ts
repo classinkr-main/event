@@ -25,12 +25,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, stored: false });
   }
 
-  const path = body.path ?? "";
-  const sheetsUrl = path.startsWith("/seoul-mokdong")
-    ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_SEOUL ??
-      process.env.GOOGLE_SHEETS_WEBHOOK_URL
-    : process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
-      process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  // 방문 로그는 설명회 시트(Visits 탭)로 — Path 컬럼으로 페이지 구분
+  const sheetsUrl =
+    process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
+    process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!sheetsUrl) {
     console.warn("[track] No webhook URL configured. Visit not stored.", body);
