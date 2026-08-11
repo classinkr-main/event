@@ -37,7 +37,7 @@ const program: Part[] = [
 
 export default function SeoulProgram() {
   return (
-    <section id="program" className="relative py-20 sm:py-32 md:py-40">
+    <section id="program" className="snap-section relative py-20 sm:py-32 md:py-40">
       <div className="max-w-5xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-12 sm:mb-16">
           <p className="text-xs sm:text-sm tracking-[0.3em] text-white/50 mb-3 sm:mb-4">

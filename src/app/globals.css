@@ -32,6 +32,15 @@ section[id] {
   scroll-margin-top: 4rem;
 }
 
+/* 페이지 단위 스크롤 — .snap-root를 쓰는 페이지에만 적용.
+   proximity라 섹션이 뷰포트보다 길어도 중간 지점은 자유롭게 스크롤된다. */
+html:has(main.snap-root) {
+  scroll-snap-type: y proximity;
+}
+.snap-section {
+  scroll-snap-align: start;
+}
+
 html, body {
   overflow-x: hidden;
 }

@@ -1,6 +1,6 @@
 export default function SeoulEventInfo() {
   return (
-    <section id="event" className="relative py-20 sm:py-32 md:py-40">
+    <section id="event" className="snap-section relative py-20 sm:py-32 md:py-40">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
         <div className="text-center mb-12 sm:mb-20">
           <p className="text-sm tracking-[0.3em] text-white/50 mb-4">

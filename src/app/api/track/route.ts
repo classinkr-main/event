@@ -30,30 +30,54 @@ export async function POST(request: Request) {
     process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
     process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
-  if (!sheetsUrl) {
-    console.warn("[track] No webhook URL configured. Visit not stored.", body);
-    return NextResponse.json({ ok: true, stored: false });
-  }
+  const sheetsSend = sheetsUrl
+    ? fetch(sheetsUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "visit",
+          timestamp: new Date().toISOString(),
+          channel: (body.channel ?? "unknown").slice(0, 100),
+          referrer: (body.referrer ?? "").slice(0, 300),
+          device: body.device === "mobile" ? "mobile" : "desktop",
+          firstVisit: body.firstVisit ? "Y" : "N",
+          path: (body.path ?? "").slice(0, 300),
+          userAgent: ua.slice(0, 300),
+        }),
+      }).then((res) => {
+        if (!res.ok) console.error("[track] Sheets webhook failed", res.status);
+      })
+    : Promise.resolve(
+        console.warn("[track] No sheets webhook URL configured.", body),
+      );
+
+  // Compass CRM(page_visits)에도 병렬 적재 — 광고/QR 유입 구분은 CRM이 bucket으로 분류
+  const compassUrl = process.env.COMPASS_VISIT_URL;
+  const compassToken = process.env.COMPASS_VISIT_TOKEN;
+  const page = (body.path ?? "").split("?")[0].replace(/^\//, "") || "unknown";
+  const compassSend =
+    compassUrl && compassToken
+      ? fetch(compassUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-visit-token": compassToken,
+          },
+          body: JSON.stringify({
+            page,
+            channel: body.channel,
+            referrer: body.referrer,
+            device: body.device,
+            firstVisit: body.firstVisit,
+            userAgent: ua,
+          }),
+        }).then((res) => {
+          if (!res.ok) console.error("[track] Compass webhook failed", res.status);
+        })
+      : Promise.resolve();
 
   try {
-    const res = await fetch(sheetsUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "visit",
-        timestamp: new Date().toISOString(),
-        channel: (body.channel ?? "unknown").slice(0, 100),
-        referrer: (body.referrer ?? "").slice(0, 300),
-        device: body.device === "mobile" ? "mobile" : "desktop",
-        firstVisit: body.firstVisit ? "Y" : "N",
-        path: (body.path ?? "").slice(0, 300),
-        userAgent: ua.slice(0, 300),
-      }),
-    });
-
-    if (!res.ok) {
-      console.error("[track] Sheets webhook failed", res.status);
-    }
+    await Promise.all([sheetsSend, compassSend]);
   } catch (err) {
     console.error("[track] Webhook fetch error", err);
   }

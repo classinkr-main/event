@@ -10,7 +10,7 @@ import SeoulVisitTracker from "./SeoulVisitTracker";
 
 export default function SeoulPage({ source }: { source?: string }) {
   return (
-    <main>
+    <main className="snap-root">
       <SeoulVisitTracker />
       <SeoulHeader />
       <SeoulHero />
