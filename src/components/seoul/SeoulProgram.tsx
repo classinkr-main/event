@@ -9,31 +9,28 @@ type Part = {
 const program: Part[] = [
   {
     tag: "Part 1",
-    title: "AI 튜토리얼",
-    subtitle: "수업 자동화 시작해보기",
-    description:
-      "복잡한 도구 없이도 시작할 수 있는, 학원 현장에서 바로 쓰는 AI 활용법. 출석·과제·피드백까지 단계별 자동화 시연.",
+    title: "수학에 심장을 달다",
+    subtitle: "이정환 대표",
+    description: "클래스인으로 완성하는 새로운 수업 모델.",
   },
   {
     tag: "Part 2",
-    title: "학원 마케팅 전략",
-    subtitle: "학원 성장의 新공식",
-    description:
-      "AI 시대의 학부모는 다르게 검색하고 다르게 선택합니다. 등록률을 높이는 신규 채널·콘텐츠·상담 전환 공식.",
+    title: "쿼드러닝",
+    subtitle: "배철웅 대표",
+    description: "시간의 한계를 넘어서는 수익 확장 전략.",
   },
   {
     tag: "Part 3",
-    title: "AI 전환 교실 사례",
-    subtitle: "도입부터 정착까지",
-    description:
-      "실제 도입한 학원장님들의 솔직한 이야기. 무엇이 바뀌었고, 어떤 저항이 있었으며, 어떻게 정착시켰는지.",
+    title: "클래스인",
+    subtitle: "박 한 팀장",
+    description: "학원 운영을 바꾼 클래스인 도입 사례.",
   },
   {
     tag: "Special",
-    title: "현장 전문가 1:1 컨설팅",
+    title: "현직 전문가 1:1 컨설팅 제공",
     subtitle: "원장님 학원만을 위한 맞춤 진단",
     description:
-      "세션 후 별도 시간 — Classin 전문가가 학원 규모·과목·지역 특성에 맞춘 도입 로드맵을 1:1로 함께 설계합니다.",
+      "세미나 현장에서 현직 전문가가 원장님 학원 상황에 맞춘 1:1 컨설팅을 제공합니다.",
     variant: "special",
   },
 ];
@@ -50,7 +47,7 @@ export default function SeoulProgram() {
             세 가지 핵심, 그리고 한 번의 만남.
           </h2>
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto">
-            AI 도입을 고민하시는 학원장님들이 가장 많이 묻는 세 가지 주제를 한 자리에 모았습니다.
+            학원 성장의 답을 먼저 찾은 세 분의 이야기를 한 자리에 모았습니다.
           </p>
         </div>
 

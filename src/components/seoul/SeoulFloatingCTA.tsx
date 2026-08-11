@@ -62,10 +62,10 @@ export default function SeoulFloatingCTA() {
           </div>
           <div className="min-w-0">
             <div className="text-[11px] tracking-[0.2em] text-white/50">
-              목동 8/20 (목)
+              목동 8/19 (수) 11AM
             </div>
             <div className="text-sm sm:text-base font-semibold text-white truncate">
-              학원장 설명회 신청 받는 중
+              학원장 세미나 신청 받는 중
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ export default function SeoulRegister({ source }: { source?: string }) {
             참가 신청
           </h2>
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 leading-relaxed">
-            참가 신청 후 세부 시간을 개별 안내드립니다.
+            8월 19일 (수) 오전 11시, 거산학원에서 뵙겠습니다.
           </p>
         </div>
 

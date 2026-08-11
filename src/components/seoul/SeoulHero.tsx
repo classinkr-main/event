@@ -34,11 +34,11 @@ export default function SeoulHero() {
           <p className="mt-8 sm:mt-10 max-w-xl text-[15px] sm:text-lg leading-relaxed text-white/70">
             AI는 더 이상 먼 미래의 이야기가 아닙니다.
             <br className="hidden sm:inline" />{" "}
-            수업 자동화부터 마케팅, 교실 전환까지
+            새로운 수업 모델부터 수익 확장 전략, 도입 사례까지
             <br className="hidden sm:inline" />{" "}
-            서울 목동 학원장님들을 위한
+            학원 원장님들을 위한
             <br className="hidden sm:inline" />{" "}
-            현장 중심의 실전 설명회를 준비했습니다.
+            현장 중심의 오프라인 세미나를 준비했습니다.
           </p>
 
           <div className="mt-10 sm:mt-12 flex flex-col sm:flex-row gap-3">

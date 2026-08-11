@@ -10,7 +10,7 @@ export default function SeoulEventInfo() {
             서울 목동에서 만납니다.
           </h2>
           <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto">
-            8월 20일 목요일, 클래스인코리아에서 진행됩니다.
+            8월 19일 수요일 오전 11시, 거산학원에서 진행됩니다.
           </p>
         </div>
 
@@ -27,10 +27,10 @@ export default function SeoulEventInfo() {
                   MOKDONG
                 </div>
                 <div className="text-lg sm:text-2xl font-semibold leading-snug">
-                  8월 20일 (목)
+                  8월 19일 (수)
                 </div>
                 <div className="mt-1 text-xs sm:text-sm text-white/50">
-                  2026
+                  오전 11시 – 오후 1시
                 </div>
               </div>
             </div>
@@ -47,9 +47,11 @@ export default function SeoulEventInfo() {
                   />
                 </svg>
                 <div>
-                  <div className="text-sm sm:text-base">클래스인코리아</div>
+                  <div className="text-sm sm:text-base">
+                    거산학원 <span className="text-white/50">(수학에 심장을 달다)</span>
+                  </div>
                   <div className="mt-1 text-[11px] sm:text-xs text-white/40">
-                    서울시 양천구 목동동로 233-1, 8층
+                    서울 양천구 오목로 285, 4층
                   </div>
                 </div>
               </div>
@@ -65,7 +67,7 @@ export default function SeoulEventInfo() {
             <span className="text-sm font-medium">참가 안내</span>
           </div>
           <p className="text-sm text-white/60">
-            서울 목동 지역 학원장 및 운영진을 위한 초청 설명회입니다. 세부 시간은 신청자에게 개별 안내됩니다.
+            학원 원장 및 관계자를 위한 오프라인 세미나입니다. 현장에서 현직 전문가 1:1 컨설팅이 제공됩니다.
           </p>
         </div>
       </div>
