@@ -31,7 +31,7 @@ export default function SeoulHero() {
             </span>
           </h1>
 
-          <p className="mt-8 sm:mt-10 max-w-xl text-[15px] sm:text-lg leading-relaxed text-white/70">
+          <p className="mt-8 sm:mt-10 max-w-xl text-base sm:text-xl leading-relaxed text-white/70">
             AI는 더 이상 먼 미래의 이야기가 아닙니다.
             <br className="hidden sm:inline" />{" "}
             새로운 수업 모델부터 수익 확장 전략, 도입 사례까지

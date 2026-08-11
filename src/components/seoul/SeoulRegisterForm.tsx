@@ -146,7 +146,7 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
   return (
     <form onSubmit={handleSubmit} className="glass-strong rounded-2xl sm:rounded-3xl p-5 sm:p-10">
       {source && <input type="hidden" name="source" value={source} />}
-      <input type="hidden" name="session" value="서울 목동 · 8월 20일 (목)" />
+      <input type="hidden" name="session" value="서울 목동 · 8월 19일 (수)" />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <Field label="이름" name="name" placeholder="홍길동" required />
         <Field label="학원명" name="organization" placeholder="○○학원" required />
@@ -176,13 +176,13 @@ export default function SeoulRegisterForm({ source }: { source?: string }) {
         <div className="sm:col-span-2">
           <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 flex items-center justify-between gap-3">
             <div>
-              <div className="text-base font-semibold text-white/90">클래스인코리아 · 8층</div>
-              <div className="mt-0.5 text-xs text-white/50">
-                서울시 양천구 목동동로 233-1
+              <div className="text-base sm:text-lg font-semibold text-white/90">거산학원 · 4층</div>
+              <div className="mt-0.5 text-sm text-white/50">
+                서울 양천구 오목로 285
               </div>
             </div>
-            <span className="shrink-0 text-[11px] tracking-[0.2em] rounded-full border border-white/15 px-3 py-1.5 text-white/60">
-              8/20 (목)
+            <span className="shrink-0 text-xs tracking-[0.2em] rounded-full border border-white/15 px-3 py-1.5 text-white/60">
+              8/19 (수) 11AM
             </span>
           </div>
         </div>

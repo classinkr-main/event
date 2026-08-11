@@ -46,7 +46,7 @@ export default function SeoulProgram() {
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
             세 가지 핵심, 그리고 한 번의 만남.
           </h2>
-          <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto">
+          <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 max-w-2xl mx-auto">
             학원 성장의 답을 먼저 찾은 세 분의 이야기를 한 자리에 모았습니다.
           </p>
         </div>
@@ -74,13 +74,13 @@ export default function SeoulProgram() {
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight">
+                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
                       {p.title}
                     </h3>
-                    <div className="mt-1 text-sm sm:text-base text-white/60">
+                    <div className="mt-1 text-base sm:text-lg text-white/60">
                       {p.subtitle}
                     </div>
-                    <p className="mt-3 sm:mt-4 text-[13px] sm:text-[15px] leading-relaxed text-white/70">
+                    <p className="mt-3 sm:mt-4 text-[15px] sm:text-lg leading-relaxed text-white/70">
                       {p.description}
                     </p>
                   </div>

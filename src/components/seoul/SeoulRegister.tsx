@@ -11,7 +11,7 @@ export default function SeoulRegister({ source }: { source?: string }) {
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
             참가 신청
           </h2>
-          <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 leading-relaxed">
+          <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 leading-relaxed">
             8월 19일 (수) 오전 11시, 거산학원에서 뵙겠습니다.
           </p>
         </div>

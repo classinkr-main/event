@@ -9,7 +9,7 @@ export default function SeoulEventInfo() {
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight">
             서울 목동에서 만납니다.
           </h2>
-          <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/60 max-w-2xl mx-auto">
+          <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 max-w-2xl mx-auto">
             8월 19일 수요일 오전 11시, 거산학원에서 진행됩니다.
           </p>
         </div>
@@ -26,18 +26,18 @@ export default function SeoulEventInfo() {
                 <div className="text-[10px] sm:text-xs tracking-[0.25em] text-white/40 mb-1.5">
                   MOKDONG
                 </div>
-                <div className="text-lg sm:text-2xl font-semibold leading-snug">
+                <div className="text-xl sm:text-3xl font-semibold leading-snug">
                   8월 19일 (수)
                 </div>
-                <div className="mt-1 text-xs sm:text-sm text-white/50">
+                <div className="mt-1 text-sm sm:text-base text-white/50">
                   오전 11시 – 오후 1시
                 </div>
               </div>
             </div>
 
             <div className="mt-6 sm:mt-7 pt-5 sm:pt-6 border-t border-white/10 space-y-3">
-              <div className="flex items-start gap-2.5 text-white/80">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="mt-0.5 shrink-0 text-white/50">
+              <div className="flex items-start gap-3 text-white/80">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-1 shrink-0 text-white/50">
                   <path
                     d="M12 22s7-7.5 7-13a7 7 0 10-14 0c0 5.5 7 13 7 13zM12 12a3 3 0 100-6 3 3 0 000 6z"
                     stroke="currentColor"
@@ -47,10 +47,10 @@ export default function SeoulEventInfo() {
                   />
                 </svg>
                 <div>
-                  <div className="text-sm sm:text-base">
-                    거산학원 <span className="text-white/50">(수학에 심장을 달다)</span>
+                  <div className="text-lg sm:text-2xl font-semibold">
+                    거산학원 <span className="text-white/50 text-base sm:text-lg font-normal">(수학에 심장을 달다)</span>
                   </div>
-                  <div className="mt-1 text-[11px] sm:text-xs text-white/40">
+                  <div className="mt-1.5 text-sm sm:text-base text-white/60">
                     서울 양천구 오목로 285, 4층
                   </div>
                 </div>
@@ -66,7 +66,7 @@ export default function SeoulEventInfo() {
             </svg>
             <span className="text-sm font-medium">참가 안내</span>
           </div>
-          <p className="text-sm text-white/60">
+          <p className="text-sm sm:text-base text-white/60">
             학원 원장 및 관계자를 위한 오프라인 세미나입니다. 현장에서 현직 전문가 1:1 컨설팅이 제공됩니다.
           </p>
         </div>
