@@ -9,21 +9,21 @@ type Part = {
 const program: Part[] = [
   {
     tag: "Part 1",
-    title: "수학에 심장을 달다",
+    title: "클래스인으로 완성하는 새로운 수업 모델",
     subtitle: "이정환 대표",
-    description: "클래스인으로 완성하는 새로운 수업 모델.",
+    description: "수학에 심장을 달다",
   },
   {
     tag: "Part 2",
-    title: "쿼드러닝",
+    title: "시간의 한계를 넘어서는 수익 확장 전략",
     subtitle: "배철웅 대표",
-    description: "시간의 한계를 넘어서는 수익 확장 전략.",
+    description: "쿼드러닝",
   },
   {
     tag: "Part 3",
-    title: "클래스인",
+    title: "학원 운영을 바꾼 클래스인 도입 사례",
     subtitle: "박 한 팀장",
-    description: "학원 운영을 바꾼 클래스인 도입 사례.",
+    description: "클래스인",
   },
   {
     tag: "Special",
