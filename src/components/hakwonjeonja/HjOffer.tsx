@@ -35,12 +35,6 @@ const plans: Plan[] = [
   },
 ];
 
-const tiers = [
-  { label: "정가", price: "830", note: "기준", hot: false },
-  { label: "10대 기준", price: "780", note: "50만원 인하", hot: false },
-  { label: "20대 기준", price: "750", note: "80만원 인하", hot: true },
-];
-
 function Check() {
   return (
     <span className="shrink-0 w-5 h-5 rounded-full bg-[var(--accent-from)] flex items-center justify-center">
@@ -158,37 +152,32 @@ export default function HjOffer() {
             </div>
           </div>
 
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/10">
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-4 sm:mb-5">
+          {/* 가격: 정가 취소선 + 특별 혜택 할인 + 문의 유도 (구체 할인가는 비공개) */}
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/10 flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
               <div>
-                <div className="text-xs sm:text-sm tracking-[0.15em] text-white/50">회원사 공동구매</div>
-                <div className="mt-1 text-xl sm:text-2xl font-bold tracking-tight">
-                  회원사가 모일수록, <span className="text-gradient">내려갑니다</span>
+                <div className="text-[11px] sm:text-xs tracking-[0.15em] text-white/45">정가 · 세트 1대</div>
+                <div className="mt-1 leading-none text-white/40 line-through decoration-white/40 decoration-2">
+                  <span className="text-3xl sm:text-4xl font-bold tracking-tight">830</span>
+                  <span className="ml-1 text-sm sm:text-base font-semibold">만원</span>
                 </div>
               </div>
-              <div className="text-[11px] sm:text-xs text-white/40">
-                회원사 합산 수량 기준 세트당 가격 · 부가세 별도
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white/40">
+                <path d="M5 12h14m0 0l-6-6m6 6l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <div className="inline-flex items-center rounded-full bg-gradient-to-r from-[var(--accent-from)] to-[var(--accent-to)] px-4 py-2 text-sm sm:text-base font-bold text-[#050807]">
+                학원전자 특별 혜택 할인
               </div>
             </div>
-            <div className="grid grid-cols-3 divide-x divide-white/10 rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden">
-              {tiers.map((t) => (
-                <div
-                  key={t.label}
-                  className={`px-3 py-5 sm:py-6 text-center ${t.hot ? "bg-white/[0.05]" : ""}`}
-                >
-                  <div className={`text-[11px] sm:text-sm tracking-[0.1em] ${t.hot ? "text-[var(--accent-from)]" : "text-white/55"}`}>
-                    {t.label}
-                  </div>
-                  <div className="mt-2 leading-none">
-                    <span className={`text-3xl sm:text-5xl font-black tracking-tight ${t.hot ? "text-gradient" : "text-white"}`}>
-                      {t.price}
-                    </span>
-                    <span className="ml-1 text-xs sm:text-base font-bold text-white/80">만원</span>
-                  </div>
-                  <div className="mt-2 text-[11px] sm:text-sm text-white/45">{t.note}</div>
-                </div>
-              ))}
-            </div>
+            <p className="flex-1 text-sm sm:text-base text-white/60 leading-relaxed">
+              할인가는 회원사 합산 수량에 따라 정해집니다. 자세한 사항은 문의해 주세요. (부가세 별도)
+            </p>
+            <a
+              href="#consult"
+              className="press shrink-0 inline-flex items-center justify-center px-5 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium hover:border-white/40 hover:bg-white/5"
+            >
+              할인가 문의하기
+            </a>
           </div>
         </Tilt3D>
         </Reveal>

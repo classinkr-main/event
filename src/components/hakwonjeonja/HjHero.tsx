@@ -1,6 +1,6 @@
 import Tilt3D from "./fx/Tilt3D";
 
-const highlights = ["첫 2주 무료", "회원사 10% 혜택", "86″ 패키지 최대 80만원 인하"];
+const highlights = ["첫 2주 무료", "회원사 10% 혜택", "86″ 패키지 특별 할인"];
 
 export default function HjHero() {
   return (
