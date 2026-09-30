@@ -287,3 +287,32 @@ main.theme-green textarea.field {
   .tilt3d { transform: none !important; }
   .float-3d, .floor-shadow, .hero-grid { animation: none; }
 }
+
+/* 정가 취소선 — 리빌 후 왼쪽에서 그어지는 애니메이션 */
+.strike-anim {
+  position: relative;
+  display: inline-block;
+}
+.strike-anim::after {
+  content: "";
+  position: absolute;
+  left: -3%;
+  top: 54%;
+  height: 3px;
+  width: 0;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  transform: rotate(-5deg);
+  transform-origin: left center;
+  pointer-events: none;
+}
+.reveal-3d.in .strike-anim::after {
+  animation: strike-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+}
+@keyframes strike-in {
+  from { width: 0; }
+  to   { width: 106%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .strike-anim::after { width: 106%; animation: none; }
+}

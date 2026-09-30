@@ -157,9 +157,11 @@ export default function HjOffer() {
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
               <div>
                 <div className="text-[11px] sm:text-xs tracking-[0.15em] text-white/45">정가 · 세트 1대</div>
-                <div className="mt-1 leading-none text-white/40 line-through decoration-white/40 decoration-2">
-                  <span className="text-3xl sm:text-4xl font-bold tracking-tight">830</span>
-                  <span className="ml-1 text-sm sm:text-base font-semibold">만원</span>
+                <div className="mt-1 leading-none text-white/55">
+                  <span className="strike-anim">
+                    <span className="text-3xl sm:text-4xl font-bold tracking-tight">830</span>
+                    <span className="ml-1 text-sm sm:text-base font-semibold">만원</span>
+                  </span>
                 </div>
               </div>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white/40">
@@ -170,7 +172,7 @@ export default function HjOffer() {
               </div>
             </div>
             <p className="flex-1 text-sm sm:text-base text-white/60 leading-relaxed">
-              할인가는 회원사 합산 수량에 따라 정해집니다. 자세한 사항은 문의해 주세요. (부가세 별도)
+              할인가는 상담으로 안내드립니다. 지금 문의해 주세요.
             </p>
             <a
               href="#consult"
