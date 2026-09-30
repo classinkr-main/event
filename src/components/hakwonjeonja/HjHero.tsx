@@ -23,7 +23,7 @@ export default function HjHero() {
             </div>
 
             <p className="text-base sm:text-2xl md:text-3xl text-white/80 font-light tracking-tight mb-3 sm:mb-4">
-              수업이 기록으로 남는 교실
+              교실 + 온라인, 하나의 수업
             </p>
 
             <h1 className="font-bold tracking-tight leading-[1.06]">
@@ -36,7 +36,7 @@ export default function HjHero() {
             </h1>
 
             <p className="mt-5 sm:mt-8 text-lg sm:text-2xl text-white/75 leading-snug max-w-xl font-medium">
-              수업은 평소처럼.
+              교실 학생과 온라인 학생이 한 수업을 실시간으로.
               <br />
               녹화·보강·채점은 ClassIn이 합니다.
             </p>
@@ -71,8 +71,52 @@ export default function HjHero() {
             </div>
           </div>
 
-          {/* 3D 스마트보드: 마우스 틸트(데스크톱) + 부유 회전 + 바닥 반사 */}
-          <div className="reveal relative mx-auto w-full max-w-[300px] sm:max-w-[420px] lg:max-w-none [perspective:1400px]">
+          {/* 3D 스마트보드: 마우스 틸트(데스크톱) + 부유 회전 + 바닥 반사 + 하이브리드 수업 플로팅 카드 */}
+          <div className="reveal relative mx-auto w-full max-w-[320px] sm:max-w-[440px] lg:max-w-none [perspective:1400px]">
+            {/* LIVE: 교실 + 온라인 동시 수강 */}
+            <div className="float-card absolute z-20 left-[-5%] sm:left-[-9%] top-[-5%] sm:top-[-3%]">
+              <div className="rounded-2xl border border-white/15 bg-[#0b1410]/95 backdrop-blur-md px-3 py-2.5 sm:px-4 sm:py-3 shadow-[0_24px_50px_-20px_rgba(0,0,0,0.8)]">
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs font-semibold tracking-[0.15em] text-white/85">
+                  <span className="relative flex w-2 h-2">
+                    <span className="absolute inset-0 rounded-full bg-red-500 opacity-70 animate-ping" />
+                    <span className="relative w-2 h-2 rounded-full bg-red-500" />
+                  </span>
+                  LIVE · 실시간 하이브리드 수업
+                </div>
+                <div className="mt-1.5 sm:mt-2 flex items-center gap-2">
+                  <div className="flex -space-x-1.5">
+                    {["김", "이", "박", "최"].map((n, i) => (
+                      <span
+                        key={n}
+                        className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-[#0b1410] text-[9px] sm:text-[10px] font-bold text-[#050807] flex items-center justify-center ${
+                          ["bg-[#8ee8b5]", "bg-[#c8f27a]", "bg-[#7dd3fc]", "bg-[#fcd34d]"][i]
+                        }`}
+                      >
+                        {n}
+                      </span>
+                    ))}
+                    <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-[#0b1410] bg-white/15 text-[9px] sm:text-[10px] font-semibold text-white/80 flex items-center justify-center">
+                      +8
+                    </span>
+                  </div>
+                  <span className="text-[11px] sm:text-sm text-white/75 whitespace-nowrap">
+                    교실 18명 <span className="text-white/40">+</span> 온라인 12명
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* 자동 녹화 → 다시보기 */}
+            <div className="float-card-2 absolute z-20 right-[-4%] sm:right-[-7%] bottom-[16%] sm:bottom-[18%]">
+              <div className="rounded-2xl border border-white/15 bg-[#0b1410]/95 backdrop-blur-md px-3 py-2.5 sm:px-4 sm:py-3 shadow-[0_24px_50px_-20px_rgba(0,0,0,0.8)]">
+                <div className="flex items-center gap-2 text-[10px] sm:text-xs font-semibold tracking-[0.15em] text-white/85">
+                  <span className="w-2 h-2 rounded-full bg-[var(--accent-from)]" />
+                  자동 녹화 중
+                </div>
+                <div className="mt-1 text-[11px] sm:text-sm text-white/65 whitespace-nowrap">
+                  판서·영상이 다시보기로 저장
+                </div>
+              </div>
+            </div>
             <div className="floor-shadow absolute inset-x-[12%] bottom-[4%] h-[16%] rounded-[50%] bg-[var(--accent-from)]/25 blur-3xl" />
             <Tilt3D max={9} glare={false} className="w-full">
               <div className="float-3d">

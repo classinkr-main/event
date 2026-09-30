@@ -35,6 +35,75 @@ const plans: Plan[] = [
   },
 ];
 
+type PkgIcon = "board" | "pc" | "camera" | "truck" | "calendar" | "coins";
+
+const HARDWARE: { icon: PkgIcon; name: string; sub: string }[] = [
+  { icon: "board", name: "86″ AI 스마트보드", sub: "ClassIn 전자칠판" },
+  { icon: "pc", name: "PC", sub: "보드 구동용" },
+  { icon: "camera", name: "AI 카메라", sub: "수업 자동 녹화" },
+  { icon: "truck", name: "설치 · 배송", sub: "현장 설치 포함" },
+];
+
+const ICONS: Record<PkgIcon, React.ReactNode> = {
+  board: (
+    <>
+      <rect x="3" y="4" width="18" height="12" rx="2" />
+      <path d="M8 20h8M12 16v4" />
+    </>
+  ),
+  pc: (
+    <>
+      <rect x="4" y="3" width="10" height="18" rx="2" />
+      <path d="M8 7h2M8 11h2M18 8v8" />
+    </>
+  ),
+  camera: (
+    <>
+      <rect x="3" y="7" width="13" height="10" rx="2" />
+      <path d="M16 11l5-3v8l-5-3z" />
+    </>
+  ),
+  truck: (
+    <>
+      <path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z" />
+      <circle cx="7" cy="18" r="1.6" />
+      <circle cx="17" cy="18" r="1.6" />
+    </>
+  ),
+  calendar: (
+    <>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4M9 15l2 2 4-4" />
+    </>
+  ),
+  coins: (
+    <>
+      <ellipse cx="12" cy="7" rx="7" ry="3" />
+      <path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5" />
+    </>
+  ),
+};
+
+function PkgTile({ icon, name, sub, accent }: { icon: PkgIcon; name: string; sub: string; accent?: boolean }) {
+  return (
+    <div
+      className={`flex items-center gap-3 rounded-xl border px-3.5 py-3 ${
+        accent ? "border-[var(--accent-from)]/35 bg-[var(--accent-from)]/[0.07]" : "border-white/10 bg-white/[0.04]"
+      }`}
+    >
+      <span className="shrink-0 w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center text-[var(--accent-from)]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          {ICONS[icon]}
+        </svg>
+      </span>
+      <div className="min-w-0">
+        <div className="text-sm sm:text-[15px] font-semibold text-white/90 leading-tight">{name}</div>
+        <div className="mt-0.5 text-[11px] sm:text-xs text-white/45">{sub}</div>
+      </div>
+    </div>
+  );
+}
+
 function Check() {
   return (
     <span className="shrink-0 w-5 h-5 rounded-full bg-[var(--accent-from)] flex items-center justify-center">
@@ -133,24 +202,41 @@ export default function HjOffer() {
         {/* C 스마트교실 패키지 */}
         <Reveal className="mt-4 sm:mt-5">
         <Tilt3D max={3} className="glass-strong rounded-2xl sm:rounded-3xl p-6 sm:p-8">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">
-            <div className="flex items-center gap-3 shrink-0">
-              <span className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/15 bg-white/[0.05] text-white font-bold text-lg flex items-center justify-center">
-                C
-              </span>
-              <div>
-                <div className="text-[10px] sm:text-xs tracking-[0.2em] text-white/45">
-                  SOFTWARE + HARDWARE
-                </div>
-                <div className="text-xl sm:text-2xl font-bold tracking-tight">스마트교실 패키지</div>
+          <div className="flex items-center gap-3">
+            <span className="w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-white/15 bg-white/[0.05] text-white font-bold text-lg flex items-center justify-center">
+              C
+            </span>
+            <div>
+              <div className="text-[10px] sm:text-xs tracking-[0.2em] text-white/45">
+                SOFTWARE + HARDWARE
               </div>
-            </div>
-            <div className="flex-1 text-sm sm:text-base text-white/75 leading-relaxed lg:border-l lg:border-white/10 lg:pl-8">
-              86″ ClassIn AI 스마트보드 + PC + AI 카메라 + 설치·배송
-              <br />
-              ClassIn 구독 1년 또는 충전금 100만원 선택
+              <div className="text-xl sm:text-2xl font-bold tracking-tight">스마트교실 패키지</div>
             </div>
           </div>
+
+          {/* 구성품: 하드웨어 4종 타일 + 소프트웨어 택1 */}
+          <div className="mt-5 sm:mt-6">
+            <div className="flex items-center gap-3 mb-2.5">
+              <span className="text-[11px] sm:text-xs tracking-[0.2em] text-white/45 shrink-0">하드웨어 · 기본 포함</span>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+              {HARDWARE.map((it) => (
+                <PkgTile key={it.name} icon={it.icon} name={it.name} sub={it.sub} />
+              ))}
+            </div>
+
+            <div className="flex items-center gap-3 mt-4 sm:mt-5 mb-2.5">
+              <span className="text-[11px] sm:text-xs tracking-[0.2em] text-white/45 shrink-0">소프트웨어 · 둘 중 하나 선택</span>
+              <div className="h-px flex-1 bg-white/10" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-2 sm:gap-3 items-center">
+              <PkgTile icon="calendar" name="ClassIn 구독 1년" sub="강사 단위 월 구독형 (A)" accent />
+              <div className="text-center text-[11px] sm:text-xs tracking-[0.25em] text-white/40 py-0.5">또는</div>
+              <PkgTile icon="coins" name="충전금 100만원" sub="학원 단위 충전형 (B)" accent />
+            </div>
+          </div>
+
 
           {/* 가격: 정가 취소선 + 특별 혜택 할인 + 문의 유도 (구체 할인가는 비공개) */}
           <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/10 flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-8">

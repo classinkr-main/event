@@ -316,3 +316,18 @@ main.theme-green textarea.field {
 @media (prefers-reduced-motion: reduce) {
   .strike-anim::after { width: 106%; animation: none; }
 }
+
+/* 히어로 플로팅 카드 (LIVE / 자동 녹화) */
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.float-card {
+  animation: float-card 6.5s ease-in-out infinite;
+}
+.float-card-2 {
+  animation: float-card 7.5s ease-in-out 1.6s infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-card, .float-card-2 { animation: none; }
+}
