@@ -39,9 +39,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "이메일 형식이 올바르지 않습니다." }, { status: 400 });
   }
 
-  // 학원전자 상담은 설명회 시트(인천 스프레드시트)를 공유 — Apps Script가 type을 보고 "학원전자 상담" 탭에 기록
+  // 학원전자 상담 전용 시트 웹훅. 미설정 시 설명회(인천) 시트 웹훅으로 폴백(구 스크립트면 인천 탭 Session 컬럼에 요약이 남음)
   const sheetsUrl =
-    process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ?? process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+    process.env.GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA ??
+    process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
+    process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!sheetsUrl) {
     console.warn("[consult] No webhook URL configured. Received but not stored.", body);

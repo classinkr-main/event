@@ -3,16 +3,16 @@ import Reveal from "./fx/Reveal";
 import Tilt3D from "./fx/Tilt3D";
 
 const steps = [
-  { tag: "수업", title: "전자칠판 + AI 카메라", sub: "평소 수업 그대로 진행" },
-  { tag: "데이터", title: "기록이 자동으로 쌓임", sub: "판서 · 영상 · 과제 · 성적" },
-  { tag: "운영", title: "ClassIn 한 화면에서", sub: "보강 · 리포트 · 관리" },
+  { tag: "수업", title: "평소처럼 수업", sub: "전자칠판 + AI 카메라" },
+  { tag: "기록", title: "자동으로 쌓임", sub: "판서 · 영상 · 과제 · 성적" },
+  { tag: "운영", title: "ClassIn 한 화면", sub: "보강 · 리포트 · 채점" },
 ];
 
 const changes = [
-  { tag: "결석", before: "보강은 따로 시간을 내야", after: "다시보기로 보강" },
+  { tag: "결석", before: "보강은 따로 시간", after: "다시보기로 보강" },
   { tag: "강사 이탈", before: "자료도 함께 나감", after: "교안·녹화본은 학원에" },
-  { tag: "학부모 상담", before: "보여줄 근거가 없음", after: "학습 과정 리포트" },
-  { tag: "채점", before: "여전히 조교 손으로", after: "숙제·시험 자동 채점" },
+  { tag: "학부모", before: "보여줄 근거 없음", after: "학습 리포트 제공" },
+  { tag: "채점", before: "여전히 조교 손", after: "숙제·시험 자동 채점" },
 ];
 
 export default function HjWhy() {
@@ -28,7 +28,13 @@ export default function HjWhy() {
               수업은 그 시간에만 남습니다.
             </>
           }
-          lead="스마트교실은 기기가 아니라 하나의 흐름입니다. 수업이 끝나도 기록이 남고, 그 기록이 학원 운영으로 이어집니다."
+          lead={
+            <>
+              <span className="text-white/85 font-medium">ClassIn</span>은 전자칠판·AI 카메라와 연결되는 수업 플랫폼입니다.
+              <br className="hidden sm:block" />{" "}
+              수업을 자동으로 기록하고, 그 기록으로 보강·리포트·채점을 해결합니다.
+            </>
+          }
         />
 
         <Reveal className="[perspective:1400px]">

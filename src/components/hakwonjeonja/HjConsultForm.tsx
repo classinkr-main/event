@@ -53,7 +53,15 @@ export default function HjConsultForm({ source }: { source?: string }) {
     setErrorMsg("");
 
     const form = e.currentTarget;
-    const payload = Object.fromEntries(new FormData(form).entries());
+    const fd = new FormData(form);
+    const interests = fd.getAll("interest").map(String).filter(Boolean);
+    if (interests.length === 0) {
+      setErrorMsg("관심 상품을 한 개 이상 선택해주세요.");
+      setStatus("error");
+      return;
+    }
+    const payload = Object.fromEntries(fd.entries());
+    payload.interest = interests.join(", ");
     if (typeof payload.source === "string" && payload.source) {
       payload.source = `${payload.source}/${getStoredChannel()}`;
     }
@@ -184,19 +192,26 @@ export default function HjConsultForm({ source }: { source?: string }) {
         <fieldset className="sm:col-span-2">
           <legend className="block text-sm text-white/70 mb-2 font-medium">
             관심 상품<span className="text-[var(--accent-from)] ml-1">*</span>
+            <span className="ml-2 text-xs text-white/40 font-normal">여러 개 선택 가능</span>
           </legend>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-            {INTERESTS.map((it, i) => (
+            {INTERESTS.map((it) => (
               <label key={it.value} className="cursor-pointer">
                 <input
-                  type="radio"
+                  type="checkbox"
                   name="interest"
                   value={it.value}
-                  required={i === 0}
                   className="peer sr-only"
                 />
-                <div className="h-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:py-3.5 flex sm:block items-baseline gap-2 transition-all active:scale-[0.99] hover:bg-white/[0.07] peer-checked:border-[var(--accent-from)] peer-checked:bg-[var(--accent-from)]/10 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent-from)]/40">
-                  <div className="text-sm sm:text-base font-semibold text-white/90">{it.title}</div>
+                <div className="group h-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 sm:py-3.5 flex sm:block items-baseline gap-2 transition-all active:scale-[0.99] hover:bg-white/[0.07] peer-checked:border-[var(--accent-from)] peer-checked:bg-[var(--accent-from)]/10 peer-checked:[&_.chk]:bg-[var(--accent-from)] peer-checked:[&_.chk]:border-[var(--accent-from)] peer-checked:[&_.chk_svg]:opacity-100 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--accent-from)]/40">
+                  <div className="flex items-center gap-2.5 text-sm sm:text-base font-semibold text-white/90">
+                    <span className="chk shrink-0 w-4.5 h-4.5 rounded-[5px] border border-white/25 flex items-center justify-center transition-colors">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" className="opacity-0 transition-opacity">
+                        <path d="M5 12l5 5L20 7" stroke="#050807" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    {it.title}
+                  </div>
                   <div className="mt-0.5 text-xs sm:text-sm text-white/50">{it.sub}</div>
                 </div>
               </label>

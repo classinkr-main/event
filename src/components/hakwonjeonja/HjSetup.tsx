@@ -65,7 +65,7 @@ export default function HjSetup() {
               교실은 이미 쓰고 있습니다.
             </>
           }
-          lead="86″ 스마트보드와 AI 카메라, 그리고 ClassIn 소프트웨어. 세 가지가 한 세트로 설치됩니다."
+          lead="스마트보드 + AI 카메라 + ClassIn, 한 세트로 설치됩니다."
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 items-stretch">

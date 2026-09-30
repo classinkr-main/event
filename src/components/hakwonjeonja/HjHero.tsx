@@ -1,6 +1,6 @@
 import Tilt3D from "./fx/Tilt3D";
 
-const highlights = ["첫 2주 무료", "구독료·충전금 10% 혜택", "86″ 패키지 최대 80만원 인하"];
+const highlights = ["첫 2주 무료", "회원사 10% 혜택", "86″ 패키지 최대 80만원 인하"];
 
 export default function HjHero() {
   return (
@@ -35,9 +35,10 @@ export default function HjHero() {
               </span>
             </h1>
 
-            <p className="mt-5 sm:mt-8 text-[15px] sm:text-xl text-white/65 leading-relaxed max-w-xl">
-              판서·영상·과제·성적이 자동으로 쌓여 보강과 리포트, 채점까지 이어집니다.
-              학원전자 회원사는 함께 구매해 더 낮은 가격으로, 첫 2주는 무료로 시작합니다.
+            <p className="mt-5 sm:mt-8 text-lg sm:text-2xl text-white/75 leading-snug max-w-xl font-medium">
+              수업은 평소처럼.
+              <br />
+              녹화·보강·채점은 ClassIn이 합니다.
             </p>
 
             <div className="mt-6 sm:mt-9 flex flex-wrap gap-2">

@@ -51,7 +51,7 @@ export default function HjResults() {
               이렇게 달라졌습니다.
             </>
           }
-          lead="2025~2026년 ClassIn을 도입한 학원들의 실제 변화입니다."
+          lead="ClassIn을 도입한 학원들의 실제 변화입니다."
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

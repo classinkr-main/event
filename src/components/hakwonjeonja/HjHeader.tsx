@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import HjBrand from "./HjLogo";
 
 const navItems = [
   { href: "#why", label: "스마트교실" },
@@ -36,12 +37,7 @@ export default function HjHeader() {
           className="group inline-flex items-center gap-2 text-white hover:opacity-80 transition-opacity shrink-0"
           aria-label="ClassIn 홈페이지로 이동"
         >
-          <span className="text-base sm:text-lg font-bold tracking-tight">
-            Classin
-          </span>
-          <span className="text-xs sm:text-sm text-white/45 font-medium">
-            × 학원전자
-          </span>
+          <HjBrand />
         </a>
 
         <nav className="hidden md:flex items-center gap-7">

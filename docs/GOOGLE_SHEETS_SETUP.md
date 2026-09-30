@@ -188,9 +188,51 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 
 # 학원전자 공동구매 상담(hakwonjeonja) 추가 — 2026-09-30
 
-`/hakwonjeonja` 상담 신청 페이지는 **인천 스프레드시트를 그대로 공유**합니다. 새 시트·새 env 변수 없음:
-- 상담 신청: `/api/consult`가 `type: "consult"`로 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`에 전송 → 아래 스크립트가 **"학원전자 상담" 탭**(없으면 자동 생성)에 기록
-- 방문: `/api/track` → Visits 탭, Path 컬럼(`/hakwonjeonja`)으로 구분
+`/hakwonjeonja` 상담 신청 페이지는 **전용 스프레드시트**를 씁니다(사용자 결정, 인천 시트와 분리):
+- 시트: "[MKT] 학원전자 공구 상담 신청 리드" `1fLoAh4gCtOc6cEhKf0AsEX-9g6JEdP6FNM9hDdGUPok` (heesung.shin@classin.com 소유, 컨테이너 바인딩 Apps Script 프로젝트 `1PqEBxpJSyYquQlKSVhLuR_PDC4ufsQan5HmNabZK4TPTdBz6fHuixqdv`, 웹 앱 배포 v1 2026-09-30, 실행 계정 heesung.shin, 액세스 Anyone)
+- env: `GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA` (Vercel production/preview + .env.local). 미설정 시 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 폴백.
+- 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
+
+## 전용 시트 Apps Script (v1)
+
+```javascript
+const HEADERS = [
+  "Timestamp", "Name", "Organization", "Position", "Phone", "Email",
+  "Interest", "Rooms", "Message", "Source",
+];
+
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = JSON.parse(e.postData.contents);
+
+  if (data.type === "visit") {
+    let sheet = ss.getSheetByName("Visits");
+    if (!sheet) {
+      sheet = ss.insertSheet("Visits");
+      sheet.appendRow(["Timestamp", "Channel", "Referrer", "Device", "FirstVisit", "Path", "UserAgent"]);
+    }
+    sheet.appendRow([data.timestamp, data.channel, data.referrer, data.device, data.firstVisit, data.path, data.userAgent]);
+  } else {
+    const sheet = ss.getSheets()[0];
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(HEADERS);
+      sheet.setFrozenRows(1);
+    }
+    sheet.appendRow([
+      data.timestamp, data.name, data.organization, data.position, data.phone,
+      data.email || "", data.interest || "", data.rooms || "", data.message || "", data.source || "",
+    ]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+> (참고) 아래 "인천 시트 v4" 스크립트는 인천 프로젝트에 **코드만 저장되고 배포되지 않았습니다**(분리 결정으로 불필요). 인천 라이브 배포는 여전히 버전 3입니다.
+
+### (폐기) 인천 시트 공유안
 
 컬럼: Timestamp, Name, Organization, Position, Phone, Email, Interest(관심 상품 A/B/C/미정), Rooms(강의실 수), Message(문의 내용), Source
 
