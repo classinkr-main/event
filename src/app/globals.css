@@ -157,3 +157,133 @@ select.field {
   background-position: right 16px center;
   padding-right: 44px;
 }
+
+/* ── 학원전자 × ClassIn 공동구매 페이지(/hakwonjeonja) — 그린 테마 (카드뉴스 톤) ── */
+main.theme-green {
+  --accent-from: #2fd47a;
+  --accent-to: #b9ef4a;
+}
+html:has(main.theme-green) {
+  --background: #050807;
+}
+html:has(main.theme-green) body::before {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(47, 212, 122, 0.13), transparent 70%),
+    radial-gradient(40% 30% at 80% 30%, rgba(185, 239, 74, 0.05), transparent 70%),
+    radial-gradient(50% 35% at 20% 70%, rgba(47, 212, 122, 0.06), transparent 70%);
+}
+main.theme-green .field:focus {
+  border-color: rgba(47, 212, 122, 0.6);
+  box-shadow: 0 0 0 4px rgba(47, 212, 122, 0.12);
+}
+main.theme-green textarea.field {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* ── 3D 효과 (/hakwonjeonja) ── */
+.tilt3d {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
+}
+.tilt3d.is-tilting {
+  transition: transform 0.08s linear;
+}
+.tilt3d-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.13),
+    transparent 46%
+  );
+  transition: opacity 0.35s ease;
+}
+.tilt3d.is-tilting .tilt3d-glare {
+  opacity: 1;
+}
+
+/* 부유 + 미세 회전 (히어로 보드) */
+@keyframes float-3d {
+  0%, 100% { transform: perspective(1200px) rotateY(-5deg) rotateX(1deg) translateY(0); }
+  50%      { transform: perspective(1200px) rotateY(5deg) rotateX(-1.5deg) translateY(-14px); }
+}
+.float-3d {
+  animation: float-3d 8s ease-in-out infinite;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+@keyframes shadow-breathe {
+  0%, 100% { transform: scaleX(1); opacity: 0.55; }
+  50%      { transform: scaleX(0.86); opacity: 0.35; }
+}
+.floor-shadow {
+  animation: shadow-breathe 8s ease-in-out infinite;
+}
+
+/* 원근 바닥 그리드 (히어로) */
+.hero-grid {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: 220vw;
+  max-width: 3000px;
+  height: 58vh;
+  transform: translateX(-50%) perspective(700px) rotateX(72deg);
+  transform-origin: 50% 100%;
+  background-image:
+    linear-gradient(rgba(47, 212, 122, 0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 212, 122, 0.10) 1px, transparent 1px);
+  background-size: 84px 84px;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 80%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 80%);
+  animation: grid-move 14s linear infinite;
+  pointer-events: none;
+}
+@keyframes grid-move {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 0 84px, 0 0; }
+}
+
+/* 보드 바닥 반사 (지원 브라우저만) */
+.reflect-below {
+  -webkit-box-reflect: below -18px linear-gradient(transparent 62%, rgba(255, 255, 255, 0.16));
+}
+
+/* 스크롤 진입 3D 리빌 */
+.reveal-3d {
+  opacity: 0;
+  transform: perspective(1200px) translateY(30px) rotateX(8deg);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-3d.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* 버튼 눌림 피드백 */
+.press {
+  transition: transform 0.15s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+.press:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-3d { opacity: 1; transform: none; transition: none; }
+  .tilt3d { transform: none !important; }
+  .float-3d, .floor-shadow, .hero-grid { animation: none; }
+}

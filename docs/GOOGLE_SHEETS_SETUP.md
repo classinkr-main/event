@@ -183,3 +183,101 @@ function doPost(e) {
 ```
 https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 ```
+
+---
+
+# 학원전자 공동구매 상담(hakwonjeonja) 추가 — 2026-09-30
+
+`/hakwonjeonja` 상담 신청 페이지는 **인천 스프레드시트를 그대로 공유**합니다. 새 시트·새 env 변수 없음:
+- 상담 신청: `/api/consult`가 `type: "consult"`로 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`에 전송 → 아래 스크립트가 **"학원전자 상담" 탭**(없으면 자동 생성)에 기록
+- 방문: `/api/track` → Visits 탭, Path 컬럼(`/hakwonjeonja`)으로 구분
+
+컬럼: Timestamp, Name, Organization, Position, Phone, Email, Interest(관심 상품 A/B/C/미정), Rooms(강의실 수), Message(문의 내용), Source
+
+## 인천 시트의 Apps Script를 아래로 교체 (버전 4)
+
+```javascript
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = JSON.parse(e.postData.contents);
+
+  if (data.type === "visit") {
+    let sheet = ss.getSheetByName("Visits");
+    if (!sheet) {
+      sheet = ss.insertSheet("Visits");
+      sheet.appendRow([
+        "Timestamp", "Channel", "Referrer", "Device",
+        "FirstVisit", "Path", "UserAgent",
+      ]);
+    }
+    sheet.appendRow([
+      data.timestamp,
+      data.channel,
+      data.referrer,
+      data.device,
+      data.firstVisit,
+      data.path,
+      data.userAgent,
+    ]);
+  } else if (data.type === "consult") {
+    // 학원전자 공동구매 상담 신청 (/hakwonjeonja)
+    let sheet = ss.getSheetByName("학원전자 상담");
+    if (!sheet) {
+      sheet = ss.insertSheet("학원전자 상담");
+      sheet.appendRow([
+        "Timestamp", "Name", "Organization", "Position", "Phone", "Email",
+        "Interest", "Rooms", "Message", "Source",
+      ]);
+    }
+    sheet.appendRow([
+      data.timestamp,
+      data.name,
+      data.organization,
+      data.position,
+      data.phone,
+      data.email || "",
+      data.interest || "",
+      data.rooms || "",
+      data.message || "",
+      data.source || "",
+    ]);
+  } else {
+    // 신청자 컬럼: Timestamp, Name, Organization, Position,
+    // Phone, Email, Session, Source (부산과 달리 Dinner 대신 Session)
+    // source가 seoul-mokdong이면 "서울 목동" 탭, 아니면 첫 번째 탭(인천)
+    let sheet;
+    if ((data.source || "").indexOf("seoul-mokdong") === 0) {
+      sheet = ss.getSheetByName("서울 목동");
+      if (!sheet) {
+        sheet = ss.insertSheet("서울 목동");
+        sheet.appendRow([
+          "Timestamp", "Name", "Organization", "Position",
+          "Phone", "Email", "Session", "Source",
+        ]);
+      }
+    } else {
+      sheet = ss.getSheets()[0];
+    }
+    sheet.appendRow([
+      data.timestamp,
+      data.name,
+      data.organization,
+      data.position,
+      data.phone,
+      data.email,
+      data.session || "",
+      data.source || "",
+    ]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+교체 후 **배포 → 배포 관리 → ✏️ 편집 → 버전: 새 버전 → 배포** (URL은 그대로).
+
+> ⚠️ 순서: Apps Script 먼저 교체·재배포 → 그 다음 사이트 배포. 순서가 바뀌면 상담 신청이 인천 탭에 섞여 들어갑니다.
+
+> 참고(2026-09-30): `/api/consult`는 호환용으로 `session` 필드에 `관심=… | 강의실=… | 문의=…` 요약도 함께 보냅니다. 스크립트가 아직 v3(상담 분기 없음)이면 상담 신청이 **인천 탭**(첫 탭)에 들어가되 Session 컬럼에 이 요약이 남고 Source가 `hakwonjeonja/…`로 찍히므로 데이터는 잃지 않습니다. v4 배포 후에는 "학원전자 상담" 탭으로 정상 분기됩니다.
