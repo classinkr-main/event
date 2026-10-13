@@ -323,3 +323,55 @@ function doPost(e) {
 > ⚠️ 순서: Apps Script 먼저 교체·재배포 → 그 다음 사이트 배포. 순서가 바뀌면 상담 신청이 인천 탭에 섞여 들어갑니다.
 
 > 참고(2026-09-30): `/api/consult`는 호환용으로 `session` 필드에 `관심=… | 강의실=… | 문의=…` 요약도 함께 보냅니다. 스크립트가 아직 v3(상담 분기 없음)이면 상담 신청이 **인천 탭**(첫 탭)에 들어가되 Session 컬럼에 이 요약이 남고 Source가 `hakwonjeonja/…`로 찍히므로 데이터는 잃지 않습니다. v4 배포 후에는 "학원전자 상담" 탭으로 정상 분기됩니다.
+
+# 베이징 초청 탐방(beijing) 추가 — 2026-10-13
+
+`/beijing`은 **초청 코드가 있어야 열리는** 안내·신청 페이지입니다(ClassIn Meets 베이징 탐방, 11/24~27).
+
+## 초청 코드
+- env `BEIJING_INVITE_CODES` — 쉼표로 여러 개. 대소문자·공백·하이픈은 무시(`beijing-1124` = `BEIJING1124`). 비우면 기본값 `BEIJING1124`.
+- env `BEIJING_INVITE_SECRET` — 쿠키 토큰 서명 키(선택). 코드를 바꾸면 기존 쿠키는 자동 무효.
+- 흐름: 게이트 화면 → `POST /api/beijing/invite {code}` → 맞으면 HttpOnly 쿠키 `bj_invite`(60일) → 서버 컴포넌트가 쿠키를 보고 본문 렌더. 본문 HTML은 코드 없이는 내려가지 않음.
+- 초청 링크에 `?code=BEIJING1124`를 붙이면 게이트가 자동으로 확인하고 바로 열립니다. 예: `https://meets.classin.co.kr/beijing?code=BEIJING1124`
+- 참가 신청 `POST /api/beijing`도 같은 쿠키가 있어야 받습니다.
+
+## 시트
+- **전용 시트** 권장(학원전자 방식). env `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`. 미설정이면 인천 시트 웹훅으로 폴백 → 인천 탭에 들어가되 Source `beijing/…`, Session 컬럼에 `인원=…|도착=…|요청=…` 요약이 남아 데이터는 잃지 않음.
+- 방문 로그는 기존대로 인천 시트 Visits 탭 + Compass(Path `/beijing/gate` = 코드 입력 화면, `/beijing` = 열람).
+
+## 전용 시트 Apps Script (v1)
+
+```javascript
+const HEADERS = [
+  "Timestamp", "Name", "Organization", "Position", "Phone", "Email",
+  "Party", "Arrival", "Message", "Source",
+];
+
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = JSON.parse(e.postData.contents);
+
+  if (data.type === "visit") {
+    let sheet = ss.getSheetByName("Visits");
+    if (!sheet) {
+      sheet = ss.insertSheet("Visits");
+      sheet.appendRow(["Timestamp", "Channel", "Referrer", "Device", "FirstVisit", "Path", "UserAgent"]);
+    }
+    sheet.appendRow([data.timestamp, data.channel, data.referrer, data.device, data.firstVisit, data.path, data.userAgent]);
+  } else {
+    const sheet = ss.getSheets()[0];
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(HEADERS);
+      sheet.setFrozenRows(1);
+    }
+    sheet.appendRow([
+      data.timestamp, data.name, data.organization, data.position, data.phone,
+      data.email || "", data.party || "", data.arrival || "", data.message || "", data.source || "",
+    ]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
