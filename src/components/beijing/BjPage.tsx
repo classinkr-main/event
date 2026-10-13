@@ -3,9 +3,10 @@ import BjTopbar from "./BjTopbar";
 import BjHero from "./BjHero";
 import BjLetter from "./BjLetter";
 import BjQuestions from "./BjQuestions";
-import BjPassport from "./BjPassport";
+import BjAgenda from "./BjAgenda";
 import BjProgram from "./BjProgram";
 import BjCards from "./BjCards";
+import BjPhotoBand from "./BjPhotoBand";
 import BjNotes from "./BjNotes";
 import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
@@ -16,16 +17,17 @@ import { fontVars } from "./fonts";
 
 export default function BjPage({ source }: { source?: string }) {
   return (
-    <main className={`theme-bj ${fontVars} bj-lattice`}>
+    <main className={`theme-bj ${fontVars}`}>
       <BjVisitTracker path="/beijing" clearGateFlag />
       <BjHashScroll />
       <BjTopbar />
       <BjHero />
       <BjLetter />
       <BjQuestions />
-      <BjPassport />
+      <BjAgenda />
       <BjProgram />
       <BjCards />
+      <BjPhotoBand />
       <BjNotes />
       <BjRegister source={source} />
       <BjFooter />

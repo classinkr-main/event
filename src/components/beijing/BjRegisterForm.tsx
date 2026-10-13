@@ -219,7 +219,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                     <label
                       key={o}
                       className={`cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
-                        on ? "border-[var(--seal)] bg-[rgba(200,50,43,0.1)] text-[var(--seal)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
+                        on ? "border-[var(--green)] bg-[var(--green-soft)] text-[var(--green)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
                       }`}
                     >
                       <input type="radio" name="arrival" value={o} checked={on} onChange={() => setArrival(o)} className="sr-only" />
@@ -238,11 +238,11 @@ export default function BjRegisterForm({ source }: { source?: string }) {
           </div>
 
           {status === "error" && (
-            <div className="mt-6 border border-[var(--seal)] bg-[rgba(200,50,43,0.07)] px-4 py-3 text-sm text-[var(--seal)]">{errorMsg}</div>
+            <div className="mt-6 border border-[var(--seal)] bg-[rgba(200,50,43,0.06)] px-4 py-3 text-sm text-[var(--seal)] rounded-lg">{errorMsg}</div>
           )}
 
           <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
-            <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-seal text-base sm:min-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed">
+            <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-green text-base sm:min-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed">
               {status === "submitting" ? "접수 중..." : "참가 신청 제출"}
             </button>
             <p className="text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
@@ -304,7 +304,7 @@ function Label({ htmlFor, required, children }: { htmlFor?: string; required?: b
   return (
     <label htmlFor={htmlFor} className="mono block text-[10px] text-[var(--ink-3)] mb-0.5">
       {children}
-      {required && <span className="text-[var(--seal)] ml-1">*</span>}
+      {required && <span className="text-[var(--green)] ml-1">*</span>}
     </label>
   );
 }

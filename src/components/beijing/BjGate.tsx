@@ -109,17 +109,15 @@ export default function BjGate({ prefill }: { prefill?: string }) {
   const busy = status === "checking" || status === "admitted";
 
   return (
-    <main className={`theme-bj ${fontVars} relative min-h-[100svh] flex items-center justify-center overflow-hidden`}>
+    <main className={`theme-bj ${fontVars} on-page relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[var(--page)]`}>
       <BjVisitTracker path="/beijing/gate" />
 
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-cover bg-center scale-105" style={{ backgroundImage: "url('/beijing-skyline.jpg')" }} />
-        <div className="absolute inset-0 bg-[#0b0d12]/78" />
-        <div className="absolute inset-0 bj-lattice" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b0d12]/30 to-[#0b0d12]" />
+      <div className="absolute inset-x-0 top-0 h-[46svh] min-h-[280px]">
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/beijing-day.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--page)]" />
       </div>
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-8 py-12 sm:py-20">
+      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-8 pt-[28svh] pb-12 sm:pb-16">
         <div ref={passRef} className="transition-transform duration-300 ease-out" style={{ transformStyle: "preserve-3d" }}>
           <div className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
             {/* 본권 */}
@@ -219,7 +217,7 @@ export default function BjGate({ prefill }: { prefill?: string }) {
                     />
                   </div>
                   {status === "error" && error && <p className="mt-2.5 text-xs text-[var(--seal)] leading-relaxed">{error}</p>}
-                  <button type="submit" disabled={busy} className="bj-btn bj-btn-seal mt-5 w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed">
+                  <button type="submit" disabled={busy} className="bj-btn bj-btn-green mt-5 w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed">
                     {status === "checking" ? "확인 중..." : status === "admitted" ? "입장합니다" : "초청장 열기"}
                   </button>
                 </form>
@@ -233,7 +231,7 @@ export default function BjGate({ prefill }: { prefill?: string }) {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-[var(--snow-3)] leading-relaxed">
+        <p className="mt-6 text-center text-xs text-[var(--ink-3)] leading-relaxed">
           초청받으신 원장님께만 공개되는 페이지입니다. 코드를 받지 못하셨다면 ClassIn Korea 02-6958-8566으로 연락해 주세요.
         </p>
       </div>
