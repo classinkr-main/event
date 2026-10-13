@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { getStoredChannel } from "@/lib/inflow";
 import { formatKoreanPhone } from "@/lib/phone";
-import Corners from "./Corners";
+import Barcode from "./gfx/Barcode";
+import FlightArc from "./gfx/FlightArc";
+import TicketField from "./TicketField";
 import { INTEREST_LABELS } from "./data";
 import { useInterests } from "./interests";
 
@@ -24,7 +26,7 @@ type SubmittedData = {
 const PARTY_OPTIONS = ["1명 (본인)", "2명", "3명 이상"];
 const ARRIVAL_OPTIONS = ["11/24 (화) 저녁", "11/25 (수) 오전", "미정"];
 
-/** 참가 신청 = 티켓. 본문(입력) + 스텁(관심 일정·바코드). 접수되면 스탬프 */
+/** 참가 신청 = 종이 탑승권. 본권에 입력, 스텁에 관심 일정. 접수되면 이름이 인쇄된 탑승권 + 스탬프 */
 export default function BjRegisterForm({ source }: { source?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
@@ -38,13 +40,10 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     e.preventDefault();
     setStatus("submitting");
     setErrorMsg("");
-
     const form = e.currentTarget;
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries()) as Record<string, string>;
+    const payload = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
     if (payload.source) payload.source = `${payload.source}/${getStoredChannel()}`;
     payload.interests = interestLabels.join(", ");
-
     try {
       const res = await fetch("/api/beijing", {
         method: "POST",
@@ -67,72 +66,98 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     }
   }
 
+  const strip = (label: string, right: string) => (
+    <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-8 py-3">
+      <span className="font-bold tracking-tight text-sm sm:text-base">
+        ClassIn <span className="serif font-medium">Meets</span>
+      </span>
+      <span className="mono text-[10px] sm:text-[11px] opacity-85">
+        {label} {right}
+      </span>
+    </div>
+  );
+
   if (status === "success" && submitted) {
-    const rows: [string, string][] = [
-      ["이름", submitted.name],
-      ["소속", submitted.organization],
-      ["직책", submitted.position],
-      ["연락처", submitted.phone],
-      ["이메일", submitted.email],
-      ["참가 인원", submitted.party || "-"],
-      ["도착 예정", submitted.arrival || "-"],
-      ...(submitted.interests ? ([["관심 일정", submitted.interests]] as [string, string][]) : []),
-      ...(submitted.message ? ([["요청사항", submitted.message]] as [string, string][]) : []),
-    ];
     return (
-      <div className="relative border border-[var(--bj-line)] bg-[#0b0d13]/80">
-        <Corners />
-        <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr]">
-          <div className="relative p-7 sm:p-10 md:p-12">
-            <div className="mono text-[10px] text-[var(--ink-3)]">ADMIT ONE · CLASSIN MEETS BEIJING</div>
-            <h3 className="serif mt-4 text-3xl sm:text-4xl font-semibold">신청이 접수되었습니다</h3>
-            <p className="mt-3 text-sm sm:text-base text-[var(--ink-2)] leading-relaxed">
-              항공·숙박과 세부 일정 안내를 위해 담당자가 순차적으로 개별 연락드립니다.
-            </p>
-            <dl className="mt-8 border-t border-[var(--bj-line)]">
-              {rows.map(([k, v]) => (
-                <div key={k} className="grid grid-cols-[5.5rem_1fr] gap-4 py-3 border-b border-[var(--bj-line)]">
-                  <dt className="mono text-[11px] text-[var(--ink-3)] pt-0.5">{k}</dt>
-                  <dd className="text-sm sm:text-[15px] text-[var(--ink)] break-all whitespace-pre-line">{v}</dd>
+      <div className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
+        <div className="relative">
+          {strip("BOARDING PASS /", "접수 완료")}
+          <div className="p-6 sm:p-9">
+            <div className="grid grid-cols-[1fr_auto] gap-6">
+              <div>
+                <div className="mono text-[10px] text-[var(--ink-3)]">PASSENGER / 탑승객</div>
+                <div className="serif mt-1 text-2xl sm:text-3xl font-bold">
+                  {submitted.name} <span className="text-base sm:text-lg font-semibold text-[var(--ink-2)]">{submitted.position}</span>
                 </div>
-              ))}
-            </dl>
-            <div className="absolute right-6 sm:right-10 top-6 sm:top-10">
-              <span className="bj-stamp text-base sm:text-xl">접수 완료</span>
-            </div>
-          </div>
-          <div className="relative p-7 sm:p-10 border-t md:border-t-0 md:border-l border-dashed border-[var(--bj-line-2)] flex flex-col justify-between">
-            <div>
-              <div className="mono text-[10px] text-[var(--ink-3)]">PASSENGER</div>
-              <div className="serif mt-1 text-2xl font-semibold">{submitted.name}</div>
-              <div className="mt-6 grid grid-cols-2 gap-4">
-                <div>
-                  <div className="mono text-[10px] text-[var(--ink-3)]">FROM</div>
-                  <div className="serif text-3xl font-semibold mt-1">ICN</div>
-                </div>
-                <div>
-                  <div className="mono text-[10px] text-[var(--ink-3)]">TO</div>
-                  <div className="serif text-3xl font-semibold mt-1">PEK</div>
-                </div>
-                <div>
-                  <div className="mono text-[10px] text-[var(--ink-3)]">DATE</div>
-                  <div className="text-sm font-semibold mt-1">24 – 27 NOV</div>
-                </div>
-                <div>
-                  <div className="mono text-[10px] text-[var(--ink-3)]">PARTY</div>
-                  <div className="text-sm font-semibold mt-1">{submitted.party || "-"}</div>
-                </div>
+                <div className="text-sm text-[var(--ink-2)] mt-1">{submitted.organization}</div>
+              </div>
+              <div className="text-right">
+                <div className="mono text-[10px] text-[var(--ink-3)]">PARTY</div>
+                <div className="mt-1 font-bold text-sm sm:text-base">{submitted.party || "-"}</div>
               </div>
             </div>
-            <div className="mt-8">
-              <div className="bj-barcode h-10 w-full" aria-hidden />
+            <div className="mt-5 grid grid-cols-[auto_1fr_auto] items-end gap-3 sm:gap-6">
+              <TicketField k="FROM" v="ICN" big />
+              <FlightArc className="w-full h-auto text-[var(--ink)] -mb-2" id="done-arc" />
+              <TicketField k="TO" v="PEK" big right />
+            </div>
+            <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-y-4 gap-x-4 border-t border-[var(--paper-line)] pt-4">
+              <TicketField k="DATE" v="24 – 27 NOV 2026" />
+              <TicketField k="ARRIVAL" v={submitted.arrival || "-"} />
+              <TicketField k="PHONE" v={submitted.phone} />
+              <TicketField k="EMAIL" v={submitted.email} />
+            </div>
+            {(submitted.interests || submitted.message) && (
+              <dl className="mt-5 border-t border-[var(--paper-line)] pt-4 space-y-2 text-sm">
+                {submitted.interests && (
+                  <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                    <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">INTERESTS</dt>
+                    <dd className="text-[var(--ink)]">{submitted.interests}</dd>
+                  </div>
+                )}
+                {submitted.message && (
+                  <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                    <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">NOTE</dt>
+                    <dd className="text-[var(--ink)] whitespace-pre-line">{submitted.message}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
+            <Barcode seed={`${submitted.name}-${submitted.phone}`} height={44} className="mt-6 h-11 w-full text-[var(--ink)]" />
+            <div className="mono mt-1.5 text-[10px] text-[var(--ink-3)]">CM1124 ICNPEK 24NOV</div>
+            <div className="absolute right-8 sm:right-14 top-[38%]">
+              <span className="bj-stamp text-lg sm:text-2xl">접수 완료</span>
+            </div>
+          </div>
+        </div>
+        <div className="relative border-t-2 md:border-t-0 md:border-l-2 border-dashed border-[var(--paper-line-2)]">
+          <span className="notch hidden md:block -top-[11px] left-0 -translate-x-1/2" aria-hidden />
+          <span className="notch hidden md:block -bottom-[11px] left-0 -translate-x-1/2" aria-hidden />
+          <span className="notch md:hidden top-0 -left-[11px] -translate-y-1/2" aria-hidden />
+          <span className="notch md:hidden top-0 -right-[11px] -translate-y-1/2" aria-hidden />
+          <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
+            <span className="mono text-[10px]">STUB</span>
+            <span className="mono text-[10px]">CM 1124</span>
+          </div>
+          <div className="p-5 sm:p-7 flex flex-col gap-6 h-full">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+              <TicketField k="FROM" v="ICN" big />
+              <TicketField k="TO" v="PEK" big right />
+              <TicketField k="DATE" v="24 NOV" />
+              <TicketField k="GATE" v="GET" right />
+            </div>
+            <p className="text-sm leading-relaxed text-[var(--ink-2)]">
+              접수되었습니다. 항공과 숙박, 세부 일정 안내를 위해 담당자가 순차적으로 개별 연락드립니다.
+            </p>
+            <div className="mt-auto">
+              <Barcode seed={`stub-${submitted.phone}`} height={36} className="h-9 w-full text-[var(--ink)]" />
               <button
                 type="button"
                 onClick={() => {
                   setStatus("idle");
                   setSubmitted(null);
                 }}
-                className="mt-5 text-xs text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4 transition-colors"
+                className="mt-4 text-xs text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4"
               >
                 새 신청서 작성
               </button>
@@ -144,20 +169,20 @@ export default function BjRegisterForm({ source }: { source?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="relative border border-[var(--bj-line)] bg-[#0b0d13]/80">
-      <Corners />
+    <form onSubmit={handleSubmit} className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
       {source && <input type="hidden" name="source" value={source} />}
       <input type="hidden" name="session" value="ClassIn Meets 베이징 · 11/24–27" />
 
-      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr]">
-        {/* 본문 */}
-        <div className="p-7 sm:p-10 md:p-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
-            <Field label="이름" name="name" placeholder="홍길동" required />
-            <Field label="학원명 / 기관" name="organization" placeholder="○○학원" required />
-            <Field label="직책" name="position" placeholder="원장 / 대표 등" required />
+      {/* 본권: 입력 */}
+      <div className="relative">
+        {strip("BOARDING PASS /", "참가 신청서")}
+        <div className="p-6 sm:p-9">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+            <Field label="PASSENGER / 이름" name="name" placeholder="홍길동" required />
+            <Field label="ORGANIZATION / 학원명 · 기관" name="organization" placeholder="○○학원" required />
+            <Field label="TITLE / 직책" name="position" placeholder="원장, 대표 등" required />
             <div>
-              <Label htmlFor="phone" required>연락처</Label>
+              <Label htmlFor="phone" required>PHONE / 연락처</Label>
               <input
                 id="phone"
                 name="phone"
@@ -173,28 +198,28 @@ export default function BjRegisterForm({ source }: { source?: string }) {
               />
             </div>
             <div className="sm:col-span-2">
-              <Field label="이메일" name="email" type="email" placeholder="name@example.com" required />
+              <Field label="EMAIL / 이메일" name="email" type="email" placeholder="name@example.com" required />
             </div>
             <div>
-              <Label htmlFor="party">참가 인원</Label>
+              <Label htmlFor="party">PARTY / 참가 인원</Label>
               <select id="party" name="party" className="field" defaultValue={PARTY_OPTIONS[0]}>
                 {PARTY_OPTIONS.map((o) => (
-                  <option key={o} value={o} className="bg-[#0b0d13]">
+                  <option key={o} value={o}>
                     {o}
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <Label>도착 예정</Label>
-              <div className="flex flex-wrap gap-2 pt-1">
+              <Label>ARRIVAL / 도착 예정</Label>
+              <div className="flex flex-wrap gap-2 pt-1.5">
                 {ARRIVAL_OPTIONS.map((o) => {
                   const on = arrival === o;
                   return (
                     <label
                       key={o}
-                      className={`cursor-pointer select-none border px-3 py-2 text-xs sm:text-sm transition-colors ${
-                        on ? "border-[var(--bj-red)] bg-[rgba(255,79,46,0.12)] text-[var(--ink)]" : "border-[var(--bj-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
+                      className={`cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
+                        on ? "border-[var(--seal)] bg-[rgba(200,50,43,0.1)] text-[var(--seal)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
                       }`}
                     >
                       <input type="radio" name="arrival" value={o} checked={on} onChange={() => setArrival(o)} className="sr-only" />
@@ -206,55 +231,57 @@ export default function BjRegisterForm({ source }: { source?: string }) {
             </div>
             <div className="sm:col-span-2">
               <Label htmlFor="message">
-                요청사항 <span className="text-[var(--ink-3)] font-normal">(선택)</span>
+                NOTE / 요청사항 <span className="font-normal normal-case">(선택)</span>
               </Label>
-              <textarea
-                id="message"
-                name="message"
-                rows={2}
-                placeholder="항공·숙박·식사 관련 요청이나 궁금한 점"
-                className="field min-h-[72px]"
-                maxLength={1000}
-              />
+              <textarea id="message" name="message" rows={2} placeholder="항공, 숙박, 식사 관련 요청이나 궁금한 점" className="field min-h-[64px]" maxLength={1000} />
             </div>
           </div>
 
           {status === "error" && (
-            <div className="mt-6 border border-[rgba(255,79,46,0.5)] bg-[rgba(255,79,46,0.08)] px-4 py-3 text-sm text-[#ffb3a0]">{errorMsg}</div>
+            <div className="mt-6 border border-[var(--seal)] bg-[rgba(200,50,43,0.07)] px-4 py-3 text-sm text-[var(--seal)]">{errorMsg}</div>
           )}
 
-          <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-red mt-9 w-full sm:w-auto sm:min-w-[260px] text-base disabled:opacity-50 disabled:cursor-not-allowed">
-            {status === "submitting" ? "접수 중..." : "참가 신청 제출"}
-            {status !== "submitting" && (
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
-          </button>
-          <p className="mt-4 text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
-            제출하신 정보는 본 행사 운영(항공·숙박·현지 일정 안내) 목적으로만 사용되며, 행사 종료 후 안전하게 폐기됩니다.
-          </p>
+          <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
+            <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-seal text-base sm:min-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed">
+              {status === "submitting" ? "접수 중..." : "참가 신청 제출"}
+            </button>
+            <p className="text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
+              제출하신 정보는 본 행사 운영(항공, 숙박, 현지 일정 안내) 목적으로만 사용되며 행사 종료 후 안전하게 폐기됩니다.
+            </p>
+          </div>
         </div>
+      </div>
 
-        {/* 스텁 */}
-        <div className="relative p-7 sm:p-10 border-t md:border-t-0 md:border-l border-dashed border-[var(--bj-line-2)] flex flex-col justify-between">
+      {/* 스텁: 관심 일정 */}
+      <div className="relative border-t-2 md:border-t-0 md:border-l-2 border-dashed border-[var(--paper-line-2)]">
+        <span className="notch hidden md:block -top-[11px] left-0 -translate-x-1/2" aria-hidden />
+        <span className="notch hidden md:block -bottom-[11px] left-0 -translate-x-1/2" aria-hidden />
+        <span className="notch md:hidden top-0 -left-[11px] -translate-y-1/2" aria-hidden />
+        <span className="notch md:hidden top-0 -right-[11px] -translate-y-1/2" aria-hidden />
+        <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
+          <span className="mono text-[10px]">STUB</span>
+          <span className="mono text-[10px]">CM 1124</span>
+        </div>
+        <div className="p-5 sm:p-7 flex flex-col gap-6 h-full">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-3">
+            <TicketField k="FROM" v="ICN" big />
+            <TicketField k="TO" v="PEK" big right />
+            <TicketField k="DATE" v="24 – 27 NOV" />
+            <TicketField k="GATE" v="GET" right />
+          </div>
           <div>
-            <div className="mono text-[10px] text-[var(--ink-3)]">INTERESTS · 관심 일정</div>
+            <div className="mono text-[10px] text-[var(--ink-3)]">INTERESTS / 관심 일정</div>
             {interestLabels.length === 0 ? (
-              <p className="mt-3 text-sm text-[var(--ink-2)] leading-relaxed">
-                아직 표시한 일정이 없습니다. <a href="#itinerary" className="underline underline-offset-4 hover:text-[var(--ink)]">일정</a>이나{" "}
-                <a href="#session" className="underline underline-offset-4 hover:text-[var(--ink)]">세션</a>에서 「관심 표시」를 누르면 여기에 담겨 함께 접수됩니다.
+              <p className="mt-2 text-[13px] text-[var(--ink-2)] leading-relaxed">
+                아직 표시한 일정이 없습니다. <a href="#questions" className="underline underline-offset-4">질문</a>,{" "}
+                <a href="#journey" className="underline underline-offset-4">여권</a>,{" "}
+                <a href="#program" className="underline underline-offset-4">프로그램</a>에서 관심 표시를 누르면 여기에 담겨 함께 접수됩니다.
               </p>
             ) : (
-              <ul className="mt-3 flex flex-wrap gap-2">
+              <ul className="mt-2 flex flex-wrap gap-1.5">
                 {interests.map((id) => (
                   <li key={id}>
-                    <button
-                      type="button"
-                      onClick={() => remove(id)}
-                      className="bj-mark on"
-                      title="빼기"
-                    >
+                    <button type="button" onClick={() => remove(id)} className="bj-mark on" title="빼기">
                       {INTEREST_LABELS[id] ?? id}
                       <span aria-hidden>×</span>
                     </button>
@@ -262,32 +289,10 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                 ))}
               </ul>
             )}
-
-            <div className="mt-8 grid grid-cols-2 gap-4">
-              <div>
-                <div className="mono text-[10px] text-[var(--ink-3)]">FROM</div>
-                <div className="serif text-3xl font-semibold mt-1">ICN</div>
-              </div>
-              <div>
-                <div className="mono text-[10px] text-[var(--ink-3)]">TO</div>
-                <div className="serif text-3xl font-semibold mt-1">PEK</div>
-              </div>
-              <div>
-                <div className="mono text-[10px] text-[var(--ink-3)]">DATE</div>
-                <div className="text-sm font-semibold mt-1">24 – 27 NOV 2026</div>
-              </div>
-              <div>
-                <div className="mono text-[10px] text-[var(--ink-3)]">GATE</div>
-                <div className="text-sm font-semibold mt-1">GET 2026</div>
-              </div>
-            </div>
           </div>
-          <div className="mt-8">
-            <div className="bj-barcode h-10 w-full" aria-hidden />
-            <div className="mono mt-2 text-[10px] text-[var(--ink-3)] flex justify-between">
-              <span>CLASSIN MEETS</span>
-              <span>BEIJING · 1124</span>
-            </div>
+          <div className="mt-auto">
+            <Barcode seed="register-stub-1124" height={36} className="h-9 w-full text-[var(--ink)]" />
+            <div className="mono mt-1 text-[10px] text-[var(--ink-3)]">2026 1124 PEK</div>
           </div>
         </div>
       </div>
@@ -297,9 +302,9 @@ export default function BjRegisterForm({ source }: { source?: string }) {
 
 function Label({ htmlFor, required, children }: { htmlFor?: string; required?: boolean; children: React.ReactNode }) {
   return (
-    <label htmlFor={htmlFor} className="mono block text-[10px] text-[var(--ink-3)] mb-1">
+    <label htmlFor={htmlFor} className="mono block text-[10px] text-[var(--ink-3)] mb-0.5">
       {children}
-      {required && <span className="text-[var(--bj-red)] ml-1">*</span>}
+      {required && <span className="text-[var(--seal)] ml-1">*</span>}
     </label>
   );
 }

@@ -1,34 +1,32 @@
 import BackToTop from "@/components/BackToTop";
 import BjTopbar from "./BjTopbar";
-import BjRail from "./BjRail";
 import BjHero from "./BjHero";
-import BjTicker from "./BjTicker";
-import BjPanels from "./BjPanels";
-import BjStats from "./BjStats";
-import BjItinerary from "./BjItinerary";
-import BjSession from "./BjSession";
-import BjDossier from "./BjDossier";
+import BjLetter from "./BjLetter";
+import BjQuestions from "./BjQuestions";
+import BjPassport from "./BjPassport";
+import BjProgram from "./BjProgram";
+import BjCards from "./BjCards";
+import BjNotes from "./BjNotes";
 import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
 import BjFloatingCTA from "./BjFloatingCTA";
 import BjVisitTracker from "./BjVisitTracker";
 import BjHashScroll from "./BjHashScroll";
-import { serif } from "./fonts";
+import { fontVars } from "./fonts";
 
 export default function BjPage({ source }: { source?: string }) {
   return (
-    <main className={`theme-bj ${serif.variable}`}>
+    <main className={`theme-bj ${fontVars} bj-lattice`}>
       <BjVisitTracker path="/beijing" clearGateFlag />
       <BjHashScroll />
       <BjTopbar />
-      <BjRail />
       <BjHero />
-      <BjTicker />
-      <BjPanels />
-      <BjStats />
-      <BjItinerary />
-      <BjSession />
-      <BjDossier />
+      <BjLetter />
+      <BjQuestions />
+      <BjPassport />
+      <BjProgram />
+      <BjCards />
+      <BjNotes />
       <BjRegister source={source} />
       <BjFooter />
       <BjFloatingCTA />

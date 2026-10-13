@@ -194,3 +194,30 @@ export const STATS = [
   { value: 73, suffix: "%", label: "샹량교육 온라인 수강 완료율 (업계 평균 약 45%)" },
   { value: 100, suffix: "명+", label: "쉐팡교육 전임 교사" },
 ];
+
+/** 여권 스탬프(일정 4일) */
+export const STAMPS: { shape: "round" | "rect"; color: "blue" | "red" | "green"; top: string; center: string; bottom: string; rot: number }[] = [
+  { shape: "round", color: "blue", top: "BEIJING CAPITAL · PEK", center: "24 NOV 2026", bottom: "ARRIVAL", rot: -9 },
+  { shape: "rect", color: "red", top: "GET 2026 · 教育科技大会", center: "25 NOV 2026", bottom: "CLASSIN SESSION", rot: 6 },
+  { shape: "round", color: "green", top: "CLASSIN HEADQUARTERS", center: "26 NOV 2026", bottom: "VISIT · 学方", rot: -5 },
+  { shape: "rect", color: "blue", top: "BEIJING CAPITAL · PEK", center: "27 NOV 2026", bottom: "DEPARTURE", rot: 8 },
+];
+
+/** 이번 여정에서 만나는 사람과 숫자로 만든 질문 */
+export const QUESTIONS: { no: string; q: string; where: string; who: string; id: string }[] = [
+  { no: "01", q: "수업을 녹화하고 분석하는 AI는 학원 운영을 어디까지 바꿨나", where: "11.25 · GET 세션 1", who: "한국 정율사관 · 2023년 전 캠퍼스 스마트교실 전환", id: "s1" },
+  { no: "02", q: "온라인 수학 수업의 수강 완료율 73%, 업계 평균의 1.6배는 어떻게 나왔나", where: "11.26 15:00 · ClassIn 본사", who: "샹량교육 · 수강생 0명에서 1만 명까지", id: "d3-xiangliang" },
+  { no: "03", q: "본사 조직 없는 학원, AI로 정말 가능한가", where: "11.26 16:00 · ClassIn 본사", who: "리루이 · TAL 교육상품 설계 총괄 출신", id: "d3-lirui" },
+  { no: "04", q: "지역 학원은 전자칠판과 입소문으로 어떻게 14만 명을 모았나", where: "11.25 · GET 세션 4", who: "충칭 훠광교육 · 2020년 설립", id: "s4" },
+  { no: "05", q: "전임 100명이 1:1 맞춤 지도를 돌리는 학원은 현장에서 어떻게 움직이나", where: "11.26 오전 · 방문", who: "쉐팡교육 · 베이징 5개 핵심 지역", id: "d3-xuefang" },
+  { no: "06", q: "AI 시대, ClassIn 제품은 어디로 가나", where: "11.26 14:00 · ClassIn 본사", who: "ClassIn CTO · 제품 로드맵", id: "d3-cto" },
+];
+
+/** 여행 메모 */
+export const NOTES: [string, string][] = [
+  ["시차", "베이징은 서울보다 1시간 늦습니다."],
+  ["날씨", "11월 하순 베이징은 영하 3도에서 영상 8도 안팎, 서울보다 건조합니다. 두꺼운 외투를 챙기세요."],
+  ["여권", "유효기간이 6개월 이상 남은 여권인지 확인해 주세요."],
+  ["결제", "현지는 알리페이·위챗페이가 보편적입니다. 위안화 소액 환전도 권합니다."],
+  ["안내", "비자·항공·숙박·현지 이동은 신청 후 담당자가 개별 안내드립니다."],
+];
