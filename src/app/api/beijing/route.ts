@@ -11,6 +11,7 @@ type Payload = {
   party?: string;
   arrival?: string;
   message?: string;
+  interests?: string;
   session?: string;
   source?: string;
 };
@@ -60,6 +61,7 @@ export async function POST(request: Request) {
   const party = clean(body.party, 30);
   const arrival = clean(body.arrival, 50);
   const message = clean(body.message, 1000);
+  const interests = clean(body.interests, 400);
 
   if (!sheetsUrl) {
     console.warn("[beijing] No webhook URL configured. Received but not stored.", body);
@@ -81,12 +83,14 @@ export async function POST(request: Request) {
         party,
         arrival,
         message,
+        interests,
         source: clean(body.source, 200),
         // 호환용: 인천 시트(v3)로 폴백될 때 Session 컬럼에 요약이 남도록
         session: [
           clean(body.session, 100) || "베이징 탐방 11/24–27",
           party ? `인원=${party}` : "",
           arrival ? `도착=${arrival}` : "",
+          interests ? `관심=${interests}` : "",
           message ? `요청=${message.slice(0, 300)}` : "",
         ]
           .filter(Boolean)

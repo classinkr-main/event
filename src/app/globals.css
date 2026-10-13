@@ -331,3 +331,205 @@ main.theme-green textarea.field {
 @media (prefers-reduced-motion: reduce) {
   .float-card, .float-card-2 { animation: none; }
 }
+
+/* ── ClassIn Meets 베이징 초청(/beijing) — 탑승권형 초청장 테마 (각진 프레임·세리프·버밀리언 한 색) ── */
+main.theme-bj {
+  --ink: #f2ede3;
+  --ink-2: rgba(242, 237, 227, 0.62);
+  --ink-3: rgba(242, 237, 227, 0.38);
+  --bj-line: rgba(242, 237, 227, 0.16);
+  --bj-line-2: rgba(242, 237, 227, 0.3);
+  --bj-red: #ff4f2e;
+  --bj-red-deep: #d93a1c;
+  --accent-from: #ff4f2e;
+  --accent-to: #ff8a5b;
+  color: var(--ink);
+}
+html:has(main.theme-bj) {
+  --background: #07080b;
+  scroll-snap-type: none;
+}
+html:has(main.theme-bj) body::before {
+  background:
+    radial-gradient(55% 35% at 50% 0%, rgba(255, 79, 46, 0.09), transparent 70%),
+    radial-gradient(40% 30% at 85% 60%, rgba(242, 237, 227, 0.04), transparent 70%);
+}
+main.theme-bj .serif {
+  font-family: var(--font-serif), "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  letter-spacing: -0.02em;
+}
+main.theme-bj .mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.08em;
+}
+
+/* 밑줄형 입력 */
+main.theme-bj .field {
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--bj-line-2);
+  padding: 12px 0;
+  color: var(--ink);
+}
+main.theme-bj .field:focus {
+  background: transparent;
+  border-bottom-color: var(--bj-red);
+  box-shadow: 0 1px 0 0 var(--bj-red);
+}
+main.theme-bj select.field {
+  background-position: right 0 center;
+  padding-right: 28px;
+}
+main.theme-bj textarea.field {
+  resize: vertical;
+  line-height: 1.6;
+}
+main.theme-bj .field::placeholder {
+  color: var(--ink-3);
+}
+
+/* 네 귀퉁이 브래킷 프레임 */
+.bj-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 0 solid var(--ink);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.bj-corner.tl { top: 0; left: 0; border-top-width: 1px; border-left-width: 1px; }
+.bj-corner.tr { top: 0; right: 0; border-top-width: 1px; border-right-width: 1px; }
+.bj-corner.bl { bottom: 0; left: 0; border-bottom-width: 1px; border-left-width: 1px; }
+.bj-corner.br { bottom: 0; right: 0; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* 티켓 절취선(세로/가로) */
+.bj-perf-v {
+  background-image: linear-gradient(to bottom, var(--bj-line-2) 55%, transparent 55%);
+  background-size: 1px 10px;
+  width: 1px;
+}
+.bj-perf-h {
+  background-image: linear-gradient(to right, var(--bj-line-2) 55%, transparent 55%);
+  background-size: 10px 1px;
+  height: 1px;
+}
+/* 바코드 느낌 줄무늬 */
+.bj-barcode {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--ink) 0 2px, transparent 2px 5px,
+    var(--ink) 5px 6px, transparent 6px 9px,
+    var(--ink) 9px 12px, transparent 12px 14px,
+    var(--ink) 14px 15px, transparent 15px 19px
+  );
+  opacity: 0.8;
+}
+
+/* 스탬프 */
+@keyframes bj-stamp-in {
+  0%   { transform: rotate(-14deg) scale(2.4); opacity: 0; }
+  55%  { transform: rotate(-12deg) scale(0.94); opacity: 1; }
+  100% { transform: rotate(-12deg) scale(1); opacity: 1; }
+}
+.bj-stamp {
+  display: inline-block;
+  padding: 10px 18px;
+  border: 3px solid var(--bj-red);
+  color: var(--bj-red);
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  transform: rotate(-12deg);
+  animation: bj-stamp-in 0.55s cubic-bezier(0.2, 0.9, 0.2, 1.2) both;
+  mix-blend-mode: screen;
+  box-shadow: inset 0 0 0 1px rgba(255, 79, 46, 0.35);
+}
+
+/* 흔들림(오류) */
+@keyframes bj-shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+.bj-shake { animation: bj-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+
+/* 흐르는 띠 */
+@keyframes bj-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.bj-marquee {
+  display: flex;
+  width: max-content;
+  animation: bj-marquee 38s linear infinite;
+}
+.bj-marquee:hover { animation-play-state: paused; }
+
+/* 도시에 패널 전환 */
+@keyframes bj-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+.bj-fade-up { animation: bj-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* 일정 경로선 */
+.bj-route-fill {
+  transition: height 0.12s linear;
+}
+.bj-node {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.bj-node.on {
+  background: var(--bj-red);
+  border-color: var(--bj-red);
+  box-shadow: 0 0 0 6px rgba(255, 79, 46, 0.18);
+}
+
+/* 패널 확장(한눈에 보기) */
+.bj-panel { transition: flex-grow 0.6s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.4s ease; }
+@media (hover: hover) and (min-width: 768px) {
+  .bj-panels:hover .bj-panel { flex-grow: 1; }
+  .bj-panels .bj-panel:hover { flex-grow: 2.3; }
+}
+
+/* 버튼 */
+.bj-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.bj-btn:active { transform: scale(0.98); }
+.bj-btn-solid { background: var(--ink); color: #0a0b0f; }
+.bj-btn-solid:hover { background: #ffffff; }
+.bj-btn-red { background: var(--bj-red); color: #fff; }
+.bj-btn-red:hover { background: var(--bj-red-deep); }
+.bj-btn-ghost { border: 1px solid var(--bj-line-2); color: var(--ink); }
+.bj-btn-ghost:hover { border-color: var(--ink); background: rgba(242, 237, 227, 0.05); }
+
+/* 북마크 토글 */
+.bj-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--bj-line-2);
+  color: var(--ink-2);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  transition: all 0.2s ease;
+}
+.bj-mark:hover { border-color: var(--ink); color: var(--ink); }
+.bj-mark.on { border-color: var(--bj-red); background: rgba(255, 79, 46, 0.12); color: #ffb3a0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bj-marquee, .bj-stamp, .bj-shake, .bj-fade-up { animation: none; }
+  .bj-panel { transition: none; }
+}

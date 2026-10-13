@@ -333,10 +333,10 @@ function doPost(e) {
 - env `BEIJING_INVITE_SECRET` — 쿠키 토큰 서명 키(선택). 코드를 바꾸면 기존 쿠키는 자동 무효.
 - 흐름: 게이트 화면 → `POST /api/beijing/invite {code}` → 맞으면 HttpOnly 쿠키 `bj_invite`(60일) → 서버 컴포넌트가 쿠키를 보고 본문 렌더. 본문 HTML은 코드 없이는 내려가지 않음.
 - 초청 링크에 `?code=BEIJING1124`를 붙이면 게이트가 자동으로 확인하고 바로 열립니다. 예: `https://meets.classin.co.kr/beijing?code=BEIJING1124`
-- 참가 신청 `POST /api/beijing`도 같은 쿠키가 있어야 받습니다.
+- 참가 신청 `POST /api/beijing`도 같은 쿠키가 있어야 받습니다. 일정·세션에서 「관심 표시」한 항목은 `interests`(쉼표 구분 라벨)로 함께 저장됩니다.
 
 ## 시트
-- **전용 시트** "[MKT] ClassIn Meets 베이징 탐방 참가 신청" `1eMhW7X_zF93jZ2pitPtHyYCf8aENKP4eJRw7MxMer78` (classinkr@classin.com 소유, heesung.shin@classin.com 편집자, 첫 탭 "참가 신청"에 헤더 입력·고정 완료, 2026-10-13 생성)
+- **전용 시트** "[MKT] ClassIn Meets 베이징 탐방 참가 신청" `1eMhW7X_zF93jZ2pitPtHyYCf8aENKP4eJRw7MxMer78` (classinkr@classin.com 소유, heesung.shin@classin.com 편집자, 첫 탭 "참가 신청"에 헤더 11열(Interests 포함) 입력·고정 완료, 2026-10-13 생성)
 - 컨테이너 바인딩 Apps Script "클래스인_베이징_탐방_신청" `1Rgz89rq8FP8zHv0yqfpdFvlLtYcI52CE5D4AwN4YiNDATmte1WOw2NxS` (아래 v1 코드 저장 완료). **남은 단계(사람이 클릭)**: 새 배포(웹 앱, 실행 계정 나, 액세스 모든 사용자) 대화상자에서 "액세스 승인" → 계정 classinkr@classin.com 선택 → 허용 → 웹 앱 URL(`…/exec`) 복사 → `printf '<URL>' | vercel env add GOOGLE_SHEETS_WEBHOOK_URL_BEIJING production` + `.env.local` → 재배포(빈 커밋 push 또는 `vercel redeploy`).
 - env `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`. 미설정이면 인천 시트 웹훅으로 폴백 → 인천 탭에 들어가되 Source `beijing/…`, Session 컬럼에 `인원=…|도착=…|요청=…` 요약이 남아 데이터는 잃지 않음.
 - 방문 로그는 기존대로 인천 시트 Visits 탭 + Compass(Path `/beijing/gate` = 코드 입력 화면, `/beijing` = 열람).
@@ -346,7 +346,7 @@ function doPost(e) {
 ```javascript
 const HEADERS = [
   "Timestamp", "Name", "Organization", "Position", "Phone", "Email",
-  "Party", "Arrival", "Message", "Source",
+  "Party", "Arrival", "Message", "Interests", "Source",
 ];
 
 function doPost(e) {
@@ -368,7 +368,8 @@ function doPost(e) {
     }
     sheet.appendRow([
       data.timestamp, data.name, data.organization, data.position, data.phone,
-      data.email || "", data.party || "", data.arrival || "", data.message || "", data.source || "",
+      data.email || "", data.party || "", data.arrival || "", data.message || "",
+      data.interests || "", data.source || "",
     ]);
   }
 

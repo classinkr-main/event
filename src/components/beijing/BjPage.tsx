@@ -1,27 +1,34 @@
 import BackToTop from "@/components/BackToTop";
-import BjHeader from "./BjHeader";
+import BjTopbar from "./BjTopbar";
+import BjRail from "./BjRail";
 import BjHero from "./BjHero";
-import BjGlance from "./BjGlance";
-import BjSchedule from "./BjSchedule";
+import BjTicker from "./BjTicker";
+import BjPanels from "./BjPanels";
+import BjStats from "./BjStats";
+import BjItinerary from "./BjItinerary";
 import BjSession from "./BjSession";
-import BjPeople from "./BjPeople";
+import BjDossier from "./BjDossier";
 import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
 import BjFloatingCTA from "./BjFloatingCTA";
 import BjVisitTracker from "./BjVisitTracker";
 import BjHashScroll from "./BjHashScroll";
+import { serif } from "./fonts";
 
 export default function BjPage({ source }: { source?: string }) {
   return (
-    <main>
+    <main className={`theme-bj ${serif.variable}`}>
       <BjVisitTracker path="/beijing" clearGateFlag />
       <BjHashScroll />
-      <BjHeader />
+      <BjTopbar />
+      <BjRail />
       <BjHero />
-      <BjGlance />
-      <BjSchedule />
+      <BjTicker />
+      <BjPanels />
+      <BjStats />
+      <BjItinerary />
       <BjSession />
-      <BjPeople />
+      <BjDossier />
       <BjRegister source={source} />
       <BjFooter />
       <BjFloatingCTA />
