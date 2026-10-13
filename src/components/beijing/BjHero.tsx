@@ -80,13 +80,13 @@ export default function BjHero() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/35 to-transparent" />
           <div className="absolute left-4 right-4 sm:left-7 sm:right-7 bottom-4 sm:bottom-6 flex flex-wrap items-end justify-between gap-3 text-white">
             <div className="flex flex-wrap gap-2">
-              <span className="inline-flex items-baseline gap-2 rounded-full bg-white/92 text-[var(--ink)] px-4 py-2 text-sm backdrop-blur">
+              <span className="inline-flex items-baseline gap-2 rounded-full bg-black/55 text-white px-4 py-2 text-sm backdrop-blur">
                 출발까지 <span className="font-semibold tabular-nums" suppressHydrationWarning>{dd}일</span>
-                <span className="mono text-xs text-[var(--ink-2)] tabular-nums" suppressHydrationWarning>{hh}:{mm}:{ss}</span>
+                <span className="mono text-xs text-white/70 tabular-nums" suppressHydrationWarning>{hh}:{mm}:{ss}</span>
               </span>
-              <span className="inline-flex items-baseline gap-2 rounded-full bg-white/92 text-[var(--ink)] px-4 py-2 text-sm backdrop-blur">
+              <span className="inline-flex items-baseline gap-2 rounded-full bg-black/55 text-white px-4 py-2 text-sm backdrop-blur">
                 베이징 현재 <span className="font-semibold tabular-nums" suppressHydrationWarning>{bj}</span>
-                <span className="text-xs text-[var(--ink-2)]">서울보다 1시간 늦음</span>
+                <span className="text-xs text-white/70">서울보다 1시간 늦음</span>
               </span>
             </div>
             <span className="text-xs text-white/80">베이징 CBD, 서우두공항으로 접근하는 항공기</span>

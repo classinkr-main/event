@@ -14,7 +14,7 @@ export default function FlipCard({ org }: { org: Org }) {
           type="button"
           onClick={() => setOpen(true)}
           aria-expanded={open}
-          className="flip-face absolute inset-0 text-left p-6 flex flex-col rounded-2xl bg-white border border-[var(--line)] hover:border-[var(--line-2)] transition-colors shadow-[0_1px_2px_rgba(23,24,28,0.04)]"
+          className="flip-face absolute inset-0 text-left p-6 flex flex-col rounded-2xl bg-[var(--card)] border border-[var(--line)] hover:border-[var(--line-2)] transition-colors"
         >
           <div className="flex items-start justify-between gap-3">
             <Seal glyph={org.glyph} size={52} />
@@ -30,17 +30,17 @@ export default function FlipCard({ org }: { org: Org }) {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="flip-face flip-back text-left p-6 overflow-y-auto rounded-2xl bg-[var(--ink)] text-white"
+          className="flip-face flip-back text-left p-6 overflow-y-auto rounded-2xl bg-[#f3f1ec] text-[#17181c]"
         >
           <div className="flex items-center justify-between gap-3">
             <span className="font-medium">{org.name}</span>
-            <span className="text-xs text-white/60">앞면으로</span>
+            <span className="text-xs text-[#17181c]/55">앞면으로</span>
           </div>
           <dl className="mt-3">
             {org.rows.map(([k, v]) => (
-              <div key={k} className="grid grid-cols-[3.6rem_1fr] gap-3 py-2 border-b border-white/10">
-                <dt className="text-[11px] text-white/55 pt-0.5">{k}</dt>
-                <dd className="text-[12.5px] leading-relaxed text-white/85">{v}</dd>
+              <div key={k} className="grid grid-cols-[3.6rem_1fr] gap-3 py-2 border-b border-[#17181c]/10">
+                <dt className="text-[11px] text-[#17181c]/55 pt-0.5">{k}</dt>
+                <dd className="text-[12.5px] leading-relaxed text-[#17181c]/85">{v}</dd>
               </div>
             ))}
           </dl>

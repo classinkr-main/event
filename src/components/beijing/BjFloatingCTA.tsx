@@ -34,7 +34,7 @@ export default function BjFloatingCTA() {
       className={`fixed inset-x-0 z-50 px-3 sm:px-4 transition-all duration-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"}`}
       style={{ bottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <div className="max-w-xl mx-auto bg-white border border-[var(--line)] rounded-2xl pl-5 pr-2 py-2 flex items-center justify-between gap-3 shadow-[0_20px_50px_-20px_rgba(23,24,28,0.35)]">
+      <div className="max-w-xl mx-auto bg-[var(--card)] border border-[var(--line-2)] rounded-2xl pl-5 pr-2 py-2 flex items-center justify-between gap-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)]">
         <div className="min-w-0">
           <div className="text-sm sm:text-[15px] font-medium truncate">참가 신청 받는 중</div>
           <div className="text-[11px] text-[var(--ink-2)]">

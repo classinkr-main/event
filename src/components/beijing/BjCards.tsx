@@ -17,7 +17,7 @@ export default function BjCards() {
       </div>
       <div className="mt-4 sm:mt-5 grid md:grid-cols-2 gap-4 sm:gap-5">
         <Reveal>
-          <div className="rounded-2xl bg-white border border-[var(--line)] p-6 h-full flex gap-5">
+          <div className="rounded-2xl bg-[var(--card)] border border-[var(--line)] p-6 h-full flex gap-5">
             <Seal glyph="會" size={52} className="shrink-0" />
             <div>
               <div className="text-xl font-medium tracking-tight">GET 교육기술 대회</div>
@@ -29,7 +29,7 @@ export default function BjCards() {
           </div>
         </Reveal>
         <Reveal delay={60}>
-          <div className="rounded-2xl bg-white border border-[var(--line)] p-6 h-full flex gap-5">
+          <div className="rounded-2xl bg-[var(--card)] border border-[var(--line)] p-6 h-full flex gap-5">
             <Seal glyph="大" size={52} className="shrink-0" />
             <div>
               <div className="text-xl font-medium tracking-tight">베이징 협력 대학</div>

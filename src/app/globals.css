@@ -334,8 +334,29 @@ main.theme-green textarea.field {
 
 /* ── ClassIn Meets 베이징 초청(/beijing) v4 — 밝은 편집 디자인(흰 배경, 큰 가는 제목, 2단 구성). 종이 탑승권은 게이트·신청서에만 ── */
 main.theme-bj {
-  --page: #ffffff;
-  --band: #f4f2ed;
+  --page: #0e0f12;
+  --band: #15161a;
+  --card: #191a1f;
+  --ink: #f3f1ec;
+  --ink-2: rgba(243, 241, 236, 0.66);
+  --ink-3: rgba(243, 241, 236, 0.42);
+  --line: rgba(243, 241, 236, 0.12);
+  --line-2: rgba(243, 241, 236, 0.26);
+  --green: #35c282;
+  --green-soft: rgba(53, 194, 130, 0.16);
+  --seal: #e0553f;
+  --paper: #fbf9f4;
+  --paper-line: rgba(23, 24, 28, 0.12);
+  --paper-line-2: rgba(23, 24, 28, 0.3);
+  --stamp-blue: #7f9de0;
+  --stamp-green: #5cbf96;
+  --accent-from: #35c282;
+  --accent-to: #6fd3a6;
+  color: var(--ink);
+  background: var(--page);
+}
+/* 종이 위에서는 잉크·선·강조색을 종이용으로 되돌린다 */
+main.theme-bj .paper {
   --ink: #17181c;
   --ink-2: #5f6368;
   --ink-3: #9a9ea6;
@@ -344,18 +365,11 @@ main.theme-bj {
   --green: #084734;
   --green-soft: #e4f1ea;
   --seal: #c8322b;
-  --paper: #fbf9f4;
-  --paper-line: rgba(23, 24, 28, 0.12);
-  --paper-line-2: rgba(23, 24, 28, 0.3);
   --stamp-blue: #2f4f8f;
   --stamp-green: #2e6b4f;
-  --accent-from: #084734;
-  --accent-to: #1d7a5a;
-  color: var(--ink);
-  background: var(--page);
 }
 html:has(main.theme-bj) {
-  --background: #ffffff;
+  --background: #0e0f12;
   scroll-snap-type: none;
 }
 html:has(main.theme-bj) body::before { background: none; }
@@ -415,7 +429,7 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
   height: 22px;
   border-radius: 50%;
   background: var(--band);
-  box-shadow: inset 0 2px 3px rgba(23, 24, 28, 0.12);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.5);
 }
 .on-page .notch { background: var(--page); }
 
@@ -445,8 +459,8 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
   --rot: -8deg;
   opacity: 0;
   transform: rotate(var(--rot)) scale(1.6);
-  mix-blend-mode: multiply;
 }
+.paper .stamp-anim { mix-blend-mode: multiply; }
 .reveal-3d.in .stamp-anim { animation: bj-stamp-drop 0.55s cubic-bezier(0.2, 0.9, 0.2, 1.2) forwards; }
 @keyframes bj-stamp-drop {
   60%  { opacity: 0.8; transform: rotate(var(--rot)) scale(0.96); }
@@ -486,10 +500,11 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
 .bj-btn:active { transform: scale(0.98); }
 .bj-btn-green { background: var(--green); color: #fff; }
 .bj-btn-green:hover { background: #0b5a42; box-shadow: 0 8px 20px -10px rgba(8, 71, 52, 0.6); }
-.bj-btn-ink { background: var(--ink); color: #fff; }
-.bj-btn-ink:hover { background: #000; }
-.bj-btn-line { border: 1px solid var(--line-2); color: var(--ink); background: #fff; }
-.bj-btn-line:hover { border-color: var(--ink); }
+.bj-btn-ink { background: var(--ink); color: var(--page); }
+.bj-btn-ink:hover { filter: brightness(1.08); }
+.paper .bj-btn-ink { color: #fff; }
+.bj-btn-line { border: 1px solid var(--line-2); color: var(--ink); background: transparent; }
+.bj-btn-line:hover { border-color: var(--ink); background: rgba(243, 241, 236, 0.05); }
 .bj-btn-seal { background: var(--seal); color: #fff; }
 .bj-btn-seal:hover { background: #a4261f; }
 
@@ -503,9 +518,10 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
   border-radius: 999px;
   color: var(--ink-2);
   font-size: 12px;
-  background: #fff;
+  background: transparent;
   transition: all 0.2s ease;
 }
+.paper .bj-mark { background: #fff; }
 .bj-mark:hover { border-color: var(--ink); color: var(--ink); }
 .bj-mark.on { border-color: var(--green); background: var(--green-soft); color: var(--green); font-weight: 600; }
 

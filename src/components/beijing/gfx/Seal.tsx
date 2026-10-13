@@ -9,7 +9,7 @@ export default function Seal({ glyph, size = 56, className = "" }: { glyph: stri
           <feDisplacementMap in="SourceGraphic" in2="n" scale="5" />
         </filter>
       </defs>
-      <g filter={`url(#${id})`} style={{ mixBlendMode: "multiply" }}>
+      <g filter={`url(#${id})`}>
         <rect x="5" y="5" width="90" height="90" fill="var(--seal)" />
         <rect x="12" y="12" width="76" height="76" fill="none" stroke="var(--paper)" strokeWidth="2.5" opacity="0.92" />
       </g>
