@@ -67,9 +67,9 @@ export default function BjRegisterForm({ source }: { source?: string }) {
   }
 
   const strip = (label: string, right: string) => (
-    <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-8 py-3">
+    <div className="bj-meander-fill flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-8 py-3">
       <span className="font-bold tracking-tight text-sm sm:text-base">
-        ClassIn <span className="serif font-medium">Meets</span>
+        ClassIn <span className="serif font-medium">Meets</span> Beijing
       </span>
       <span className="mono text-[10px] sm:text-[11px] opacity-85">
         {label} {right}
@@ -135,7 +135,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
           <span className="notch hidden md:block -bottom-[11px] left-0 -translate-x-1/2" aria-hidden />
           <span className="notch md:hidden top-0 -left-[11px] -translate-y-1/2" aria-hidden />
           <span className="notch md:hidden top-0 -right-[11px] -translate-y-1/2" aria-hidden />
-          <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
+          <div className="bj-meander-fill flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
             <span className="mono text-[10px]">STUB</span>
             <span className="mono text-[10px]">CM 1124</span>
           </div>
@@ -219,7 +219,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                     <label
                       key={o}
                       className={`cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
-                        on ? "border-[var(--green)] bg-[var(--green-soft)] text-[var(--green)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
+                        on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
                       }`}
                     >
                       <input type="radio" name="arrival" value={o} checked={on} onChange={() => setArrival(o)} className="sr-only" />
@@ -242,7 +242,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
           )}
 
           <div className="mt-8 flex flex-col sm:flex-row sm:items-center gap-4">
-            <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-green text-base sm:min-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed">
+            <button type="submit" disabled={status === "submitting"} className="bj-btn bj-btn-accent text-base sm:min-w-[240px] disabled:opacity-50 disabled:cursor-not-allowed">
               {status === "submitting" ? "접수 중..." : "참가 신청 제출"}
             </button>
             <p className="text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
@@ -258,7 +258,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
         <span className="notch hidden md:block -bottom-[11px] left-0 -translate-x-1/2" aria-hidden />
         <span className="notch md:hidden top-0 -left-[11px] -translate-y-1/2" aria-hidden />
         <span className="notch md:hidden top-0 -right-[11px] -translate-y-1/2" aria-hidden />
-        <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
+        <div className="bj-meander-fill flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
           <span className="mono text-[10px]">STUB</span>
           <span className="mono text-[10px]">CM 1124</span>
         </div>
@@ -304,7 +304,7 @@ function Label({ htmlFor, required, children }: { htmlFor?: string; required?: b
   return (
     <label htmlFor={htmlFor} className="mono block text-[10px] text-[var(--ink-3)] mb-0.5">
       {children}
-      {required && <span className="text-[var(--green)] ml-1">*</span>}
+      {required && <span className="text-[var(--accent)] ml-1">*</span>}
     </label>
   );
 }

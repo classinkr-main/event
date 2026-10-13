@@ -14,10 +14,12 @@ import BjFloatingCTA from "./BjFloatingCTA";
 import BjVisitTracker from "./BjVisitTracker";
 import BjHashScroll from "./BjHashScroll";
 import { fontVars } from "./fonts";
+import ZhFonts from "./ZhFonts";
 
 export default function BjPage({ source }: { source?: string }) {
   return (
     <main className={`theme-bj ${fontVars}`}>
+      <ZhFonts />
       <BjVisitTracker path="/beijing" clearGateFlag />
       <BjHashScroll />
       <BjTopbar />

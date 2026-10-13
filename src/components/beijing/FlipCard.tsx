@@ -8,13 +8,13 @@ import type { Org } from "./data";
 export default function FlipCard({ org }: { org: Org }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className={`flip h-[320px] ${open ? "is-open" : ""}`}>
+    <div className={`flip h-[300px] ${open ? "is-open" : ""}`}>
       <div className="flip-inner h-full">
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-expanded={open}
-          className="flip-face absolute inset-0 text-left p-6 flex flex-col rounded-2xl bg-[var(--card)] border border-[var(--line)] hover:border-[var(--line-2)] transition-colors"
+          className="flip-face glass absolute inset-0 text-left p-6 flex flex-col rounded-3xl hover:bg-white/[0.07] transition-colors"
         >
           <div className="flex items-start justify-between gap-3">
             <Seal glyph={org.glyph} size={52} />
@@ -25,12 +25,12 @@ export default function FlipCard({ org }: { org: Org }) {
             {org.cn && <div className="text-xs text-[var(--ink-3)] mt-1">{org.cn}</div>}
             <p className="mt-3 text-[13px] text-[var(--ink-2)] leading-relaxed line-clamp-3">{org.summary}</p>
           </div>
-          <div className="mt-4 pt-3 border-t border-[var(--line)] text-xs text-[var(--green)] font-medium">소개 보기</div>
+          <div className="mt-4 pt-3 border-t border-[var(--line)] text-xs text-[var(--ink-2)]">소개 보기</div>
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="flip-face flip-back text-left p-6 overflow-y-auto rounded-2xl bg-[#f3f1ec] text-[#17181c]"
+          className="flip-face flip-back text-left p-6 overflow-y-auto rounded-3xl bg-[#f3f1ec] text-[#17181c]"
         >
           <div className="flex items-center justify-between gap-3">
             <span className="font-medium">{org.name}</span>

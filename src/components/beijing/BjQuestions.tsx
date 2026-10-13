@@ -10,32 +10,30 @@ export default function BjQuestions() {
       id="questions"
       title={
         <>
-          현장에서 확인하고 올
+          현장에서 확인할
           <br />
           여섯 가지 질문
         </>
       }
-      lead="이번 여정에서 만나는 사람과 숫자로 만든 질문입니다. 관심 가는 항목에 표시해 두면 참가 신청서에 함께 담깁니다."
-      band
+      lead="관심 가는 항목에 표시해 두면 신청서에 함께 담깁니다."
     >
-      <ol className="border-t border-[var(--line-2)]">
+      <div className="grid sm:grid-cols-2 gap-4">
         {QUESTIONS.map((q, i) => (
-          <Reveal key={q.no} delay={i * 40}>
-            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[4rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-6 sm:py-7 border-b border-[var(--line)] items-start">
-              <span className="text-sm sm:text-base text-[var(--ink-3)] tabular-nums pt-1">{q.no}</span>
-              <div className="min-w-0">
-                <p className="text-lg sm:text-2xl font-medium leading-snug tracking-tight">{q.q}</p>
-                <p className="mt-2 text-sm text-[var(--ink-2)]">
-                  {q.where} <span className="text-[var(--ink-3)] mx-1.5">|</span> {q.who}
-                </p>
+          <Reveal key={q.no} delay={(i % 2) * 60} className="h-full">
+            <div className="glass rounded-2xl p-5 sm:p-6 h-full flex flex-col hover:bg-white/[0.07] transition-colors">
+              <div className="flex items-center justify-between">
+                <span className="text-gradient text-2xl font-semibold tabular-nums">{q.no}</span>
+                <span className="text-xs text-[var(--ink-3)]">{q.where}</span>
               </div>
-              <div className="col-start-2 sm:col-start-3 pt-0.5">
-                <InterestMark id={q.id} />
+              <p className="mt-4 text-lg sm:text-xl font-medium leading-snug tracking-tight flex-1">{q.q}</p>
+              <div className="mt-5 flex items-center justify-between gap-3">
+                <span className="text-sm text-[var(--ink-2)]">{q.who}</span>
+                <InterestMark id={q.id} compact />
               </div>
-            </li>
+            </div>
           </Reveal>
         ))}
-      </ol>
+      </div>
     </Split>
   );
 }

@@ -6,6 +6,7 @@ import Barcode from "./gfx/Barcode";
 import FlightArc from "./gfx/FlightArc";
 import TicketField from "./TicketField";
 import { fontVars } from "./fonts";
+import ZhFonts from "./ZhFonts";
 
 type Status = "idle" | "checking" | "admitted" | "error";
 const VERIFIED_FLAG = "bj-gate-verified";
@@ -110,11 +111,13 @@ export default function BjGate({ prefill }: { prefill?: string }) {
 
   return (
     <main className={`theme-bj ${fontVars} on-page relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[var(--page)]`}>
+      <ZhFonts />
       <BjVisitTracker path="/beijing/gate" />
 
       <div className="absolute inset-x-0 top-0 h-[46svh] min-h-[280px]">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/beijing-day.jpg')" }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--page)]" />
+        <div className="absolute inset-0 bg-cover bg-[center_40%]" style={{ backgroundImage: "url('/beijing-jingshan.jpg')" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(14,15,18,0.25)] via-transparent to-[var(--page)]" />
+        <span className="bj-wm zh-brush right-[4%] -top-6 text-[28vw] sm:text-[18vw] !opacity-[0.16] text-white" aria-hidden>北京</span>
       </div>
 
       <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-8 pt-[28svh] pb-12 sm:pb-16">
@@ -122,9 +125,9 @@ export default function BjGate({ prefill }: { prefill?: string }) {
           <div className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
             {/* 본권 */}
             <div className="relative">
-              <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-6 sm:px-9 py-3">
+              <div className="bj-meander-fill flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-6 sm:px-9 py-3">
                 <span className="font-bold tracking-tight text-base sm:text-lg">
-                  ClassIn <span className="serif font-medium">Meets</span>
+                  ClassIn <span className="serif font-medium">Meets</span> Beijing
                 </span>
                 <span className="mono text-[10px] sm:text-[11px] opacity-85">BOARDING PASS / 탑승권</span>
               </div>
@@ -184,7 +187,7 @@ export default function BjGate({ prefill }: { prefill?: string }) {
               <span className="notch md:hidden top-0 -left-[11px] -translate-y-1/2" aria-hidden />
               <span className="notch md:hidden top-0 -right-[11px] -translate-y-1/2" aria-hidden />
 
-              <div className="flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
+              <div className="bj-meander-fill flex items-center justify-between bg-[var(--ink)] text-[var(--paper)] px-5 sm:px-7 py-3">
                 <span className="mono text-[10px]">STUB</span>
                 <span className="mono text-[10px]">CM 1124</span>
               </div>
@@ -217,7 +220,7 @@ export default function BjGate({ prefill }: { prefill?: string }) {
                     />
                   </div>
                   {status === "error" && error && <p className="mt-2.5 text-xs text-[var(--seal)] leading-relaxed">{error}</p>}
-                  <button type="submit" disabled={busy} className="bj-btn bj-btn-green mt-5 w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed">
+                  <button type="submit" disabled={busy} className="bj-btn bj-btn-accent mt-5 w-full text-sm disabled:opacity-60 disabled:cursor-not-allowed">
                     {status === "checking" ? "확인 중..." : status === "admitted" ? "입장합니다" : "초청장 열기"}
                   </button>
                 </form>

@@ -342,16 +342,17 @@ main.theme-bj {
   --ink-3: rgba(243, 241, 236, 0.42);
   --line: rgba(243, 241, 236, 0.12);
   --line-2: rgba(243, 241, 236, 0.26);
-  --green: #35c282;
-  --green-soft: rgba(53, 194, 130, 0.16);
-  --seal: #e0553f;
+  --accent: #e2452f;
+  --accent-soft: rgba(226, 69, 47, 0.16);
+  --gold: #e3b04b;
+  --seal: #e2452f;
   --paper: #fbf9f4;
   --paper-line: rgba(23, 24, 28, 0.12);
   --paper-line-2: rgba(23, 24, 28, 0.3);
   --stamp-blue: #7f9de0;
   --stamp-green: #5cbf96;
-  --accent-from: #35c282;
-  --accent-to: #6fd3a6;
+  --accent-from: #e2452f;
+  --accent-to: #e3b04b;
   color: var(--ink);
   background: var(--page);
 }
@@ -362,8 +363,9 @@ main.theme-bj .paper {
   --ink-3: #9a9ea6;
   --line: rgba(23, 24, 28, 0.1);
   --line-2: rgba(23, 24, 28, 0.22);
-  --green: #084734;
-  --green-soft: #e4f1ea;
+  --accent: #b5281f;
+  --accent-soft: rgba(181, 40, 31, 0.1);
+  --gold: #b8892e;
   --seal: #c8322b;
   --stamp-blue: #2f4f8f;
   --stamp-green: #2e6b4f;
@@ -372,7 +374,13 @@ html:has(main.theme-bj) {
   --background: #0e0f12;
   scroll-snap-type: none;
 }
-html:has(main.theme-bj) body::before { background: none; }
+html:has(main.theme-bj) body::before {
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(226, 69, 47, 0.14), transparent 70%),
+    radial-gradient(40% 30% at 85% 35%, rgba(227, 176, 75, 0.09), transparent 70%),
+    radial-gradient(50% 35% at 15% 75%, rgba(226, 69, 47, 0.07), transparent 70%);
+}
+main.theme-bj .text-gradient { background: linear-gradient(120deg, #ff6a4d, #e3b04b); -webkit-background-clip: text; background-clip: text; color: transparent; }
 main.theme-bj .serif {
   font-family: var(--font-display), "Hahmlet", "Apple SD Gothic Neo", serif;
   letter-spacing: -0.01em;
@@ -381,7 +389,31 @@ main.theme-bj .mono {
   font-family: var(--font-mono), ui-monospace, Menlo, monospace;
   letter-spacing: 0.05em;
 }
-main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
+main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.03em; }
+main.theme-bj .zh-brush { font-family: "Ma Shan Zheng", "STKaiti", "KaiTi", "Songti SC", serif; }
+main.theme-bj .zh-serif { font-family: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif; }
+
+/* 回纹(뇌문) 띠 — 금빛, 아주 옅게 */
+.bj-meander {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 22V2h20v16H6V6h12v8H10v-4h4' fill='none' stroke='%23e3b04b' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-size: 24px 24px;
+  background-repeat: repeat-x;
+  background-position: center;
+}
+.bj-meander-fill {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M2 22V2h20v16H6V6h12v8H10v-4h4' fill='none' stroke='%23e3b04b' stroke-opacity='0.22' stroke-width='1.4'/%3E%3C/svg%3E");
+  background-size: 24px 24px;
+}
+
+/* 붓글씨 워터마크 */
+.bj-wm {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  color: var(--accent);
+  opacity: 0.1;
+  line-height: 0.9;
+}
 
 /* 종이(탑승권) — 밝은 배경 위라 그림자는 부드럽게 */
 .paper {
@@ -411,8 +443,8 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
 .paper .field::placeholder { color: var(--ink-3); }
 .paper .field:focus {
   background-color: transparent;
-  border-bottom-color: var(--green);
-  box-shadow: 0 1px 0 0 var(--green);
+  border-bottom-color: var(--accent);
+  box-shadow: 0 1px 0 0 var(--accent);
 }
 .paper select.field {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8' fill='none'><path d='M1 1l6 6 6-6' stroke='%2317181c' stroke-opacity='0.6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
@@ -491,18 +523,20 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 24px;
-  border-radius: 10px;
+  padding: 14px 26px;
+  border-radius: 999px;
   font-weight: 600;
   letter-spacing: -0.01em;
   transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .bj-btn:active { transform: scale(0.98); }
-.bj-btn-green { background: var(--green); color: #fff; }
-.bj-btn-green:hover { background: #0b5a42; box-shadow: 0 8px 20px -10px rgba(8, 71, 52, 0.6); }
+.bj-btn-accent { background: var(--accent); color: #fff; }
+.bj-btn-accent:hover { filter: brightness(1.08); box-shadow: 0 10px 24px -12px rgba(226, 69, 47, 0.7); }
 .bj-btn-ink { background: var(--ink); color: var(--page); }
 .bj-btn-ink:hover { filter: brightness(1.08); }
 .paper .bj-btn-ink { color: #fff; }
+.bj-btn-snow { background: #fff; color: #0b0d12; }
+.bj-btn-snow:hover { background: #f1efe9; transform: scale(1.02); }
 .bj-btn-line { border: 1px solid var(--line-2); color: var(--ink); background: transparent; }
 .bj-btn-line:hover { border-color: var(--ink); background: rgba(243, 241, 236, 0.05); }
 .bj-btn-seal { background: var(--seal); color: #fff; }
@@ -518,12 +552,13 @@ main.theme-bj h1, main.theme-bj h2 { letter-spacing: -0.035em; }
   border-radius: 999px;
   color: var(--ink-2);
   font-size: 12px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.04);
   transition: all 0.2s ease;
 }
 .paper .bj-mark { background: #fff; }
 .bj-mark:hover { border-color: var(--ink); color: var(--ink); }
-.bj-mark.on { border-color: var(--green); background: var(--green-soft); color: var(--green); font-weight: 600; }
+.bj-mark.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+main.theme-bj .paper .bj-mark.on { color: var(--accent); }
 
 /* 사진 */
 .bj-photo { position: relative; overflow: hidden; border-radius: 20px; background: var(--band); }

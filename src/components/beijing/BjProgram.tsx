@@ -15,14 +15,14 @@ export default function BjProgram() {
           특별 세션
         </>
       }
-      lead="GET 대회 안에서 ClassIn이 여는 「AI 신교육」 세션입니다. 한국과 중국 학원 네 곳이 AI로 수업과 모집, 운영을 바꾼 이야기를 차례로 발표합니다. 베이징 신윈난 크라운플라자 호텔."
+      lead="GET 대회 안에서 ClassIn이 여는 「AI 신교육」 세션. 한국·중국 학원 4곳이 발표합니다."
       band
     >
-      <ol className="border-t border-[var(--line-2)]">
+      <ol className="glass rounded-3xl px-5 sm:px-7">
         {TALKS.map((t, i) => (
           <Reveal key={t.id} delay={i * 40}>
-            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[4rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-6 sm:py-7 border-b border-[var(--line)] items-start">
-              <span className="text-sm sm:text-base text-[var(--ink-3)] tabular-nums pt-1">{t.no}</span>
+            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[3.5rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-5 sm:py-6 border-b border-[var(--line)] last:border-b-0 items-start">
+              <span className="text-gradient text-xl sm:text-2xl font-semibold tabular-nums">{t.no}</span>
               <div className="min-w-0">
                 <h3 className="text-lg sm:text-2xl font-medium leading-snug tracking-tight">{t.title}</h3>
                 <p className="mt-2 text-sm text-[var(--ink-2)] flex flex-wrap items-center gap-2">
