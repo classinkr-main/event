@@ -1,11 +1,11 @@
 const points = [
   {
-    n: "01",
+    n: "밤 시간 매출",
     q: "비어 있는 밤 시간, 매출로 바꿀 수 있을까요?",
     d: "학원 문을 닫은 뒤에도 반을 하나 더 여는 방법",
   },
   {
-    n: "02",
+    n: "수업 품질 관리",
     q: "우리 학원 선생님들, 수업 잘하고 있을까요?",
     d: "원장님이 교실에 들어가지 않아도 반마다 수업의 질을 아는 방법",
   },
@@ -16,27 +16,23 @@ export default function SongdoPoints() {
     <section id="points" className="relative py-20 sm:py-32">
       <div className="max-w-4xl mx-auto px-6 sm:px-10">
         <div className="flex items-center gap-4 text-xs sm:text-sm tracking-[0.18em] text-[var(--accent-from)] font-bold">
-          <span>오프라인 설명회에서 직접 확인하실 2가지</span>
+          <span>오프라인 설명회에서 직접 확인하실 두 가지 주제</span>
           <span className="flex-1 h-px bg-white/15" />
         </div>
 
         <ul className="mt-2 divide-y divide-white/10">
           {points.map((p) => (
-            <li key={p.n} className="py-7 sm:py-9 flex items-start gap-5 sm:gap-8">
-              <span className="font-display shrink-0 text-3xl sm:text-5xl font-bold text-[var(--accent-from)] leading-none pt-1">
-                {p.n}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-4">
-                  <h3 className="font-display text-xl sm:text-3xl font-bold leading-snug text-white">
-                    {p.q}
-                  </h3>
-                  <span className="shrink-0 mt-1 text-[11px] sm:text-xs font-bold tracking-wide text-[#8fe3ae] border border-[var(--accent-from)]/45 rounded px-2 py-1">
-                    현장 공개
-                  </span>
-                </div>
-                <p className="mt-2 text-sm sm:text-lg text-white/55">{p.d}</p>
+            <li key={p.n} className="py-7 sm:py-9">
+              <div className="flex items-start justify-between gap-4">
+                <span className="inline-block text-sm sm:text-base font-bold text-[#07140c] bg-[var(--accent-from)] rounded-full px-3 py-1">
+                  {p.n}
+                </span>
+                <span className="shrink-0 mt-1 text-[11px] sm:text-xs font-bold tracking-wide text-[#8fe3ae] border border-[var(--accent-from)]/45 rounded px-2 py-1">
+                  현장 공개
+                </span>
               </div>
+              <h3 className="font-display mt-4 text-2xl sm:text-4xl font-bold leading-snug text-white">{p.q}</h3>
+              <p className="mt-2 sm:mt-3 text-base sm:text-lg text-white/60">{p.d}</p>
             </li>
           ))}
         </ul>
