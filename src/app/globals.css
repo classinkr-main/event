@@ -565,19 +565,34 @@ main.theme-bj .paper .bj-mark.on { color: var(--accent); }
   .stamp-anim { opacity: 0.75; transform: rotate(var(--rot)); animation: none !important; }
 }
 
-/* ── 송도 설명회 신청 페이지(/songdo) — 글씨체 Paperlogy(본문 400/600, 제목 800), 전단지와 통일 ── */
+/* ── 송도 설명회 신청 페이지(/songdo) — 애플 스타일: 검정 배경, 시스템 서체(Apple SD Gothic Neo) 우선 + Paperlogy 폴백, 회색 보조 텍스트, 둥근 타일 ── */
 @font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-4Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-6SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-8ExtraBold.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 main.theme-songdo {
-  font-family: "Paperlogy", var(--font-sans);
+  --accent-from: #2fd36f;
+  --accent-to: #2fd36f;
+  --ink: #f5f5f7;
+  --ink-2: #a1a1a6;
+  --ink-3: #6e6e73;
+  --tile: #161616;
+  --tile-2: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Paperlogy", "Pretendard Variable", sans-serif;
   font-feature-settings: normal;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.012em;
+  color: var(--ink);
 }
-main.theme-songdo .font-display {
-  font-family: "Paperlogy", var(--font-sans);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  font-feature-settings: normal;
+html:has(main.theme-songdo) { --background: #000; }
+html:has(main.theme-songdo) body::before { background: none; }
+main.theme-songdo .font-display { font-weight: 600; letter-spacing: -0.03em; font-feature-settings: normal; }
+main.theme-songdo .tile { background: var(--tile); border-radius: 28px; }
+main.theme-songdo .field {
+  font-family: inherit; background: var(--tile-2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px 16px; font-size: 17px; color: var(--ink);
 }
-main.theme-songdo .field { font-family: inherit; }
+main.theme-songdo .field::placeholder { color: var(--ink-3); }
+main.theme-songdo .field:focus { border-color: rgba(47,211,111,0.7); box-shadow: 0 0 0 4px rgba(47,211,111,0.15); background: #202022; }
+main.theme-songdo .btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 600; transition: transform .15s ease, filter .15s ease, background .15s ease; }
+main.theme-songdo .btn:hover { filter: brightness(1.08); transform: scale(1.02); }
+main.theme-songdo .btn:active { transform: scale(0.98); }
+main.theme-songdo .link { color: var(--accent-from); font-weight: 500; }
+main.theme-songdo .link:hover { text-decoration: underline; text-underline-offset: 4px; }
