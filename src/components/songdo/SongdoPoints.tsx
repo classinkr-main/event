@@ -17,14 +17,14 @@ export default function SongdoPoints() {
       <div className="max-w-4xl mx-auto px-6 sm:px-10">
         <div className="flex items-center gap-4 text-xs sm:text-sm tracking-[0.18em] text-[var(--accent-from)] font-bold">
           <span>오프라인 설명회에서 직접 확인하실 두 가지 주제</span>
-          <span className="flex-1 h-px bg-white/15" />
+          <span className="flex-1 h-px bg-gradient-to-r from-[var(--accent-from)]/60 to-transparent" />
         </div>
 
         <ul className="mt-2 divide-y divide-white/10">
           {points.map((p) => (
             <li key={p.n} className="py-7 sm:py-9">
               <div className="flex items-start justify-between gap-4">
-                <span className="inline-block text-sm sm:text-base font-bold text-[#07140c] bg-[var(--accent-from)] rounded-full px-3 py-1">
+                <span className="inline-block text-sm sm:text-base font-bold text-[#07140c] grad-fill rounded-full px-3 py-1">
                   {p.n}
                 </span>
                 <span className="shrink-0 mt-1 text-[11px] sm:text-xs font-bold tracking-wide text-[#8fe3ae] border border-[var(--accent-from)]/45 rounded px-2 py-1">
@@ -37,7 +37,7 @@ export default function SongdoPoints() {
           ))}
         </ul>
 
-        <div className="mt-6 rounded-lg bg-[var(--accent-from)] text-[#07140c] px-6 py-5 sm:px-8 sm:py-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <div className="mt-6 panel-cta px-6 py-5 sm:px-8 sm:py-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="text-base sm:text-lg font-bold">10월 29일 (목),</span>
           <span className="font-display text-lg sm:text-2xl font-bold">
             송도 오프라인 설명회에서 답을 확인하세요.

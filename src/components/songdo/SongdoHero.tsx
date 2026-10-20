@@ -18,7 +18,7 @@ export default function SongdoHero() {
 
       <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-10 pt-28 pb-16 sm:py-32">
         <div className="reveal max-w-3xl">
-          <div className="inline-flex items-center rounded-md bg-[var(--accent-from)] px-3.5 py-1.5 sm:px-4 sm:py-2 shadow-[0_6px_20px_rgba(0,0,0,0.35)]">
+          <div className="inline-flex items-center rounded-md grad-fill px-3.5 py-1.5 sm:px-4 sm:py-2 shadow-[0_6px_20px_rgba(0,0,0,0.35)]">
             <span className="font-display text-sm sm:text-lg font-bold text-[#07140c]">
               10.29 송도 오프라인 설명회
             </span>
@@ -26,7 +26,7 @@ export default function SongdoHero() {
 
           <h1 className="font-display mt-5 sm:mt-7 text-[2.5rem] leading-[1.14] sm:text-6xl md:text-7xl [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
             <span className="block text-white">원장님 없는 학원에서,</span>
-            <span className="block text-[var(--accent-from)]">학원 평판이 정해집니다.</span>
+            <span className="block text-gradient">학원 평판이 정해집니다.</span>
           </h1>
 
           <p className="mt-5 sm:mt-7 text-base sm:text-xl text-white/75 leading-relaxed max-w-xl">
@@ -50,7 +50,7 @@ export default function SongdoHero() {
           <div className="mt-9 sm:mt-12 flex flex-col sm:flex-row gap-3">
             <a
               href="#register"
-              className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[var(--accent-from)] text-[#07140c] font-bold text-sm sm:text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.99]"
+              className="inline-flex items-center justify-center px-7 py-3.5 rounded-full grad-fill font-bold text-sm sm:text-base transition-all hover:brightness-110 hover:scale-[1.02] active:scale-[0.99]"
             >
               무료 참석 신청하기
             </a>

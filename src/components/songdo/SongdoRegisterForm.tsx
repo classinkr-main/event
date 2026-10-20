@@ -82,8 +82,8 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
       : [];
 
     return (
-      <div className="glass-strong rounded-2xl sm:rounded-3xl p-7 sm:p-12 text-center">
-        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--accent-from)] flex items-center justify-center mb-5 sm:mb-6">
+      <div className="panel p-7 sm:p-12 text-center">
+        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full grad-fill flex items-center justify-center mb-5 sm:mb-6">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
             <path d="M5 12l5 5L20 7" stroke="#07140c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -100,7 +100,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
             <div className="text-xs tracking-[0.25em] text-white/40 mb-3 sm:mb-4 text-center">
               입력하신 정보를 확인해주세요
             </div>
-            <dl className="rounded-2xl border border-white/10 bg-white/[0.03] divide-y divide-white/5 overflow-hidden">
+            <dl className="rounded-md border border-white/10 bg-white/[0.03] divide-y divide-white/5 overflow-hidden">
               {summary.map((item) => (
                 <div key={item.label} className="flex items-start gap-4 px-4 sm:px-5 py-3">
                   <dt className="w-20 sm:w-24 shrink-0 text-xs sm:text-sm text-white/50">{item.label}</dt>
@@ -129,7 +129,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="glass-strong rounded-2xl sm:rounded-3xl p-5 sm:p-10">
+    <form onSubmit={handleSubmit} className="panel p-5 sm:p-10">
       {source && <input type="hidden" name="source" value={source} />}
       <input type="hidden" name="session" value="송도 · 10월 29일 (목) 11:00" />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
@@ -159,7 +159,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         </div>
 
         <div className="sm:col-span-2">
-          <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+          <div className="panel-sm px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
             <div>
               <div className="text-base sm:text-lg font-semibold text-white/90">엔에스 수능관학원 · 5층 504호</div>
               <div className="mt-0.5 text-sm text-white/50">인천 연수구 해돋이로 160-14</div>
@@ -180,7 +180,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-8 w-full inline-flex items-center justify-center px-6 py-4 rounded-full bg-[var(--accent-from)] text-[#07140c] font-bold text-base transition-all hover:brightness-110 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+        className="mt-8 w-full inline-flex items-center justify-center px-6 py-4 rounded-full grad-fill font-bold text-base transition-all hover:brightness-110 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {status === "submitting" ? "신청 중..." : "무료 참석 신청하기"}
       </button>

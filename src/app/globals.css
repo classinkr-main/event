@@ -577,3 +577,29 @@ main.theme-songdo {
 }
 main.theme-songdo .font-display { font-family: inherit; font-weight: 800; letter-spacing: -0.035em; font-feature-settings: normal; }
 main.theme-songdo .field { font-family: inherit; font-weight: 500; }
+
+/* /songdo — 그라데이션 포인트 + 새 박스(둥근 유리 카드 대신 모서리 컷 패널) */
+main.theme-songdo .grad-fill { background: linear-gradient(90deg, var(--accent-from), var(--accent-to)); color: #07140c; }
+main.theme-songdo .text-gradient { background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to)); }
+main.theme-songdo .panel, main.theme-songdo .panel-sm, main.theme-songdo .panel-cta { position: relative; }
+main.theme-songdo .panel {
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(47, 212, 122, 0.12) 0%, rgba(255, 255, 255, 0.035) 42%, rgba(185, 239, 74, 0.07) 100%);
+  border: 1px solid rgba(47, 212, 122, 0.28);
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
+}
+main.theme-songdo .panel::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, var(--accent-from), var(--accent-to)); }
+main.theme-songdo .panel::after { content: ""; position: absolute; top: 15px; right: -6px; width: 42px; height: 1.5px; background: rgba(47, 212, 122, 0.6); transform: rotate(45deg); }
+main.theme-songdo .panel-sm {
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(47, 212, 122, 0.10), rgba(255, 255, 255, 0.03) 60%);
+  border: 1px solid rgba(47, 212, 122, 0.22);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%);
+}
+main.theme-songdo .panel-sm::after { content: ""; position: absolute; top: 9px; right: -4px; width: 26px; height: 1.5px; background: rgba(47, 212, 122, 0.55); transform: rotate(45deg); }
+main.theme-songdo .panel-cta {
+  border-radius: 8px; color: #07140c;
+  background: linear-gradient(90deg, var(--accent-from), var(--accent-to));
+  clip-path: polygon(0 0, calc(100% - 26px) 0, 100% 26px, 100% 100%, 0 100%);
+}
+main.theme-songdo .field { border-radius: 8px; }

@@ -16,9 +16,9 @@ export default function SongdoEventInfo() {
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto glass rounded-3xl p-6 sm:p-10">
+        <div className="max-w-2xl mx-auto panel p-6 sm:p-10">
           <div className="flex items-start gap-4 sm:gap-5">
-            <div className="shrink-0 rounded-2xl border border-[var(--accent-from)]/40 bg-[var(--accent-from)]/10 px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[68px] sm:min-w-[80px]">
+            <div className="shrink-0 rounded-md border border-[var(--accent-from)]/40 bg-[var(--accent-from)]/10 px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[68px] sm:min-w-[80px]">
               <div className="font-display text-lg sm:text-2xl font-bold text-[var(--accent-from)]">
                 10.29
               </div>
