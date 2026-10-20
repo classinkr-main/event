@@ -378,3 +378,22 @@ function doPost(e) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 ```
+
+## 송도 설명회 신청 페이지 (added 2026-10-20, route `/songdo`)
+
+- Live: `https://meets.classin.co.kr/songdo` — 10/29 송도 설명회 A5 전단지 QR 랜딩(UTM 없음 → 채널 `qr-direct`).
+- 신청: `/api/register`가 source `songdo-1029`도 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 전송. **이메일은 선택 항목**(QR·모바일 유입이라 입력 최소화) — 서버도 source가 `songdo`로 시작하면 email 필수 검사를 건너뜀.
+- 방문: `/api/track` → Visits 탭 Path `/songdo` + Compass page_visits(page `songdo`).
+- Apps Script 분기: 아래처럼 `songdo` 분기를 넣으면 **"송도 10/29" 탭**에 쌓임. 분기가 없는 스크립트 버전이면 첫 탭(인천)에 들어가되 Source `songdo-1029/…`, Session `송도 · 10월 29일 (목) 11:00`로 구분됨.
+
+```js
+    } else if ((data.source || "").indexOf("songdo") === 0) {
+      sheet = ss.getSheetByName("송도 10/29");
+      if (!sheet) {
+        sheet = ss.insertSheet("송도 10/29");
+        sheet.appendRow([
+          "Timestamp", "Name", "Organization", "Position",
+          "Phone", "Email", "Session", "Source",
+        ]);
+      }
+```

@@ -30,7 +30,12 @@ export async function POST(request: Request) {
     );
   }
 
+  // 송도(10/29) 신청 페이지는 QR·모바일 유입이라 이메일을 선택 항목으로 받는다
+  const source = body.source ?? "";
+  const isSongdo = source.startsWith("songdo");
+
   for (const key of REQUIRED) {
+    if (key === "email" && isSongdo) continue;
     if (!body[key] || typeof body[key] !== "string" || !body[key]!.trim()) {
       return NextResponse.json(
         { error: `필수 항목이 비어 있습니다: ${key}` },
@@ -46,10 +51,11 @@ export async function POST(request: Request) {
     );
   }
 
-  // 설명회 신청(인천·서울)은 같은 웹훅으로 — Apps Script가 source를 보고 탭을 분기
-  const source = body.source ?? "";
+  // 설명회 신청(인천·서울·송도)은 같은 웹훅으로 — Apps Script가 source를 보고 탭을 분기
   const isMeets =
-    source.startsWith("0709-10incheon") || source.startsWith("seoul-mokdong");
+    source.startsWith("0709-10incheon") ||
+    source.startsWith("seoul-mokdong") ||
+    isSongdo;
   const sheetsUrl = isMeets
     ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
       process.env.GOOGLE_SHEETS_WEBHOOK_URL
