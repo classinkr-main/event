@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { href: "#points", label: "확인하실 주제" },
+  { href: "#points", label: "확인하실 2가지" },
   { href: "#event", label: "일시 · 장소" },
   { href: "#register", label: "참가 신청" },
 ];
@@ -22,7 +22,7 @@ export default function SongdoHeader() {
     <header
       className={`fixed top-0 inset-x-0 z-40 transition-all duration-300 ${
         scrolled
-          ? "backdrop-blur-xl bg-black/70 border-b border-white/10"
+          ? "backdrop-blur-xl bg-[#050807]/75 border-b border-white/5"
           : "bg-transparent"
       }`}
     >

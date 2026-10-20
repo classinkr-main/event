@@ -82,14 +82,14 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
       : [];
 
     return (
-      <div className="tile p-7 sm:p-12 text-center">
+      <div className="glass-strong rounded-2xl sm:rounded-3xl p-7 sm:p-12 text-center">
         <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[var(--accent-from)] flex items-center justify-center mb-5 sm:mb-6">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
             <path d="M5 12l5 5L20 7" stroke="#07140c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
-        <h3 className="font-display text-2xl sm:text-3xl text-[var(--ink)]">신청이 완료되었습니다.</h3>
-        <p className="mt-4 text-base text-[var(--ink-2)] leading-relaxed">
+        <h3 className="font-display text-2xl sm:text-3xl font-bold">신청이 완료되었습니다</h3>
+        <p className="mt-4 text-sm sm:text-base text-white/60 leading-relaxed">
           담당자가 확인 후 안내 문자를 드립니다.
           <br />
           궁금한 점은 010-5911-8522 (클래스인 신희성)으로 연락 주세요.
@@ -97,21 +97,21 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
 
         {summary.length > 0 && (
           <div className="mt-8 sm:mt-10 text-left">
-            <div className="text-sm text-[var(--ink-3)] mb-3 sm:mb-4 text-center">
+            <div className="text-xs tracking-[0.25em] text-white/40 mb-3 sm:mb-4 text-center">
               입력하신 정보를 확인해주세요
             </div>
-            <dl className="rounded-2xl bg-[var(--tile-2)] divide-y divide-white/5 overflow-hidden">
+            <dl className="rounded-2xl border border-white/10 bg-white/[0.03] divide-y divide-white/5 overflow-hidden">
               {summary.map((item) => (
                 <div key={item.label} className="flex items-start gap-4 px-4 sm:px-5 py-3">
-                  <dt className="w-20 sm:w-24 shrink-0 text-sm text-[var(--ink-2)]">{item.label}</dt>
-                  <dd className="flex-1 text-base text-[var(--ink)] break-all">{item.value}</dd>
+                  <dt className="w-20 sm:w-24 shrink-0 text-xs sm:text-sm text-white/50">{item.label}</dt>
+                  <dd className="flex-1 text-sm sm:text-base text-white/90 break-all">{item.value}</dd>
                 </div>
               ))}
             </dl>
           </div>
         )}
 
-        <p className="font-display mt-8 sm:mt-10 text-lg text-[var(--ink)]">
+        <p className="font-display mt-8 sm:mt-10 text-base sm:text-lg font-bold text-white/85">
           현장에서 뵙겠습니다.
         </p>
 
@@ -120,7 +120,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
             setStatus("idle");
             setSubmitted(null);
           }}
-          className="link mt-6 text-sm"
+          className="mt-6 text-xs sm:text-sm text-white/40 hover:text-white underline underline-offset-4 transition-colors"
         >
           새 신청서 작성
         </button>
@@ -129,7 +129,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="tile p-5 sm:p-10">
+    <form onSubmit={handleSubmit} className="glass-strong rounded-2xl sm:rounded-3xl p-5 sm:p-10">
       {source && <input type="hidden" name="source" value={source} />}
       <input type="hidden" name="session" value="송도 · 10월 29일 (목) 11:00" />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
@@ -137,7 +137,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         <Field label="학원명" name="organization" placeholder="○○학원" required autoComplete="organization" />
         <Field label="직책" name="position" placeholder="원장 / 부원장 / 실장 등" required autoComplete="organization-title" />
         <div>
-          <label htmlFor="phone" className="block text-sm text-[var(--ink-2)] mb-2 font-medium">
+          <label htmlFor="phone" className="block text-sm text-white/70 mb-2 font-medium">
             연락처<span className="text-[var(--accent-from)] ml-1">*</span>
           </label>
           <input
@@ -159,12 +159,12 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         </div>
 
         <div className="sm:col-span-2">
-          <div className="rounded-xl bg-[var(--tile-2)] px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
+          <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
             <div>
-              <div className="text-base sm:text-lg font-semibold text-[var(--ink)]">엔에스 수능관학원 · 5층 504호</div>
-              <div className="mt-0.5 text-sm text-[var(--ink-2)]">인천 연수구 해돋이로 160-14</div>
+              <div className="text-base sm:text-lg font-semibold text-white/90">엔에스 수능관학원 · 5층 504호</div>
+              <div className="mt-0.5 text-sm text-white/50">인천 연수구 해돋이로 160-14</div>
             </div>
-            <span className="shrink-0 text-sm font-semibold rounded-full bg-[var(--accent-from)]/15 px-3 py-1.5 text-[var(--accent-from)]">
+            <span className="shrink-0 text-xs tracking-[0.15em] rounded-full border border-[var(--accent-from)]/40 px-3 py-1.5 text-[var(--accent-from)]">
               10/29 (목) 11AM
             </span>
           </div>
@@ -180,12 +180,12 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="btn mt-8 w-full px-6 py-4 bg-[var(--accent-from)] text-[#07140c] text-base sm:text-lg disabled:opacity-60 disabled:cursor-not-allowed"
+        className="mt-8 w-full inline-flex items-center justify-center px-6 py-4 rounded-full bg-[var(--accent-from)] text-[#07140c] font-bold text-base transition-all hover:brightness-110 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         {status === "submitting" ? "신청 중..." : "무료 참석 신청하기"}
       </button>
 
-      <p className="mt-5 text-xs text-[var(--ink-3)] text-center leading-relaxed">
+      <p className="mt-5 text-xs text-white/40 text-center leading-relaxed">
         제출하신 정보는 본 설명회 운영 목적으로만 사용되며, 행사 종료 후 안전하게 폐기됩니다.
       </p>
     </form>
@@ -209,7 +209,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-sm text-[var(--ink-2)] mb-2 font-medium">
+      <label htmlFor={name} className="block text-sm text-white/70 mb-2 font-medium">
         {label}
         {required && <span className="text-[var(--accent-from)] ml-1">*</span>}
       </label>
