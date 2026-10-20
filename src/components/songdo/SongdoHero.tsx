@@ -24,7 +24,7 @@ export default function SongdoHero() {
             </span>
           </div>
 
-          <h1 className="font-display mt-5 sm:mt-7 text-[2.55rem] leading-[1.12] sm:text-6xl md:text-7xl font-bold [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
+          <h1 className="font-display mt-5 sm:mt-7 text-[2.5rem] leading-[1.14] sm:text-6xl md:text-7xl [text-shadow:0_2px_18px_rgba(0,0,0,0.55)]">
             <span className="block text-white">원장님 없는 학원에서,</span>
             <span className="block text-[var(--accent-from)]">학원 평판이 정해집니다.</span>
           </h1>

@@ -11,7 +11,7 @@ import SongdoVisitTracker from "./SongdoVisitTracker";
 /** 송도 설명회(2026-10-29) 참가 신청 페이지 — 전단지 QR 랜딩. 전단지(광고C)와 같은 다크+그린 톤 */
 export default function SongdoPage({ source }: { source?: string }) {
   return (
-    <main className="theme-green">
+    <main className="theme-green theme-songdo">
       <SongdoVisitTracker />
       <SongdoHeader />
       <SongdoHero />

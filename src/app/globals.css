@@ -565,16 +565,19 @@ main.theme-bj .paper .bj-mark.on { color: var(--accent); }
   .stamp-anim { opacity: 0.75; transform: rotate(var(--rot)); animation: none !important; }
 }
 
-/* ── 송도 설명회 신청 페이지(/songdo) — 제목 글씨체: Paperlogy Black(페이지 문구만 서브셋) ── */
-@font-face {
-  font-family: "SongdoDisplay";
-  src: url("/fonts/paperlogy-black.sub.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+/* ── 송도 설명회 신청 페이지(/songdo) — 글씨체 Paperlogy(본문 400/600, 제목 800), 전단지와 통일 ── */
+@font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-4Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-6SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-8ExtraBold.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
+main.theme-songdo {
+  font-family: "Paperlogy", var(--font-sans);
+  font-feature-settings: normal;
+  letter-spacing: -0.015em;
 }
-.font-display {
-  font-family: "SongdoDisplay", var(--font-sans);
-  letter-spacing: -0.04em;
+main.theme-songdo .font-display {
+  font-family: "Paperlogy", var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.035em;
   font-feature-settings: normal;
 }
+main.theme-songdo .field { font-family: inherit; }
