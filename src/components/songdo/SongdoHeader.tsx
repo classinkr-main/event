@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { href: "#points", label: "확인하실 2가지" },
   { href: "#event", label: "일시 · 장소" },
   { href: "#register", label: "참가 신청" },
 ];
