@@ -30,7 +30,7 @@ export default function SongdoHero() {
           </h1>
 
           <p className="mt-5 sm:mt-7 text-base sm:text-xl text-white/75 leading-relaxed max-w-xl">
-            그래서 봐야 할 2가지, 10월 29일 송도 오프라인 설명회에서 직접 확인하세요.
+            그래서 봐야 할 2가지,<br className="hidden sm:block" /> 10월 29일 송도 오프라인 설명회에서 직접 확인하세요.
           </p>
 
           <div className="mt-8 sm:mt-10 space-y-2.5 text-base sm:text-lg text-white/80">
@@ -40,7 +40,7 @@ export default function SongdoHero() {
                   {r.label}
                 </span>
                 <span className="font-semibold text-white">
-                  {r.main}{" "}
+                  <span className="whitespace-nowrap">{r.main}</span>{" "}
                   <span className="font-normal text-white/65">{r.sub}</span>
                 </span>
               </div>

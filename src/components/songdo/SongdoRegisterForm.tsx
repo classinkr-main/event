@@ -92,7 +92,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         <p className="mt-4 text-sm sm:text-base text-white/60 leading-relaxed">
           담당자가 확인 후 안내 문자를 드립니다.
           <br />
-          궁금한 점은 010-5911-8522 (클래스인 신희성)으로 연락 주세요.
+          궁금한 점은 <span className="whitespace-nowrap">010-5911-8522 (클래스인 신희성)</span>으로 연락 주세요.
         </p>
 
         {summary.length > 0 && (

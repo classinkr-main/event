@@ -12,7 +12,7 @@ export default function SongdoEventInfo() {
             송도에서 만납니다.
           </h2>
           <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 max-w-2xl mx-auto">
-            10월 29일 목요일 오전 11시, 클래스인을 실제로 도입한 엔에스 수능관학원에서 진행됩니다.
+            10월 29일 목요일 오전 11시,<br className="hidden sm:block" /> 클래스인을 실제로 도입한 <span className="whitespace-nowrap">엔에스 수능관학원</span>에서 진행됩니다.
           </p>
         </div>
 

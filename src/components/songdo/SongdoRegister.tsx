@@ -12,7 +12,7 @@ export default function SongdoRegister({ source }: { source?: string }) {
             무료 참석 신청
           </h2>
           <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 leading-relaxed">
-            10월 29일 (목) 오전 11시, 엔에스 수능관학원에서 뵙겠습니다.
+            10월 29일 (목) 오전 11시,<br className="hidden sm:block" /> <span className="whitespace-nowrap">엔에스 수능관학원</span>에서 뵙겠습니다.
           </p>
         </div>
 

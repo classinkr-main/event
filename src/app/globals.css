@@ -570,6 +570,8 @@ main.theme-bj .paper .bj-mark.on { color: var(--accent); }
 @font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-6SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Paperlogy"; src: url("/fonts/paperlogy-8ExtraBold.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 main.theme-songdo {
+  --accent-from: #2fd36f;
+  --accent-to: #4fe3c1;
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Paperlogy", "Pretendard Variable", sans-serif;
   font-feature-settings: normal;
   font-weight: 500;
@@ -584,7 +586,7 @@ main.theme-songdo .text-gradient { background-image: linear-gradient(90deg, var(
 main.theme-songdo .panel, main.theme-songdo .panel-sm, main.theme-songdo .panel-cta { position: relative; }
 main.theme-songdo .panel {
   border-radius: 10px;
-  background: linear-gradient(135deg, rgba(47, 212, 122, 0.12) 0%, rgba(255, 255, 255, 0.035) 42%, rgba(185, 239, 74, 0.07) 100%);
+  background: linear-gradient(135deg, rgba(47, 212, 122, 0.12) 0%, rgba(255, 255, 255, 0.035) 42%, rgba(79, 227, 193, 0.07) 100%);
   border: 1px solid rgba(47, 212, 122, 0.28);
   clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
 }
