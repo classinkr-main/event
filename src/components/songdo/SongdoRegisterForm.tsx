@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getStoredChannel } from "@/lib/inflow";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -35,6 +35,12 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState<SubmittedData | null>(null);
+  const doneRef = useRef<HTMLDivElement>(null);
+
+  // 휴대폰에서 신청 버튼을 누르면 완료 카드 아래쪽만 보이고 「신청이 완료되었습니다」는 화면 위로 밀려 있었음 → 카드 맨 위로 화면을 옮김
+  useEffect(() => {
+    if (status === "success") doneRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [status]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -82,7 +88,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
       : [];
 
     return (
-      <div className="panel p-7 sm:p-12 text-center">
+      <div ref={doneRef} className="panel p-7 sm:p-12 text-center scroll-mt-20">
         <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-full grad-fill flex items-center justify-center mb-5 sm:mb-6">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
             <path d="M5 12l5 5L20 7" stroke="#07140c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -104,7 +110,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
               {summary.map((item) => (
                 <div key={item.label} className="flex items-start gap-4 px-4 sm:px-5 py-3">
                   <dt className="w-20 sm:w-24 shrink-0 text-xs sm:text-sm text-white/50">{item.label}</dt>
-                  <dd className="flex-1 text-sm sm:text-base text-white/90 break-all">{item.value}</dd>
+                  <dd className="flex-1 text-sm sm:text-base text-white/90 min-w-0 break-words">{item.value}</dd>
                 </div>
               ))}
             </dl>

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 
 type Payload = {
   name?: string;
@@ -69,38 +69,41 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, stored: false });
   }
 
-  try {
-    const res = await fetch(sheetsUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        timestamp: new Date().toISOString(),
-        name: body.name,
-        organization: body.organization,
-        position: body.position,
-        phone: body.phone,
-        email: body.email,
-        dinner: body.dinner ?? "",
-        session: body.session ?? "",
-        source: body.source ?? "",
-      }),
-    });
+  const row = {
+    timestamp: new Date().toISOString(),
+    name: body.name,
+    organization: body.organization,
+    position: body.position,
+    phone: body.phone,
+    email: body.email,
+    dinner: body.dinner ?? "",
+    session: body.session ?? "",
+    source: body.source ?? "",
+  };
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("[register] Google Sheets webhook failed", res.status, text);
-      return NextResponse.json(
-        { error: "신청 데이터 저장에 실패했습니다. 잠시 후 다시 시도해주세요." },
-        { status: 502 }
-      );
+  // 시트 저장(Apps Script)은 2~4초 걸려 신청 완료 화면이 늦게 떴음 → 응답은 바로 보내고 저장은 응답 뒤에 마저 한다
+  after(() => sendToSheets(sheetsUrl, row));
+
+  return NextResponse.json({ ok: true });
+}
+
+// Apps Script 는 저장을 마친 뒤 302(결과 주소)로 답한다 → 따라가지 않고 그 응답으로 성공 판단.
+// 실패하면 2번 더 시도하고, 끝내 실패하면 신청 내용을 오류 로그에 남겨 시트에 손으로 옮길 수 있게 한다.
+async function sendToSheets(url: string, row: Record<string, string | undefined>) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(row),
+        redirect: "manual",
+      });
+      if (res.status < 400) return;
+      console.error("[register] Google Sheets webhook failed", attempt, res.status, await res.text());
+    } catch (err) {
+      console.error("[register] Webhook fetch error", attempt, err);
     }
-
-    return NextResponse.json({ ok: true, stored: true });
-  } catch (err) {
-    console.error("[register] Webhook fetch error", err);
-    return NextResponse.json(
-      { error: "신청 데이터 저장 중 네트워크 오류가 발생했습니다." },
-      { status: 502 }
-    );
+    if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 1500));
   }
+  console.error("[register] 시트 저장 최종 실패 — 이 신청을 시트에 직접 옮길 것", JSON.stringify(row));
 }
