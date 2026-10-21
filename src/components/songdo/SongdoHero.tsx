@@ -1,7 +1,7 @@
 const rows = [
   { label: "일 시", main: "2026.10.29 (목)", sub: "오전 11시 – 오후 1시" },
   { label: "장 소", main: "엔에스 수능관학원", sub: "인천 연수구 해돋이로 160-14 5층 504호" },
-  { label: "대 상", main: "학원 원장님 및 관계자", sub: "무료 참석 · 실제 도입 학원 현장" },
+  { label: "대 상", main: "학원 원장님 및 관계자", sub: "무료 참석 · 실제 도입 학원 현장", nowrap: true },
 ];
 
 export default function SongdoHero() {
@@ -30,7 +30,7 @@ export default function SongdoHero() {
           </h1>
 
           <p className="mt-5 sm:mt-7 text-base sm:text-xl text-white/75 leading-relaxed max-w-xl">
-            그래서 봐야 할 2가지,<br className="hidden sm:block" /> 10월 29일 송도 오프라인 설명회에서 직접 확인하세요.
+            그래서 봐야 할 2가지,<br className="hidden sm:block" /> 10월 29일 <span className="whitespace-nowrap">송도 오프라인 설명회에서</span> 직접 확인하세요.
           </p>
 
           <div className="mt-8 sm:mt-10 space-y-2.5 text-base sm:text-lg text-white/80">
@@ -41,7 +41,7 @@ export default function SongdoHero() {
                 </span>
                 <span className="font-semibold text-white">
                   <span className="whitespace-nowrap">{r.main}</span>{" "}
-                  <span className="font-normal text-white/65">{r.sub}</span>
+                  <span className={"font-normal text-white/65" + (r.nowrap ? " whitespace-nowrap" : "")}>{r.sub}</span>
                 </span>
               </div>
             ))}
