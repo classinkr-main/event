@@ -582,7 +582,7 @@ main.theme-songdo .field { font-family: inherit; font-weight: 500; }
 
 /* /songdo — 그라데이션 포인트 + 새 박스(둥근 유리 카드 대신 모서리 컷 패널) */
 main.theme-songdo .grad-fill { background: linear-gradient(90deg, var(--accent-from), var(--accent-to)); color: #07140c; }
-main.theme-songdo .text-gradient { background-image: linear-gradient(90deg, var(--accent-from), var(--accent-to)); }
+main.theme-songdo .text-gradient { background-image: linear-gradient(90deg, #b9f3d4 0%, #8feec0 45%, #5fe6a3 100%); text-shadow: none; filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35)); }
 main.theme-songdo .panel, main.theme-songdo .panel-sm, main.theme-songdo .panel-cta { position: relative; }
 main.theme-songdo .panel {
   border-radius: 10px;

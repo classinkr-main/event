@@ -54,12 +54,6 @@ export default function SongdoHero() {
             >
               무료 참석 신청하기
             </a>
-            <a
-              href="#points"
-              className="inline-flex items-center justify-center px-7 py-3.5 rounded-full border border-white/20 text-white font-medium text-sm sm:text-base hover:border-white/40 hover:bg-white/5 active:scale-[0.99] transition-all"
-            >
-              확인하실 2가지 보기
-            </a>
           </div>
         </div>
       </div>
