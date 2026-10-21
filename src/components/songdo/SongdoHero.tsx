@@ -9,7 +9,7 @@ export default function SongdoHero() {
     <section className="relative min-h-[100svh] flex items-end sm:items-center overflow-hidden">
       <div className="absolute inset-0">
         <div
-          className="absolute inset-0 bg-cover bg-[50%_35%]"
+          className="absolute inset-0 bg-cover bg-[72%_50%]"
           style={{ backgroundImage: "url('/songdo/hero.jpg')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050807]/55 via-[#050807]/35 to-[#050807]" />
