@@ -6,7 +6,7 @@ const rows = [
 
 /**
  * 히어로 사진 = 부산 1차 설명회(2026.05.08) 준혁님 발표 장면. 슬라이드 쪽은 글씨가 제목 뒤로 읽히지 않게 흐리게 처리한 사본.
- * 가로 화면(PC·태블릿 가로) = 사진을 배경 전체에, 준혁님은 오른쪽 빈자리 / 세로 화면(휴대폰·태블릿 세로) = 위쪽에 발표 장면(흐린 화면 일부·준혁님·청중 뒷모습), 아래에 글
+ * 가로 화면(PC·태블릿 가로) = 사진을 배경 전체에, 준혁님은 오른쪽 빈자리 / 세로 화면(휴대폰·태블릿 세로) = 위쪽에 발표 장면(흐린 화면 일부·준혁님·청중 뒷모습), 칩·제목은 사진 아래쪽에 겹쳐 올림
  */
 export default function SongdoHero() {
   return (
@@ -19,15 +19,15 @@ export default function SongdoHero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#050807]/60 via-[#050807]/15 to-[#050807]" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.92)_0%,rgba(5,8,7,0.78)_40%,rgba(5,8,7,0.35)_60%,rgba(5,8,7,0)_76%)]" />
       </div>
-      <div aria-hidden className="relative landscape:hidden h-[42svh] min-h-[300px]">
+      <div aria-hidden className="relative landscape:hidden h-[min(113vw,560px)]">
         <div
           className="absolute inset-0 bg-cover bg-[50%_12%]"
           style={{ backgroundImage: "url('/songdo/hero-junhyuk-m.jpg')" }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,7,0.55)_0%,rgba(5,8,7,0)_28%,rgba(5,8,7,0)_60%,#050807_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,7,0.55)_0%,rgba(5,8,7,0)_22%,rgba(5,8,7,0)_44%,rgba(5,8,7,0.6)_62%,rgba(5,8,7,0.86)_78%,rgba(5,8,7,0.96)_90%,#050807_100%)]" />
       </div>
 
-      <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-10 portrait:-mt-10 portrait:pb-14 landscape:py-32">
+      <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-10 portrait:-mt-[min(44vw,190px)] portrait:pb-14 landscape:py-32">
         <div className="reveal max-w-3xl">
           <div className="inline-flex items-center rounded-md grad-fill px-3.5 py-1.5 sm:px-4 sm:py-2 shadow-[0_6px_20px_rgba(0,0,0,0.35)]">
             <span className="font-display text-sm sm:text-lg font-bold text-[#07140c]">
