@@ -78,10 +78,9 @@ export default function SongdoEventInfo() {
               </svg>
               <div>
                 <div className="text-base sm:text-lg font-semibold">
-                  <a href="tel:010-5911-8522" className="hover:underline underline-offset-4">
-                    010-5911-8522
-                  </a>{" "}
-                  <span className="text-white/50 font-normal text-sm sm:text-base">(클래스인 신희성)</span>
+                  <a href="tel:02-6958-8566" className="hover:underline underline-offset-4">
+                    02-6958-8566
+                  </a>
                 </div>
                 <div className="mt-1 text-sm text-white/50">참석·일정 관련 문의</div>
               </div>
