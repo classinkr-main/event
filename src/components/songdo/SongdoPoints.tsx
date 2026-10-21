@@ -15,7 +15,7 @@ export default function SongdoPoints() {
   return (
     <section id="points" className="relative py-20 sm:py-32">
       <div className="max-w-4xl mx-auto px-6 sm:px-10">
-        <div className="flex items-center gap-4 text-xs sm:text-sm tracking-[0.18em] text-[var(--accent-from)] font-bold">
+        <div className="flex items-center gap-4 text-xs sm:text-sm tracking-[0.18em] text-[var(--accent-text)] font-bold">
           <span>오프라인 설명회에서 직접 확인하실 두 가지 주제</span>
           <span className="flex-1 h-px bg-gradient-to-r from-[var(--accent-from)]/60 to-transparent" />
         </div>
@@ -27,7 +27,7 @@ export default function SongdoPoints() {
                 <span className="inline-block text-sm sm:text-base font-bold text-[#07140c] grad-fill rounded-full px-3 py-1">
                   {p.n}
                 </span>
-                <span className="shrink-0 mt-1 text-[11px] sm:text-xs font-bold tracking-wide text-[#8fe3ae] border border-[var(--accent-from)]/45 rounded px-2 py-1">
+                <span className="shrink-0 mt-1 text-[11px] sm:text-xs font-bold tracking-wide text-[var(--accent-text)] border border-[var(--accent-from)]/45 rounded px-2 py-1">
                   현장 공개
                 </span>
               </div>
@@ -49,7 +49,7 @@ export default function SongdoPoints() {
             지난 7월 송도 1차 설명회 참석 학원{" "}
             <b className="text-white font-bold">10곳 중 7곳</b>이 현장에서 도입을 확약했습니다.
           </p>
-          <span className="self-start sm:self-auto shrink-0 text-xs sm:text-sm font-bold text-[var(--accent-from)] border border-[var(--accent-from)] rounded px-3 py-1.5">
+          <span className="self-start sm:self-auto shrink-0 text-xs sm:text-sm font-bold text-[var(--accent-text)] border border-[var(--accent-from)] rounded px-3 py-1.5">
             설명회 참석자 한정 프로모션 혜택
           </span>
         </div>

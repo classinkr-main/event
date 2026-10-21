@@ -138,7 +138,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         <Field label="직책" name="position" placeholder="원장 / 부원장 / 실장 등" required autoComplete="organization-title" />
         <div>
           <label htmlFor="phone" className="block text-sm text-white/70 mb-2 font-medium">
-            연락처<span className="text-[var(--accent-from)] ml-1">*</span>
+            연락처<span className="text-[var(--accent-text)] ml-1">*</span>
           </label>
           <input
             id="phone"
@@ -164,7 +164,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
               <div className="text-base sm:text-lg font-semibold text-white/90">엔에스 수능관학원 · 5층 504호</div>
               <div className="mt-0.5 text-sm text-white/50">인천 연수구 해돋이로 160-14</div>
             </div>
-            <span className="shrink-0 text-xs tracking-[0.15em] rounded-full border border-[var(--accent-from)]/40 px-3 py-1.5 text-[var(--accent-from)]">
+            <span className="shrink-0 text-xs tracking-[0.15em] rounded-full border border-[var(--accent-from)]/40 px-3 py-1.5 text-[var(--accent-text)]">
               10/29 (목) 11AM
             </span>
           </div>
@@ -211,7 +211,7 @@ function Field({
     <div>
       <label htmlFor={name} className="block text-sm text-white/70 mb-2 font-medium">
         {label}
-        {required && <span className="text-[var(--accent-from)] ml-1">*</span>}
+        {required && <span className="text-[var(--accent-text)] ml-1">*</span>}
       </label>
       <input
         id={name}

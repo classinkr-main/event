@@ -19,7 +19,7 @@ export default function SongdoEventInfo() {
         <div className="max-w-2xl mx-auto panel p-6 sm:p-10">
           <div className="flex items-start gap-4 sm:gap-5">
             <div className="shrink-0 rounded-md border border-[var(--accent-from)]/40 bg-[var(--accent-from)]/10 px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[68px] sm:min-w-[80px]">
-              <div className="font-display text-lg sm:text-2xl font-bold text-[var(--accent-from)]">
+              <div className="font-display text-lg sm:text-2xl font-bold text-[var(--accent-text)]">
                 10.29
               </div>
             </div>
@@ -38,7 +38,7 @@ export default function SongdoEventInfo() {
 
           <div className="mt-6 sm:mt-7 pt-5 sm:pt-6 border-t border-white/10 space-y-5">
             <div className="flex items-start gap-3 text-white/80">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-1 shrink-0 text-[var(--accent-from)]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-1 shrink-0 text-[var(--accent-text)]">
                 <path
                   d="M12 22s7-7.5 7-13a7 7 0 10-14 0c0 5.5 7 13 7 13zM12 12a3 3 0 100-6 3 3 0 000 6z"
                   stroke="currentColor"
@@ -56,7 +56,7 @@ export default function SongdoEventInfo() {
                   href={MAP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm text-[var(--accent-from)] hover:underline underline-offset-4"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm text-[var(--accent-text)] hover:underline underline-offset-4"
                 >
                   네이버 지도에서 보기
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
@@ -67,7 +67,7 @@ export default function SongdoEventInfo() {
             </div>
 
             <div className="flex items-start gap-3 text-white/80">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-1 shrink-0 text-[var(--accent-from)]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="mt-1 shrink-0 text-[var(--accent-text)]">
                 <path
                   d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"
                   stroke="currentColor"

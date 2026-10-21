@@ -4,19 +4,30 @@ const rows = [
   { label: "대 상", main: "학원 원장님 및 관계자", sub: "무료 참석 · 실제 도입 학원 현장", nowrap: true },
 ];
 
+/**
+ * 히어로 사진 = 부산 1차 설명회(2026.05.08) 준혁님 발표 장면. 슬라이드 쪽은 글씨가 제목 뒤로 읽히지 않게 흐리게 처리한 사본.
+ * 가로 화면(PC·태블릿 가로) = 사진을 배경 전체에, 준혁님은 오른쪽 빈자리 / 세로 화면(휴대폰·태블릿 세로) = 위쪽에 준혁님 사진, 아래에 글
+ */
 export default function SongdoHero() {
   return (
-    <section className="relative min-h-[100svh] flex items-end sm:items-center overflow-hidden">
-      <div className="absolute inset-0">
+    <section className="relative overflow-hidden landscape:min-h-[100svh] landscape:flex landscape:items-center">
+      <div aria-hidden className="absolute inset-0 portrait:hidden">
         <div
-          className="absolute inset-0 bg-cover bg-[72%_50%]"
-          style={{ backgroundImage: "url('/songdo/hero.jpg')" }}
+          className="absolute inset-0 bg-cover bg-[70%_42%]"
+          style={{ backgroundImage: "url('/songdo/hero-junhyuk.jpg')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050807]/55 via-[#050807]/35 to-[#050807]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050807]/85 via-[#050807]/35 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050807]/60 via-[#050807]/15 to-[#050807]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.92)_0%,rgba(5,8,7,0.78)_40%,rgba(5,8,7,0.35)_60%,rgba(5,8,7,0)_76%)]" />
+      </div>
+      <div aria-hidden className="relative landscape:hidden h-[42svh] min-h-[300px]">
+        <div
+          className="absolute inset-0 bg-cover bg-[50%_12%]"
+          style={{ backgroundImage: "url('/songdo/hero-junhyuk-m.jpg')" }}
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,7,0.55)_0%,rgba(5,8,7,0)_28%,rgba(5,8,7,0)_60%,#050807_100%)]" />
       </div>
 
-      <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-10 pt-28 pb-16 sm:py-32">
+      <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-10 portrait:-mt-10 portrait:pb-14 landscape:py-32">
         <div className="reveal max-w-3xl">
           <div className="inline-flex items-center rounded-md grad-fill px-3.5 py-1.5 sm:px-4 sm:py-2 shadow-[0_6px_20px_rgba(0,0,0,0.35)]">
             <span className="font-display text-sm sm:text-lg font-bold text-[#07140c]">
@@ -36,7 +47,7 @@ export default function SongdoHero() {
           <div className="mt-8 sm:mt-10 space-y-2.5 text-base sm:text-lg text-white/80">
             {rows.map((r) => (
               <div key={r.label} className="flex items-baseline gap-3">
-                <span className="shrink-0 text-xs sm:text-sm tracking-[0.2em] text-[var(--accent-from)]/80 w-12 sm:w-14">
+                <span className="shrink-0 text-xs sm:text-sm tracking-[0.2em] text-[var(--accent-text)]/80 w-12 sm:w-14">
                   {r.label}
                 </span>
                 <span className="font-semibold text-white">
