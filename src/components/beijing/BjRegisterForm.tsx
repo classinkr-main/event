@@ -6,7 +6,7 @@ import { formatKoreanPhone } from "@/lib/phone";
 import Barcode from "./gfx/Barcode";
 import FlightArc from "./gfx/FlightArc";
 import TicketField from "./TicketField";
-import { INTEREST_LABELS } from "./data";
+import { FORM_OPTIONS, INTEREST_LABELS } from "./data";
 import { useInterests } from "./interests";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -19,32 +19,79 @@ type SubmittedData = {
   email: string;
   party: string;
   arrival: string;
+  flightDetail: string;
+  room: string;
+  roommate: string;
   message: string;
+  question: string;
+  topics: string;
   interests: string;
+  passportName: string;
 };
 
-const PARTY_OPTIONS = ["1명 (본인)", "2명", "3명 이상"];
-const ARRIVAL_OPTIONS = ["11/24 (화) 저녁", "11/25 (수) 오전", "미정"];
+const PARTY_OPTIONS = FORM_OPTIONS.party;
+const FLIGHT_OPTIONS = FORM_OPTIONS.flight;
+const ROOM_OPTIONS = FORM_OPTIONS.room;
+const TOPIC_OPTIONS = FORM_OPTIONS.topics;
+const PASSPORT_MAX_SIDE = 1600;
+
+/** 여권 사진을 브라우저에서 줄여 JPEG data URL로. 휴대폰 원본(수 MB)을 그대로 보내지 않기 위해 */
+async function fileToJpegDataUrl(file: File): Promise<string> {
+  let bitmap: ImageBitmap;
+  try {
+    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+  } catch {
+    throw new Error("여권 이미지를 읽지 못했습니다. JPG 또는 PNG 사진으로 올려 주세요.");
+  }
+  const scale = Math.min(1, PASSPORT_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
+  const w = Math.max(1, Math.round(bitmap.width * scale));
+  const h = Math.max(1, Math.round(bitmap.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("이미지 처리를 지원하지 않는 브라우저입니다.");
+  ctx.drawImage(bitmap, 0, 0, w, h);
+  bitmap.close?.();
+  let out = canvas.toDataURL("image/jpeg", 0.85);
+  if (out.length > 2_500_000) out = canvas.toDataURL("image/jpeg", 0.7);
+  return out;
+}
 
 /** 참가 신청 = 종이 탑승권. 본권에 입력, 스텁에 관심 일정. 접수되면 이름이 인쇄된 탑승권 + 스탬프 */
 export default function BjRegisterForm({ source, prefillCode }: { source?: string; prefillCode?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [phone, setPhone] = useState("");
-  const [arrival, setArrival] = useState(ARRIVAL_OPTIONS[2]);
+  const [arrival, setArrival] = useState(FLIGHT_OPTIONS[0]);
+  const [room, setRoom] = useState("");
+  const [topics, setTopics] = useState<string[]>([]);
+  const [passport, setPassport] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState<SubmittedData | null>(null);
   const { list: interests, remove, clear } = useInterests();
   const interestLabels = interests.map((id) => INTEREST_LABELS[id] ?? id);
+
+  const toggleTopic = (t: string) => setTopics((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
     setErrorMsg("");
     const form = e.currentTarget;
-    const payload = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+    const fd = new FormData(form);
+    const payload: Record<string, string> = {};
+    fd.forEach((v, k) => {
+      if (typeof v === "string") payload[k] = v;
+    });
     if (payload.source) payload.source = `${payload.source}/${getStoredChannel()}`;
     payload.interests = interestLabels.join(", ");
+    payload.topics = topics.join(", ");
+    payload.consent = fd.get("consent") ? "Y" : "";
     try {
+      if (passport) {
+        payload.passportImage = await fileToJpegDataUrl(passport);
+        payload.passportName = passport.name;
+      }
       const res = await fetch("/api/beijing", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,11 +101,14 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "신청 처리 중 문제가 발생했습니다.");
       }
-      setSubmitted(payload as unknown as SubmittedData);
+      setSubmitted({ ...(payload as unknown as SubmittedData), passportName: passport?.name ?? "" });
       setStatus("success");
       form.reset();
       setPhone("");
-      setArrival(ARRIVAL_OPTIONS[2]);
+      setArrival(FLIGHT_OPTIONS[0]);
+      setRoom("");
+      setTopics([]);
+      setPassport(null);
       clear();
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "알 수 없는 오류");
@@ -76,6 +126,11 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
       </span>
     </div>
   );
+
+  const chip = (on: boolean) =>
+    `cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
+      on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
+    }`;
 
   if (status === "success" && submitted) {
     return (
@@ -103,26 +158,56 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
             </div>
             <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-y-4 gap-x-4 border-t border-[var(--paper-line)] pt-4">
               <TicketField k="DATE" v="24 – 27 NOV 2026" />
-              <TicketField k="ARRIVAL" v={submitted.arrival || "-"} />
+              <TicketField k="FLIGHT" v={submitted.arrival ? submitted.arrival.split(" (")[0] : "-"} />
+              <TicketField k="ROOM" v={submitted.room ? submitted.room.split(" (")[0] : "-"} />
               <TicketField k="PHONE" v={submitted.phone} />
-              <TicketField k="EMAIL" v={submitted.email} />
             </div>
-            {(submitted.interests || submitted.message) && (
-              <dl className="mt-5 border-t border-[var(--paper-line)] pt-4 space-y-2 text-sm">
-                {submitted.interests && (
-                  <div className="grid grid-cols-[4.5rem_1fr] gap-3">
-                    <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">INTERESTS</dt>
-                    <dd className="text-[var(--ink)]">{submitted.interests}</dd>
-                  </div>
-                )}
-                {submitted.message && (
-                  <div className="grid grid-cols-[4.5rem_1fr] gap-3">
-                    <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">NOTE</dt>
-                    <dd className="text-[var(--ink)] whitespace-pre-line">{submitted.message}</dd>
-                  </div>
-                )}
-              </dl>
-            )}
+            <dl className="mt-5 border-t border-[var(--paper-line)] pt-4 space-y-2 text-sm">
+              <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">EMAIL</dt>
+                <dd className="text-[var(--ink)]">{submitted.email}</dd>
+              </div>
+              {submitted.flightDetail && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">FLIGHT</dt>
+                  <dd className="text-[var(--ink)]">{submitted.flightDetail}</dd>
+                </div>
+              )}
+              {submitted.roommate && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">ROOM</dt>
+                  <dd className="text-[var(--ink)]">{submitted.roommate}</dd>
+                </div>
+              )}
+              <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">PASSPORT</dt>
+                <dd className="text-[var(--ink)]">{submitted.passportName ? "접수됨" : "미제출 · 접수 후 담당자에게 보내 주세요"}</dd>
+              </div>
+              {submitted.interests && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">INTERESTS</dt>
+                  <dd className="text-[var(--ink)]">{submitted.interests}</dd>
+                </div>
+              )}
+              {submitted.topics && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">TOPICS</dt>
+                  <dd className="text-[var(--ink)]">{submitted.topics}</dd>
+                </div>
+              )}
+              {submitted.question && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">QUESTION</dt>
+                  <dd className="text-[var(--ink)] whitespace-pre-line">{submitted.question}</dd>
+                </div>
+              )}
+              {submitted.message && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">NOTE</dt>
+                  <dd className="text-[var(--ink)] whitespace-pre-line">{submitted.message}</dd>
+                </div>
+              )}
+            </dl>
             <Barcode seed={`${submitted.name}-${submitted.phone}`} height={44} className="mt-6 h-11 w-full text-[var(--ink)]" />
             <div className="mono mt-1.5 text-[10px] text-[var(--ink-3)]">CM1124 ICNPEK 24NOV</div>
             <div className="absolute right-8 sm:right-14 top-[38%]">
@@ -147,7 +232,7 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
               <TicketField k="GATE" v="GET" right />
             </div>
             <p className="text-sm leading-relaxed text-[var(--ink-2)]">
-              접수되었습니다. 항공과 숙박, 세부 일정 안내를 위해 담당자가 순차적으로 개별 연락드립니다.
+              접수되었습니다. 숙소 예약과 세부 일정 안내를 위해 담당자가 순차적으로 개별 연락드립니다.
             </p>
             <div className="mt-auto">
               <Barcode seed={`stub-${submitted.phone}`} height={36} className="h-9 w-full text-[var(--ink)]" />
@@ -213,9 +298,7 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
                 maxLength={13}
               />
             </div>
-            <div className="sm:col-span-2">
-              <Field label="EMAIL / 이메일" name="email" type="email" placeholder="name@example.com" required />
-            </div>
+            <Field label="EMAIL / 이메일" name="email" type="email" placeholder="name@example.com" required />
             <div>
               <Label htmlFor="party">PARTY / 참가 인원</Label>
               <select id="party" name="party" className="field" defaultValue={PARTY_OPTIONS[0]}>
@@ -226,30 +309,110 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
                 ))}
               </select>
             </div>
-            <div>
-              <Label>ARRIVAL / 도착 예정</Label>
+
+            <div className="sm:col-span-2">
+              <Label>FLIGHT / 항공편 <span className="font-normal normal-case">(항공은 자기 부담)</span></Label>
               <div className="flex flex-wrap gap-2 pt-1.5">
-                {ARRIVAL_OPTIONS.map((o) => {
+                {FLIGHT_OPTIONS.map((o) => {
                   const on = arrival === o;
                   return (
-                    <label
-                      key={o}
-                      className={`cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
-                        on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
-                      }`}
-                    >
+                    <label key={o} className={chip(on)}>
                       <input type="radio" name="arrival" value={o} checked={on} onChange={() => setArrival(o)} className="sr-only" />
                       {o}
                     </label>
                   );
                 })}
               </div>
+              {arrival === FLIGHT_OPTIONS[1] && (
+                <input
+                  name="flightDetail"
+                  type="text"
+                  placeholder="편명과 도착 시각 (예: 11/24 OZ335 · 15:10 도착)"
+                  className="field mt-3"
+                  maxLength={200}
+                />
+              )}
             </div>
+
+            <div className="sm:col-span-2">
+              <Label required>ROOM / 숙소 <span className="font-normal normal-case">(크라운 플라자 베이징 중관춘 · 숙박은 자기 부담)</span></Label>
+              <div className="flex flex-wrap gap-2 pt-1.5">
+                {ROOM_OPTIONS.map((o) => {
+                  const on = room === o;
+                  return (
+                    <label key={o} className={chip(on)}>
+                      <input type="radio" name="room" value={o} checked={on} onChange={() => setRoom(o)} className="sr-only" required />
+                      {o}
+                    </label>
+                  );
+                })}
+              </div>
+              {room === ROOM_OPTIONS[1] && (
+                <input
+                  name="roommate"
+                  type="text"
+                  placeholder="함께 쓰실 분 (예: ○○학원 홍길동)"
+                  className="field mt-3"
+                  maxLength={200}
+                />
+              )}
+            </div>
+
+            <div className="sm:col-span-2">
+              <Label htmlFor="passport">
+                PASSPORT / 여권 사본 <span className="font-normal normal-case">(선택)</span>
+              </Label>
+              <input
+                id="passport"
+                name="passport"
+                type="file"
+                accept="image/*"
+                className="field !py-2 file:mr-3 file:border file:border-[var(--paper-line-2)] file:bg-transparent file:px-3 file:py-1 file:text-xs file:text-[var(--ink)]"
+                onChange={(e) => setPassport(e.target.files?.[0] ?? null)}
+              />
+              <p className="mt-1.5 text-[11px] text-[var(--ink-3)] leading-relaxed">
+                숙소 예약에 필요합니다. 사진면을 찍어 올려 주세요. 지금 어려우시면 접수 후 담당자에게 보내 주셔도 됩니다. 예약이 끝나면 바로 폐기합니다.
+              </p>
+            </div>
+
+            <div className="sm:col-span-2">
+              <Label>TOPICS / 듣고 싶은 주제 <span className="font-normal normal-case">(선택, 복수 가능)</span></Label>
+              <div className="flex flex-wrap gap-2 pt-1.5">
+                {TOPIC_OPTIONS.map((t) => {
+                  const on = topics.includes(t);
+                  return (
+                    <label key={t} className={chip(on)}>
+                      <input type="checkbox" checked={on} onChange={() => toggleTopic(t)} className="sr-only" />
+                      {t}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="sm:col-span-2">
+              <Label htmlFor="question">
+                QUESTION / 방문 기관에 전달할 질문 <span className="font-normal normal-case">(선택)</span>
+              </Label>
+              <textarea id="question" name="question" rows={2} placeholder="현장에서 꼭 확인하고 싶은 내용. 특정 기관이면 [기관명 / 질문]으로 적어 주세요" className="field min-h-[64px]" maxLength={1000} />
+            </div>
+
             <div className="sm:col-span-2">
               <Label htmlFor="message">
                 NOTE / 요청사항 <span className="font-normal normal-case">(선택)</span>
               </Label>
               <textarea id="message" name="message" rows={2} placeholder="항공, 숙박, 식사 관련 요청이나 궁금한 점" className="field min-h-[64px]" maxLength={1000} />
+            </div>
+
+            <div className="sm:col-span-2 border-t border-[var(--paper-line)] pt-5">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input type="checkbox" name="consent" value="Y" required className="mt-1 h-4 w-4 accent-[var(--accent)]" />
+                <span className="text-[13px] leading-relaxed">
+                  <span className="font-semibold">개인정보 수집·이용에 동의합니다.</span>
+                  <span className="text-[var(--accent)] ml-1">*</span>
+                  <span className="block mt-1 text-[12px] text-[var(--ink-2)]">{FORM_OPTIONS.consent}</span>
+                </span>
+              </label>
             </div>
           </div>
 
@@ -262,7 +425,7 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
               {status === "submitting" ? "접수 중..." : "참가 신청 제출"}
             </button>
             <p className="text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
-              제출하신 정보는 본 행사 운영(항공, 숙박, 현지 일정 안내) 목적으로만 사용되며 행사 종료 후 안전하게 폐기됩니다.
+              항공편과 숙박은 자기 부담이며, 예약 방법은 접수 후 개별 안내드립니다.
             </p>
           </div>
         </div>

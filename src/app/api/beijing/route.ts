@@ -10,8 +10,16 @@ type Payload = {
   email?: string;
   party?: string;
   arrival?: string;
+  flightDetail?: string;
+  room?: string;
+  roommate?: string;
   message?: string;
+  question?: string;
+  topics?: string;
   interests?: string;
+  consent?: string;
+  passportImage?: string;
+  passportName?: string;
   session?: string;
   source?: string;
 };
@@ -50,6 +58,25 @@ export async function POST(request: Request) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: "이메일 형식이 올바르지 않습니다." }, { status: 400 });
   }
+  if (body.consent !== "Y") {
+    return NextResponse.json({ error: "개인정보 수집·이용에 동의해 주셔야 접수할 수 있습니다." }, { status: 400 });
+  }
+  const room = clean(body.room, 60);
+  if (!room) {
+    return NextResponse.json({ error: "숙소 객실 타입을 골라 주세요." }, { status: 400 });
+  }
+
+  // 여권 사본: 브라우저에서 줄인 JPEG data URL만 받는다(최대 약 3MB)
+  let passportImage = "";
+  let passportMime = "";
+  if (typeof body.passportImage === "string" && body.passportImage) {
+    const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(body.passportImage);
+    if (!m || m[2].length > 4_000_000) {
+      return NextResponse.json({ error: "여권 이미지는 JPG·PNG 사진으로 3MB 이하만 올릴 수 있습니다." }, { status: 400 });
+    }
+    passportMime = m[1];
+    passportImage = m[2];
+  }
 
   // 베이징 전용 시트 웹훅. 미설정 시 설명회(인천) 시트로 폴백 — 구 스크립트면 인천 탭 Session 컬럼에 요약이 남는다.
   const sheetsUrl =
@@ -58,12 +85,16 @@ export async function POST(request: Request) {
     process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   const party = clean(body.party, 30);
-  const arrival = clean(body.arrival, 50);
+  const arrival = clean(body.arrival, 80);
+  const flightDetail = clean(body.flightDetail, 200);
+  const roommate = clean(body.roommate, 200);
   const message = clean(body.message, 1000);
+  const question = clean(body.question, 1000);
+  const topics = clean(body.topics, 500);
   const interests = clean(body.interests, 400);
 
   if (!sheetsUrl) {
-    console.warn("[beijing] No webhook URL configured. Received but not stored.", body);
+    console.warn("[beijing] No webhook URL configured. Received but not stored.", { ...body, passportImage: passportImage ? `[${passportImage.length} chars]` : "" });
     return NextResponse.json({ ok: true, stored: false });
   }
 
@@ -81,14 +112,24 @@ export async function POST(request: Request) {
         email,
         party,
         arrival,
+        flightDetail,
+        room,
+        roommate,
         message,
+        question,
+        topics,
         interests,
+        consent: "Y",
+        passportImage,
+        passportMime,
+        passportName: clean(body.passportName, 200),
         source: clean(body.source, 200),
         // 호환용: 인천 시트(v3)로 폴백될 때 Session 컬럼에 요약이 남도록
         session: [
           clean(body.session, 100) || "베이징 탐방 11/24–27",
           party ? `인원=${party}` : "",
-          arrival ? `도착=${arrival}` : "",
+          arrival ? `항공=${arrival}` : "",
+          room ? `숙소=${room}` : "",
           interests ? `관심=${interests}` : "",
           message ? `요청=${message.slice(0, 300)}` : "",
         ]

@@ -28,7 +28,7 @@ export const DAYS: Day[] = [
     weekday: "화",
     label: "도착",
     stops: [
-      { time: "저녁 ~", title: "베이징 순차 도착, 호텔 체크인", sub: "11/25 오후 1시 전까지 도착" },
+      { time: "18:55", title: "베이징 도착, 호텔 체크인", sub: "안내 항공편 CA126 기준. 다른 편으로 오셔도 이날 저녁까지 도착해 주세요" },
     ],
   },
   {
@@ -212,6 +212,68 @@ export const QUESTIONS: { no: string; q: string; where: string; who: string; id:
   { no: "06", q: "ClassIn 제품은 어디로 가나", where: "11.26 본사", who: "ClassIn CTO", id: "d3-cto" },
 ];
 
+/** 항공편 — 함께 이동을 권하는 편. 항공은 자기 부담(각자 예약·결제) */
+export type Flight = {
+  label: string;
+  date: string;
+  airline: string;
+  no: string;
+  from: { code: string; name: string };
+  to: { code: string; name: string };
+  dep: string;
+  arr: string;
+  dur: string;
+  url: string;
+};
+export const FLIGHTS: { note: string; legs: Flight[] } = {
+  note: "항공편과 숙박은 자기 부담입니다. 아래 항공편으로 함께 이동하시면 현지 동선을 맞추기 쉽습니다.",
+  legs: [
+    {
+      label: "가는 편",
+      date: "11월 24일 (화)",
+      airline: "중국국제항공",
+      no: "CA126",
+      from: { code: "ICN", name: "인천" },
+      to: { code: "PEK", name: "베이징 서우두" },
+      dep: "17:50",
+      arr: "18:55",
+      dur: "직항 · 2시간 05분",
+      url: "https://www.skyscanner.co.kr/transport/flights/sela/bjsa/261124/config/12409-2611241750--32690-0-15277-2611241855?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=true&outboundaltsenabled=false&inboundaltsenabled=false&departure-times=900-1439%2C750-1439&stops=%21oneStop%2C%21twoPlusStops",
+    },
+    {
+      label: "돌아오는 편",
+      date: "11월 27일 (금)",
+      airline: "아시아나항공",
+      no: "OZ336",
+      from: { code: "PEK", name: "베이징 서우두" },
+      to: { code: "ICN", name: "인천" },
+      dep: "17:30",
+      arr: "20:25",
+      dur: "직항 · 1시간 55분",
+      url: "https://www.skyscanner.co.kr/transport/flights/bjsa/sela/261127/itinerary/H4sIAAAAAAAA_-Py4_Lh4ubiNDSyMDMDIhMhLi4OS1Mzc2MzU0spbo5X_ALcEtIKghpySnCOiIakFpuusZGpqYURlLZiNjY2c2D0YgAAY4q_lVAAAAA=?adultsv2=1&cabinclass=economy&childrenv2=&ref=home&rtn=0&preferdirects=true&outboundaltsenabled=false&inboundaltsenabled=false&departure-times=900-1439%2C750-1439&stops=%21oneStop%2C%21twoPlusStops",
+    },
+  ],
+};
+
+/** 신청서 선택지 — 웹 신청서와 구글폼이 같은 문구를 쓴다 */
+export const FORM_OPTIONS = {
+  party: ["1명 (본인)", "2명", "3명 이상"],
+  flight: ["안내 항공편 이용 (11/24 CA126 · 11/27 OZ336)", "다른 항공편 이용", "미정"],
+  room: ["더블 (950위안 · 조식 1인)", "트윈 (1,050위안 · 조식 2인)", "숙소 직접 예약"],
+  topics: [
+    "AI 수업 운영 방식과 실제 활용 사례",
+    "강사 관리와 수업 품질 표준화",
+    "하이브리드 수업 구조와 기준",
+    "AI·디지털 도구 도입 시 선택 기준",
+    "학생·학부모 커뮤니케이션 방식",
+    "한국 학원이 참고할 중국 교육 기관의 특징",
+    "마케팅·홍보 방안",
+    "학원 규모 확장과 시스템화",
+  ],
+  consent:
+    "ClassIn Korea는 본 행사 운영을 위해 성명, 직책, 연락처, 이메일, 소속 기관명, 여권 사본, 숙소·항공 선호 정보를 수집합니다. 행사 운영, 숙소 예약, 기관 방문 사전 조율에만 쓰고 행사 종료 후 즉시 폐기합니다. 동의하지 않으시면 참가 신청이 제한될 수 있습니다.",
+};
+
 /** 숙소 — 크라운 플라자 베이징 중관춘. 가격은 1박 현지 통화, 원화는 1위안 ≈ 200원 어림 */
 export const HOTEL = {
   name: "크라운 플라자 베이징 중관춘",
@@ -222,6 +284,7 @@ export const HOTEL = {
   addressCn: "海淀区知春路106号",
   url: "https://kr.trip.com/hotels/beijing-hotel-detail-430270/crowne-plaza-beijing-zhongguancun-by-ihg/",
   rateNote: "1박 기준 현지 가격입니다. 원화는 1위안 ≈ 200원으로 어림한 금액이라 결제 시점 환율에 따라 달라집니다.",
+  payNote: "숙박비는 자기 부담입니다. 예약과 결제 방법은 접수 후 개별 안내드립니다.",
   rooms: [
     { type: "더블", en: "Double", cny: "950", krw: "19만 원", breakfast: "조식 1인" },
     { type: "트윈", en: "Twin", cny: "1,050", krw: "21만 원", breakfast: "조식 2인" },

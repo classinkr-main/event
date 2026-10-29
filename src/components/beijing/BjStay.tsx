@@ -53,6 +53,7 @@ export default function BjStay() {
           </div>
 
           <p className="mt-4 text-[13px] text-[var(--ink-3)] leading-relaxed">{HOTEL.rateNote}</p>
+          <p className="mt-2 text-[13px] text-[var(--ink-2)] leading-relaxed">{HOTEL.payNote}</p>
 
           <a
             href={HOTEL.url}

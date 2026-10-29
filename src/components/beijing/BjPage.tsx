@@ -6,7 +6,7 @@ import BjQuestions from "./BjQuestions";
 import BjAgenda from "./BjAgenda";
 import BjProgram from "./BjProgram";
 import BjCards from "./BjCards";
-import BjPhotoBand from "./BjPhotoBand";
+import BjFlights from "./BjFlights";
 import BjStay from "./BjStay";
 import BjNotes from "./BjNotes";
 import BjRegister from "./BjRegister";
@@ -30,7 +30,7 @@ export default function BjPage({ source, prefillCode }: { source?: string; prefi
       <BjAgenda />
       <BjProgram />
       <BjCards />
-      <BjPhotoBand />
+      <BjFlights />
       <BjStay />
       <BjNotes />
       <BjRegister source={source} prefillCode={prefillCode} />

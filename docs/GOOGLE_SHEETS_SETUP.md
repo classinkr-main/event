@@ -193,7 +193,138 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - env: `GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA` (Vercel production/preview + .env.local). 미설정 시 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 폴백.
 - 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
 
-## 전용 시트 Apps Script (v1)
+## 신청 항목 확장 + 구글폼 (2026-10-29 저녁)
+- 콜라보 요청(동료 메시지): 항공편(가는 11/24 CA126 17:50→18:55, 오는 11/27 OZ336 17:30→20:25) 안내, 천단 사진 제거, 항공·숙박 자기 부담 표기, 옛 광저우 구글폼(1iOpzjhhAF88WJgChTgk8E5uHXOWvAFUw6VUZZNZKgxI) 질문 참고해 항목 보강, 구글폼 신청서 별도 생성.
+- 웹 신청서 추가 항목: 항공편 선택(`arrival`: 안내 항공편/다른 항공편/미정 + `flightDetail`), 숙소 객실(`room` 필수: 더블/트윈/직접 예약 + `roommate`), 여권 사본(`passportImage` JPEG data URL, 브라우저에서 긴 변 1600px로 축소, 선택), 듣고 싶은 주제(`topics`), 기관 질문(`question`), 개인정보 동의(`consent`=Y 필수). 서버는 동의·객실 없으면 400, 이미지는 jpeg/png/webp data URL 4M자 이하만.
+- 시트 "참가 신청" 헤더 L~R 추가: Room, Roommate, FlightDetail, Passport(드라이브 링크), Topics, Question, Consent. 여권 파일은 드라이브 폴더 "[MKT] ClassIn Meets 베이징 탐방 여권 사본" `1jXCmVf8L-JosQSgA0ZbOL6-HWlI6H_M4`(classinkr 소유, heesung 편집자).
+- Apps Script v2(아래): `savePassport_`로 Drive 저장, `createBeijingForm()`을 한 번 실행하면 구글폼 "ClassIn Meets Beijing 참가 신청"을 만들고 응답을 이 시트에 연결(새 탭 생성). **파일 업로드 항목은 FormApp으로 못 만들어 폼 편집 화면에서 "여권 사본" 섹션 아래에 직접 추가**해야 함. 초청 코드는 정규식 검증(`베이징1124`, 공백·하이픈 허용).
+- v2는 Drive 권한이 새로 필요해 **배포 계정의 권한 승인**이 한 번 필요. 웹 앱을 새로 배포하면 URL이 바뀌므로 env `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`(Vercel production + .env.local) 교체.
+
+## 전용 시트 Apps Script (v2, 2026-10-29)
+
+```javascript
+// 클래스인_베이징_탐방_신청 — v2 (2026-10-29): 룸타입·동행·항공편 상세·여권 사본(Drive)·주제·질문·동의 추가 + 구글폼 생성 함수
+const HEADERS = [
+  "Timestamp", "Name", "Organization", "Position", "Phone", "Email",
+  "Party", "Arrival", "Message", "Interests", "Source",
+  "Room", "Roommate", "FlightDetail", "Passport", "Topics", "Question", "Consent",
+];
+const REG_SHEET_NAME = "참가 신청";
+const SHEET_ID = "1eMhW7X_zF93jZ2pitPtHyYCf8aENKP4eJRw7MxMer78";
+const PASSPORT_FOLDER_ID = "1jXCmVf8L-JosQSgA0ZbOL6-HWlI6H_M4"; // [MKT] ClassIn Meets 베이징 탐방 여권 사본
+
+function savePassport_(data) {
+  if (!data.passportImage) return "";
+  try {
+    const mime = data.passportMime || "image/jpeg";
+    const ext = mime === "image/png" ? "png" : mime === "image/webp" ? "webp" : "jpg";
+    const stamp = Utilities.formatDate(new Date(), "Asia/Seoul", "yyyyMMdd-HHmm");
+    const name = [data.name || "이름없음", data.organization || "", stamp].filter(String).join("_") + "_여권." + ext;
+    const blob = Utilities.newBlob(Utilities.base64Decode(data.passportImage), mime, name);
+    return DriveApp.getFolderById(PASSPORT_FOLDER_ID).createFile(blob).getUrl();
+  } catch (err) {
+    return "저장 실패: " + err;
+  }
+}
+
+function doPost(e) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = JSON.parse(e.postData.contents);
+
+  if (data.type === "visit") {
+    let sheet = ss.getSheetByName("Visits");
+    if (!sheet) {
+      sheet = ss.insertSheet("Visits");
+      sheet.appendRow(["Timestamp", "Channel", "Referrer", "Device", "FirstVisit", "Path", "UserAgent"]);
+    }
+    sheet.appendRow([data.timestamp, data.channel, data.referrer, data.device, data.firstVisit, data.path, data.userAgent]);
+  } else {
+    // 구글폼 응답 탭이 맨 앞에 끼어들 수 있으므로 이름으로 찾는다
+    const sheet = ss.getSheetByName(REG_SHEET_NAME) || ss.getSheets()[0];
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(HEADERS);
+      sheet.setFrozenRows(1);
+    } else if (sheet.getLastColumn() < HEADERS.length) {
+      sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+    }
+    const passportUrl = savePassport_(data);
+    sheet.appendRow([
+      data.timestamp, data.name, data.organization, data.position, data.phone,
+      data.email || "", data.party || "", data.arrival || "", data.message || "",
+      data.interests || "", data.source || "",
+      data.room || "", data.roommate || "", data.flightDetail || "", passportUrl,
+      data.topics || "", data.question || "", data.consent || "",
+    ]);
+  }
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/** 한 번만 실행: 구글폼 신청서를 만들고 응답을 이 시트에 연결한다. 파일 업로드 항목은 스크립트로 못 만들어 편집 화면에서 직접 추가 */
+function createBeijingForm() {
+  const CONSENT = "ClassIn Korea는 본 행사 운영을 위해 성명, 직책, 연락처, 이메일, 소속 기관명, 여권 사본, 숙소·항공 선호 정보를 수집합니다. 행사 운영, 숙소 예약, 기관 방문 사전 조율에만 쓰고 행사 종료 후 즉시 폐기합니다. 동의하지 않으시면 참가 신청이 제한될 수 있습니다.";
+  const form = FormApp.create("ClassIn Meets Beijing 참가 신청");
+  form.setDescription(
+    "AI 시대, 학원의 다음 모습을 직접 보는 3일. 2026년 11월 24일(화)–27일(금), 중국 베이징.\n" +
+    "GET 교육기술 대회 · ClassIn 본사 · 베이징 학원과 대학 방문.\n\n" +
+    "항공편과 숙박은 자기 부담입니다. 예약 방법은 접수 후 개별 안내드립니다.\n" +
+    "안내 페이지: https://meets.classin.co.kr/beijing\n" +
+    "작성에 5분쯤 걸리며, 여권 사진면 이미지를 준비해 주세요."
+  );
+  form.setConfirmationMessage("접수되었습니다. 숙소 예약과 세부 일정은 담당자가 개별 연락드립니다.");
+  form.setAllowResponseEdits(false);
+  form.setProgressBar(false);
+
+  const code = form.addTextItem().setTitle("초청 코드").setHelpText("초청장과 함께 받으신 코드를 입력해 주세요.").setRequired(true);
+  code.setValidation(
+    FormApp.createTextValidation()
+      .setHelpText("초청 코드가 올바르지 않습니다. 안내받으신 코드를 다시 확인해 주세요.")
+      .requireTextMatchesPattern("^\\s*베이징\\s*[-_]?\\s*1124\\s*$")
+      .build()
+  );
+  form.addCheckboxItem().setTitle("개인정보 수집·이용 동의").setHelpText(CONSENT).setChoiceValues(["위 개인정보 수집·이용에 동의합니다."]).setRequired(true);
+  form.addTextItem().setTitle("성함").setRequired(true);
+  form.addTextItem().setTitle("소속 기관(학원)명").setRequired(true);
+  form.addTextItem().setTitle("직책").setHelpText("예: 원장, 대표").setRequired(true);
+  form.addTextItem().setTitle("연락처").setHelpText("예: 010-1234-5678").setRequired(true);
+  const email = form.addTextItem().setTitle("이메일").setRequired(true);
+  email.setValidation(FormApp.createTextValidation().setHelpText("이메일 형식을 확인해 주세요.").requireTextIsEmail().build());
+  form.addMultipleChoiceItem().setTitle("참가 인원").setChoiceValues(["1명 (본인)", "2명", "3명 이상"]).setRequired(true);
+  form.addMultipleChoiceItem()
+    .setTitle("항공편")
+    .setHelpText("항공은 자기 부담입니다. 안내 항공편 — 가는 편 11/24(화) 중국국제항공 CA126 인천 17:50 → 베이징 18:55 · 돌아오는 편 11/27(금) 아시아나항공 OZ336 베이징 17:30 → 인천 20:25")
+    .setChoiceValues(["안내 항공편 이용 (11/24 CA126 · 11/27 OZ336)", "다른 항공편 이용", "미정"])
+    .setRequired(true);
+  form.addTextItem().setTitle("다른 항공편이면 편명과 도착 시각").setHelpText("예: 11/24 OZ335 · 15:10 도착");
+  form.addMultipleChoiceItem()
+    .setTitle("숙소 객실 타입")
+    .setHelpText("크라운 플라자 베이징 중관춘(5성급). 1박 기준 더블 950위안(약 19만 원, 조식 1인) · 트윈 1,050위안(약 21만 원, 조식 2인). 숙박비는 자기 부담이며 예약·결제 방법은 접수 후 안내드립니다.")
+    .setChoiceValues(["더블 (950위안 · 조식 1인)", "트윈 (1,050위안 · 조식 2인)", "숙소 직접 예약"])
+    .setRequired(true);
+  form.addTextItem().setTitle("트윈이면 함께 쓰실 분").setHelpText("예: ○○학원 홍길동");
+  form.addSectionHeaderItem().setTitle("여권 사본").setHelpText("숙소 예약에 필요합니다. 아래 업로드 칸에 여권 사진면을 올려 주세요. 예약이 끝나면 바로 폐기합니다.");
+  form.addCheckboxItem().setTitle("관심 있는 일정").setChoiceValues([
+    "11/25 GET 메인 포럼", "11/25 AI 신교육 특별 세션", "11/26 쉐팡교육 방문", "11/26 CTO 제품 로드맵",
+    "11/26 샹량교육 발표", "11/26 리루이 발표", "11/27 협력 대학 방문",
+  ]);
+  form.addCheckboxItem().setTitle("듣고 싶은 주제").setChoiceValues([
+    "AI 수업 운영 방식과 실제 활용 사례", "강사 관리와 수업 품질 표준화", "하이브리드 수업 구조와 기준",
+    "AI·디지털 도구 도입 시 선택 기준", "학생·학부모 커뮤니케이션 방식", "한국 학원이 참고할 중국 교육 기관의 특징",
+    "마케팅·홍보 방안", "학원 규모 확장과 시스템화",
+  ]).showOtherOption(true);
+  form.addParagraphTextItem().setTitle("방문 기관에 전달할 질문").setHelpText("현장에서 꼭 확인하고 싶은 내용. 특정 기관이면 [기관명 / 질문] 형식으로 적어 주세요.");
+  form.addParagraphTextItem().setTitle("요청사항").setHelpText("항공, 숙박, 식사 관련 요청이나 궁금한 점");
+
+  form.setDestination(FormApp.DestinationType.SPREADSHEET, SHEET_ID);
+  Logger.log("EDIT " + form.getEditUrl());
+  Logger.log("VIEW " + form.getPublishedUrl());
+  return form.getPublishedUrl();
+}
+```
+
+## 전용 시트 Apps Script (v1, 참고)
 
 ```javascript
 const HEADERS = [
