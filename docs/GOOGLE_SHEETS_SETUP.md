@@ -200,6 +200,7 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - Apps Script v2(아래): `savePassport_`로 Drive 저장, `createBeijingForm()`을 한 번 실행하면 구글폼 "ClassIn Meets Beijing 참가 신청"을 만들고 응답을 이 시트에 연결(새 탭 생성). **파일 업로드 항목은 FormApp으로 못 만들어 폼 편집 화면에서 "여권 사본" 섹션 아래에 직접 추가**해야 함. 초청 코드는 정규식 검증(`베이징1124`, 공백·하이픈 허용).
 - ✅ 2026-10-29 18:25 heesung.shin 계정으로 권한 승인 → `createBeijingForm` 실행(구글폼 편집 `17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk`, 응답 링크 `https://docs.google.com/forms/d/e/1FAIpQLSf_FkLFSGg8zlqmSJYHBcHjV5S9AamC8ddJTCRDIaW9Xot5gw/viewform`, 응답 탭 「설문지 응답 시트1」이 맨 앞에 생김) → **새 웹 앱 배포(버전 3, 실행 계정 heesung.shin@classin.com, 모든 사용자)** URL `https://script.google.com/macros/s/AKfycbzo54oImJOm5yYEDQpPJlGAij8uzOBiVNA3f18gfFR38mzFiwZsXqJg0HgDkaSPjuE5/exec` → env `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`(Vercel production + .env.local) 교체. 옛 classinkr 배포(버전 2)는 그대로 두되 더 이상 안 씀.
 - ✅ 18:30 구글폼 편집 화면에서 「여권 사본」 섹션 아래에 **파일 업로드 문항 「여권 사진면 업로드」(선택, 1개, 10MB)** 수동 추가. 파일 업로드 문항이 있으면 응답자는 구글 로그인이 필요함(viewform이 비로그인엔 401). 운영 E2E(웹 → Vercel → 새 웹훅 → 시트 18열 + Drive 여권 파일) 확인 후 테스트 행 3건·Visits 테스트 탭·여권 테스트 파일 3개 정리(스크립트의 `cleanupTestPassports`로 휴지통 이동). 시트 탭 순서: 「설문지 응답 시트1」(구글폼) → 「참가 신청」(웹).
+- ✅ 21:00 구글폼 개편(스크립트 함수 `updateBeijingFormLayout`, 다시 실행해도 안전): **초청 코드 문항 삭제**(응답 시트 B열도 삭제, 웹 신청서는 코드 유지), 안내문 줄바꿈(설명·동의·항공편·객실·여권), **페이지 4개**(① 안내 ② 참석자 정보 ③ 항공편 · 숙소 ④ 교육 기관 방문 사전 질문), 「여권 사본」 아래에 옛 광저우 폼과 같은 **여권 사진면 예시 이미지**(외교부 견본 홍길순) 추가. 아래 v2 코드의 `createBeijingForm`은 최초 생성용이라 초청 코드 문항이 남아 있음(재실행 금지).
 
 ## 전용 시트 Apps Script (v2, 2026-10-29)
 
