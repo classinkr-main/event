@@ -10,8 +10,8 @@ export default function BjLetter() {
         <div className="glass-strong rounded-3xl p-7 sm:p-10 md:p-12">
           <div className="serif text-[18px] sm:text-[22px] md:text-[24px] leading-[1.75] space-y-5">
             <p>원장님께. 올해 11월, 베이징에서 사흘을 함께 보내고자 합니다.</p>
-            <p>GET 대회에서 ClassIn의 「AI 신교육」 세션을 보고, 본사에서 CTO의 제품 로드맵을 듣고, 베이징의 학원과 대학을 찾아갑니다.</p>
-            <p className="text-[var(--ink-2)]">수강 완료율 73%의 온라인 수학 학원, 0명에서 1만 명으로 큰 AI 강좌, 본사 없이 돌아가는 학원. 한국 학원의 다음 모습을 미리 보고 오시길 바랍니다.</p>
+            <p>중국 학원들은 지난 몇 년 사이 AI로 수업과 운영을 크게 바꿨습니다. 그 변화를 만든 사람들을 현장에서 직접 만나는 자리입니다.</p>
+            <p className="text-[var(--ink-2)]">GET 대회의 ClassIn 세션, 본사 CTO의 제품 로드맵, 베이징 학원과 대학 방문을 사흘에 담았습니다. 온라인 수학 수업으로 완료율 73%를 내는 학원, 본사 없이 학원을 운영하는 대표를 직접 만나 궁금한 점을 물으실 수 있습니다.</p>
             <p className="text-[var(--ink-2)]">항공·숙박 등 세부 사항은 신청 후 개별 안내드립니다.</p>
           </div>
           <div className="mt-8 flex items-center gap-4">
