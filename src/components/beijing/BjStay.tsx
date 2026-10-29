@@ -15,6 +15,10 @@ export default function BjStay() {
             <div className="min-w-0">
               <div className="text-xs text-[var(--ink-3)]">HOTEL · 11.24 – 11.27</div>
               <div className="mt-1 text-xl sm:text-2xl font-medium tracking-tight leading-tight">{HOTEL.name}</div>
+              <div className="mt-1.5 flex items-center gap-2 text-xs">
+                <span className="text-[#e3b04b] tracking-[0.12em]" aria-hidden>{"★".repeat(HOTEL.stars)}</span>
+                <span className="text-[var(--ink-2)]">{HOTEL.stars}성급</span>
+              </div>
               <div className="mt-1 text-xs text-[var(--ink-3)] leading-relaxed">
                 <span>{HOTEL.en}</span>
                 <span className="hidden sm:inline"> · </span>

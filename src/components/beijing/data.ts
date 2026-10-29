@@ -218,6 +218,7 @@ export const HOTEL = {
   name: "크라운 플라자 베이징 중관춘",
   en: "Crowne Plaza Beijing Zhongguancun",
   cn: "北京中关村皇冠假日酒店",
+  stars: 5,
   address: "베이징 하이뎬구 즈춘루 106호",
   addressCn: "海淀区知春路106号",
   url: "https://kr.trip.com/hotels/beijing-hotel-detail-430270/crowne-plaza-beijing-zhongguancun-by-ihg/",
