@@ -39,7 +39,6 @@ export const DAYS: Day[] = [
     theme: "중국 교육기술 연례 행사",
     stops: [
       { id: "d2-forum", time: "오전", title: "GET 대회 메인 포럼", sub: "신윈난 크라운플라자 호텔" },
-      { time: "점심", title: "ClassIn 부스 점심" },
       { id: "d2-session", time: "오후", title: "ClassIn「AI 신교육」특별 세션", sub: "한국·중국 학원 4곳 발표" },
       { time: "저녁", title: "교류 만찬" },
     ],
