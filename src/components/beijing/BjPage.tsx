@@ -7,6 +7,7 @@ import BjAgenda from "./BjAgenda";
 import BjProgram from "./BjProgram";
 import BjCards from "./BjCards";
 import BjPhotoBand from "./BjPhotoBand";
+import BjStay from "./BjStay";
 import BjNotes from "./BjNotes";
 import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
@@ -30,6 +31,7 @@ export default function BjPage({ source }: { source?: string }) {
       <BjProgram />
       <BjCards />
       <BjPhotoBand />
+      <BjStay />
       <BjNotes />
       <BjRegister source={source} />
       <BjFooter />

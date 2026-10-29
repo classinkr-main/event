@@ -213,6 +213,21 @@ export const QUESTIONS: { no: string; q: string; where: string; who: string; id:
   { no: "06", q: "ClassIn 제품은 어디로 가나", where: "11.26 본사", who: "ClassIn CTO", id: "d3-cto" },
 ];
 
+/** 숙소 — 크라운 플라자 베이징 중관춘. 가격은 1박 현지 통화, 원화는 1위안 ≈ 200원 어림 */
+export const HOTEL = {
+  name: "크라운 플라자 베이징 중관춘",
+  en: "Crowne Plaza Beijing Zhongguancun",
+  cn: "北京中关村皇冠假日酒店",
+  address: "베이징 하이뎬구 즈춘루 106호",
+  addressCn: "海淀区知春路106号",
+  url: "https://kr.trip.com/hotels/beijing-hotel-detail-430270/crowne-plaza-beijing-zhongguancun-by-ihg/",
+  rateNote: "1박 기준 현지 가격입니다. 원화는 1위안 ≈ 200원으로 어림한 금액이라 결제 시점 환율에 따라 달라집니다.",
+  rooms: [
+    { type: "더블", en: "Double", cny: "950", krw: "19만 원", breakfast: "조식 1인" },
+    { type: "트윈", en: "Twin", cny: "1,050", krw: "21만 원", breakfast: "조식 2인" },
+  ],
+};
+
 /** 여행 메모 */
 export const NOTES: [string, string][] = [
   ["시차", "서울보다 1시간 늦습니다."],
