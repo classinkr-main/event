@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Reveal from "@/components/hakwonjeonja/fx/Reveal";
 import Seal from "./gfx/Seal";
 import Split from "./Split";
@@ -25,7 +26,16 @@ export default function BjStay() {
             </div>
           </div>
 
-          <div className="mt-5 sm:mt-6 grid sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="mt-5 sm:mt-6 grid grid-cols-[1.6fr_1fr] gap-2 sm:gap-3">
+            <div className="relative h-40 sm:h-56 rounded-2xl overflow-hidden">
+              <Image src="/beijing-hotel.jpg" alt="크라운 플라자 베이징 중관춘 외관" fill sizes="(min-width: 1024px) 40vw, 60vw" className="object-cover" />
+            </div>
+            <div className="relative h-40 sm:h-56 rounded-2xl overflow-hidden">
+              <Image src="/beijing-hotel-room.jpg" alt="크라운 플라자 베이징 중관춘 객실" fill sizes="(min-width: 1024px) 25vw, 40vw" className="object-cover" />
+            </div>
+          </div>
+
+          <div className="mt-3 sm:mt-4 grid sm:grid-cols-2 gap-3 sm:gap-4">
             {HOTEL.rooms.map((r) => (
               <div key={r.type} className="rounded-2xl border border-[var(--line)] bg-white/[0.03] p-4 sm:p-5">
                 <div className="flex items-center justify-between gap-3">

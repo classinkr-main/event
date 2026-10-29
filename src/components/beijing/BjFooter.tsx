@@ -11,7 +11,7 @@ export default function BjFooter() {
         <div className="sm:text-right">
           © 2026 ClassIn. ClassIn 본사 초안 기준이며 세부 일정과 연사는 최종안에 따라 바뀔 수 있습니다.
           <br />
-          사진: N509FZ, xiquinhosilva (Wikimedia Commons, CC BY-SA 4.0 / CC BY 2.0)
+          사진: N509FZ, xiquinhosilva (Wikimedia Commons, CC BY-SA 4.0 / CC BY 2.0) · 호텔 사진: 크라운 플라자 베이징 중관춘(트립닷컴)
         </div>
       </div>
     </footer>
