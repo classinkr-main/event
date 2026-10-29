@@ -326,14 +326,13 @@ function doPost(e) {
 
 # 베이징 초청 탐방(beijing) 추가 — 2026-10-13
 
-`/beijing`은 **초청 코드가 있어야 열리는** 안내·신청 페이지입니다(ClassIn Meets 베이징 탐방, 11/24~27).
+`/beijing`은 누구나 열리는 안내 페이지이고, **참가 신청을 보낼 때 초청 코드가 맞아야** 접수됩니다(ClassIn Meets 베이징 탐방, 11/24~27). 2026-10-29까지는 페이지 입장 자체를 코드 게이트로 막았으나 이날 신청 시 확인으로 바꿈.
 
 ## 초청 코드
-- env `BEIJING_INVITE_CODES` — 쉼표로 여러 개. 대소문자·공백·하이픈은 무시(`beijing-1124` = `BEIJING1124`). 비우면 기본값 `BEIJING1124`.
-- env `BEIJING_INVITE_SECRET` — 쿠키 토큰 서명 키(선택). 코드를 바꾸면 기존 쿠키는 자동 무효.
-- 흐름: 게이트 화면 → `POST /api/beijing/invite {code}` → 맞으면 HttpOnly 쿠키 `bj_invite`(60일) → 서버 컴포넌트가 쿠키를 보고 본문 렌더. 본문 HTML은 코드 없이는 내려가지 않음.
-- 초청 링크에 `?code=BEIJING1124`를 붙이면 게이트가 자동으로 확인하고 바로 열립니다. 예: `https://meets.classin.co.kr/beijing?code=BEIJING1124`
-- 참가 신청 `POST /api/beijing`도 같은 쿠키가 있어야 받습니다. 일정·세션에서 「관심 표시」한 항목은 `interests`(쉼표 구분 라벨)로 함께 저장됩니다.
+- env `BEIJING_INVITE_CODES` — 쉼표로 여러 개. 대소문자·공백·하이픈 등 기호는 무시(`베이징 1124` = `베이징1124`). 비우면 기본값 `베이징1124`. Vercel production에도 같은 값 등록(2026-10-29 교체).
+- 흐름: 신청서 맨 위 「INVITE CODE / 초청 코드」 칸 → `POST /api/beijing {code, ...}` → 코드가 틀리면 401(폼에 오류 표시, 입력값 유지), 맞으면 시트 저장. 쿠키·게이트 API(`/api/beijing/invite`)는 삭제됨.
+- 초청 링크에 `?code=베이징1124`를 붙이면 신청서의 코드 칸이 미리 채워집니다. 예: `https://meets.classin.co.kr/beijing?code=베이징1124#register`
+- 일정·세션에서 「관심 표시」한 항목은 `interests`(쉼표 구분 라벨)로 함께 저장됩니다.
 
 ## 시트
 - **전용 시트** "[MKT] ClassIn Meets 베이징 탐방 참가 신청" `1eMhW7X_zF93jZ2pitPtHyYCf8aENKP4eJRw7MxMer78` (classinkr@classin.com 소유, heesung.shin@classin.com 편집자, 첫 탭 "참가 신청"에 헤더 11열(Interests 포함) 입력·고정 완료, 2026-10-13 생성)

@@ -4,25 +4,10 @@ import { useEffect } from "react";
 import { getStoredChannel } from "@/lib/inflow";
 
 /**
- * 방문 기록 — 게이트 화면(/beijing/gate)과 본문(/beijing)을 path로 구분한다.
- * 같은 세션에서 같은 path는 한 번만 보낸다.
+ * 방문 기록 — 같은 세션에서 같은 path는 한 번만 보낸다.
  */
-export default function BjVisitTracker({
-  path,
-  clearGateFlag = false,
-}: {
-  path: string;
-  /** 본문이 열렸으면 게이트의 "확인됐지만 못 열림" 표식을 지운다 */
-  clearGateFlag?: boolean;
-}) {
+export default function BjVisitTracker({ path }: { path: string }) {
   useEffect(() => {
-    if (clearGateFlag) {
-      try {
-        sessionStorage.removeItem("bj-gate-verified");
-      } catch {
-        // 무시
-      }
-    }
     const sentKey = `bj-visit-sent:${path}`;
     const uniqueKey = "bj-visited";
     try {
@@ -55,7 +40,7 @@ export default function BjVisitTracker({
     }).catch(() => {
       // 트래킹 실패가 페이지 동작에 영향을 주지 않도록 무시
     });
-  }, [path, clearGateFlag]);
+  }, [path]);
 
   return null;
 }

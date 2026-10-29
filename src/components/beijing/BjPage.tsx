@@ -17,11 +17,11 @@ import BjHashScroll from "./BjHashScroll";
 import { fontVars } from "./fonts";
 import ZhFonts from "./ZhFonts";
 
-export default function BjPage({ source }: { source?: string }) {
+export default function BjPage({ source, prefillCode }: { source?: string; prefillCode?: string }) {
   return (
     <main className={`theme-bj ${fontVars}`}>
       <ZhFonts />
-      <BjVisitTracker path="/beijing" clearGateFlag />
+      <BjVisitTracker path="/beijing" />
       <BjHashScroll />
       <BjTopbar />
       <BjHero />
@@ -33,7 +33,7 @@ export default function BjPage({ source }: { source?: string }) {
       <BjPhotoBand />
       <BjStay />
       <BjNotes />
-      <BjRegister source={source} />
+      <BjRegister source={source} prefillCode={prefillCode} />
       <BjFooter />
       <BjFloatingCTA />
       <BackToTop />

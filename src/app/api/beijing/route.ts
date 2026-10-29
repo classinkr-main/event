@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { INVITE_COOKIE, isValidToken } from "@/lib/beijingInvite";
+import { matchCode } from "@/lib/beijingInvite";
 
 type Payload = {
+  code?: string;
   name?: string;
   organization?: string;
   position?: string;
@@ -21,21 +21,20 @@ const REQUIRED: (keyof Payload)[] = ["name", "organization", "position", "phone"
 const clean = (v: unknown, max: number) =>
   typeof v === "string" ? v.trim().slice(0, max) : "";
 
-/** 베이징 탐방 참가 신청 — 초청 코드 쿠키가 있어야만 받는다 */
+/** 베이징 탐방 참가 신청 — 신청서의 초청 코드가 맞아야만 받는다 */
 export async function POST(request: Request) {
-  const store = await cookies();
-  if (!isValidToken(store.get(INVITE_COOKIE)?.value)) {
-    return NextResponse.json(
-      { error: "초청 코드 확인이 필요합니다. 페이지를 새로고침한 뒤 다시 시도해 주세요." },
-      { status: 403 }
-    );
-  }
-
   let body: Payload;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "잘못된 요청 형식입니다." }, { status: 400 });
+  }
+
+  if (!matchCode(clean(body.code, 64))) {
+    return NextResponse.json(
+      { error: "초청 코드가 올바르지 않습니다. 안내받으신 코드를 다시 확인해 주세요." },
+      { status: 401 }
+    );
   }
 
   for (const key of REQUIRED) {
