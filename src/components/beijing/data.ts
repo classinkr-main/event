@@ -216,6 +216,9 @@ export const QUESTIONS: { no: string; q: string; where: string; who: string; id:
 export type Flight = {
   label: string;
   date: string;
+  /** 탑승권 표기용 영문 날짜·숫자 날짜(바코드 아래) */
+  dateEn: string;
+  dateCode: string;
   airline: string;
   no: string;
   from: { code: string; name: string };
@@ -231,6 +234,8 @@ export const FLIGHTS: { note: string; legs: Flight[] } = {
     {
       label: "가는 편",
       date: "11월 24일 (화)",
+      dateEn: "24 NOV 2026",
+      dateCode: "1124",
       airline: "중국국제항공",
       no: "CA126",
       from: { code: "ICN", name: "인천" },
@@ -243,6 +248,8 @@ export const FLIGHTS: { note: string; legs: Flight[] } = {
     {
       label: "돌아오는 편",
       date: "11월 27일 (금)",
+      dateEn: "27 NOV 2026",
+      dateCode: "1127",
       airline: "아시아나항공",
       no: "OZ336",
       from: { code: "PEK", name: "베이징 서우두" },
