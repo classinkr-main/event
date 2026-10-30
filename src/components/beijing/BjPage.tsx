@@ -17,7 +17,7 @@ import BjHashScroll from "./BjHashScroll";
 import { fontVars } from "./fonts";
 import ZhFonts from "./ZhFonts";
 
-export default function BjPage({ source, prefillCode }: { source?: string; prefillCode?: string }) {
+export default function BjPage({ source }: { source?: string }) {
   return (
     <main className={`theme-bj ${fontVars}`}>
       <ZhFonts />
@@ -33,7 +33,7 @@ export default function BjPage({ source, prefillCode }: { source?: string; prefi
       <BjFlights />
       <BjStay />
       <BjNotes />
-      <BjRegister source={source} prefillCode={prefillCode} />
+      <BjRegister source={source} />
       <BjFooter />
       <BjFloatingCTA />
       <BackToTop />

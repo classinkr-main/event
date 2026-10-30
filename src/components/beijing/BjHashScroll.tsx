@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** 초청 링크 `?code=…#register`로 열린 뒤 전체 이동하면 브라우저가 앵커로 안 내려가는 경우 보정 */
+/** `#register` 같은 앵커 링크로 열렸을 때 브라우저가 앵커로 안 내려가는 경우 보정 */
 export default function BjHashScroll() {
   useEffect(() => {
     const hash = window.location.hash;

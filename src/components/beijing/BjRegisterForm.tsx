@@ -63,7 +63,7 @@ async function fileToJpegDataUrl(file: File): Promise<string> {
   return out;
 }
 
-export default function BjRegisterForm({ source, prefillCode }: { source?: string; prefillCode?: string }) {
+export default function BjRegisterForm({ source }: { source?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [phone, setPhone] = useState("");
@@ -277,22 +277,6 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
         {strip("BOARDING PASS /", "참가 신청서")}
         <div className="p-6 sm:p-9">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-            <div className="sm:col-span-2">
-              <Label htmlFor="code" required>INVITE CODE / 초청 코드</Label>
-              <input
-                id="code"
-                name="code"
-                type="text"
-                autoComplete="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                placeholder="초청장과 함께 받으신 코드"
-                required
-                defaultValue={prefillCode ?? ""}
-                className="field"
-                maxLength={64}
-              />
-            </div>
             <Field label="PASSENGER / 이름" name="name" placeholder="홍길동" required />
             <Field label="ORGANIZATION / 학원명 · 기관" name="organization" placeholder="○○학원" required />
             <Field label="TITLE / 직책" name="position" placeholder="원장, 대표 등" required />

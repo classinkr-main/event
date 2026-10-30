@@ -194,6 +194,7 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
 
 ## 웹 신청서 정리 (2026-10-30)
+- 저녁 사용자 "입장 코드 빼자" → **초청 코드 완전 삭제**: 신청서 INVITE CODE 칸, API `matchCode` 검사(401), `?code=` 미리 채움(page.tsx searchParams), `src/lib/beijingInvite.ts` 삭제. env `BEIJING_INVITE_CODES`는 더 이상 안 읽음(Vercel에도 없음). 구글폼은 10/29에 이미 코드 문항을 뺐으니 양쪽 모두 코드 없음. 아래 「초청 코드」 절은 이력용.
 - 사용자 지시 3건: 「이메일은 안 받아도 됨」 → EMAIL 칸 삭제(API도 필수 해제, Email 열은 빈 값으로 유지). 「인원수 빼, 각자 적게」 → PARTY 선택 삭제(참가자 각자 신청, Party 열은 빈 값). 「여권 필수 + 직접 제출/담당 매니저에게 제출 선택」 → `passportMethod` 라디오 필수(「지금 직접 제출」이면 파일 칸이 나타나고 필수, 「담당 매니저에게 제출」이면 파일 없이 접수).
 - API `/api/beijing`: `passportMethod`가 두 값 중 하나가 아니면 400, 직접 제출인데 `passportImage`가 없으면 400. 웹훅에는 `passportMethod`를 같이 보냄 → Apps Script v2.1에서 Passport 열 = Drive 링크 또는 제출 방식 문구(한 줄 수정, 아래 코드 반영). 동의문에서 「이메일」 삭제.
 - 항공편 섹션은 공항 출발 안내판(스플릿 플랩) 디자인으로 교체(`BjFlights.tsx`, `gfx/FlapText.tsx`), 시트와 무관.
@@ -501,9 +502,9 @@ function doPost(e) {
 
 # 베이징 초청 탐방(beijing) 추가 — 2026-10-13
 
-`/beijing`은 누구나 열리는 안내 페이지이고, **참가 신청을 보낼 때 초청 코드가 맞아야** 접수됩니다(ClassIn Meets 베이징 탐방, 11/24~27). 2026-10-29까지는 페이지 입장 자체를 코드 게이트로 막았으나 이날 신청 시 확인으로 바꿈.
+`/beijing`은 누구나 열리는 안내 페이지이고, 참가 신청도 **초청 코드 없이** 접수됩니다(2026-10-30부터). 2026-10-29까지는 페이지 입장 자체를 코드 게이트로 막았고, 10/29 저녁~10/30 낮에는 신청 시 코드 확인이었음.
 
-## 초청 코드
+## 초청 코드 (이력 — 2026-10-30 저녁 삭제, 아래는 옛 동작)
 - env `BEIJING_INVITE_CODES` — 쉼표로 여러 개. 대소문자·공백·하이픈 등 기호는 무시(`베이징 1124` = `베이징1124`). 비우면 기본값 `베이징1124`. Vercel production에도 같은 값 등록(2026-10-29 교체).
 - 흐름: 신청서 맨 위 「INVITE CODE / 초청 코드」 칸 → `POST /api/beijing {code, ...}` → 코드가 틀리면 401(폼에 오류 표시, 입력값 유지), 맞으면 시트 저장. 쿠키·게이트 API(`/api/beijing/invite`)는 삭제됨.
 - 초청 링크에 `?code=베이징1124`를 붙이면 신청서의 코드 칸이 미리 채워집니다. 예: `https://meets.classin.co.kr/beijing?code=베이징1124#register`
