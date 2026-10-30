@@ -193,6 +193,13 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - env: `GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA` (Vercel production/preview + .env.local). 미설정 시 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 폴백.
 - 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
 
+## 웹 신청서 정리 (2026-10-30)
+- 사용자 지시 3건: 「이메일은 안 받아도 됨」 → EMAIL 칸 삭제(API도 필수 해제, Email 열은 빈 값으로 유지). 「인원수 빼, 각자 적게」 → PARTY 선택 삭제(참가자 각자 신청, Party 열은 빈 값). 「여권 필수 + 직접 제출/담당 매니저에게 제출 선택」 → `passportMethod` 라디오 필수(「지금 직접 제출」이면 파일 칸이 나타나고 필수, 「담당 매니저에게 제출」이면 파일 없이 접수).
+- API `/api/beijing`: `passportMethod`가 두 값 중 하나가 아니면 400, 직접 제출인데 `passportImage`가 없으면 400. 웹훅에는 `passportMethod`를 같이 보냄 → Apps Script v2.1에서 Passport 열 = Drive 링크 또는 제출 방식 문구(한 줄 수정, 아래 코드 반영). 동의문에서 「이메일」 삭제.
+- 항공편 섹션은 공항 출발 안내판(스플릿 플랩) 디자인으로 교체(`BjFlights.tsx`, `gfx/FlapText.tsx`), 시트와 무관.
+- 구글폼은 손대지 않음: 여전히 이메일·참가 인원 문항과 선택 파일 업로드가 있음(맞추려면 `updateBeijingFormLayout`류 함수로 별도 작업).
+- 로컬 테스트 교훈: `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`만 비우면 `_INCHEON`으로 폴백해 **인천 시트에 실제 행이 들어감**. 로컬 dev는 `GOOGLE_SHEETS_WEBHOOK_URL*` 네 변수를 모두 빈 값으로 띄울 것(10/30 테스트 행 2건 인천 탭에서 삭제함).
+
 ## 신청 항목 확장 + 구글폼 (2026-10-29 저녁)
 - 콜라보 요청(동료 메시지): 항공편(가는 11/24 CA126 17:50→18:55, 오는 11/27 OZ336 17:30→20:25) 안내, 천단 사진 제거, 항공·숙박 자기 부담 표기, 옛 광저우 구글폼(1iOpzjhhAF88WJgChTgk8E5uHXOWvAFUw6VUZZNZKgxI) 질문 참고해 항목 보강, 구글폼 신청서 별도 생성.
 - 웹 신청서 추가 항목: 항공편 선택(`arrival`: 안내 항공편/다른 항공편/미정 + `flightDetail`), 숙소 객실(`room` 필수: 더블/트윈/직접 예약 + `roommate`), 여권 사본(`passportImage` JPEG data URL, 브라우저에서 긴 변 1600px로 축소, 선택), 듣고 싶은 주제(`topics`), 기관 질문(`question`), 개인정보 동의(`consent`=Y 필수). 서버는 동의·객실 없으면 400, 이미지는 jpeg/png/webp data URL 4M자 이하만.
@@ -249,7 +256,8 @@ function doPost(e) {
     } else if (sheet.getLastColumn() < HEADERS.length) {
       sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
     }
-    const passportUrl = savePassport_(data);
+    // v2.1(10/30): 직접 제출이면 Drive 링크, 아니면 웹 신청서의 제출 방식 문구("담당 매니저에게 제출")
+    const passportUrl = savePassport_(data) || data.passportMethod || "";
     sheet.appendRow([
       data.timestamp, data.name, data.organization, data.position, data.phone,
       data.email || "", data.party || "", data.arrival || "", data.message || "",

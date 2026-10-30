@@ -8,7 +8,9 @@ type Payload = {
   position?: string;
   phone?: string;
   email?: string;
-  party?: string;
+  passportMethod?: string;
+  passportImage?: string;
+  passportName?: string;
   arrival?: string;
   flightDetail?: string;
   room?: string;
@@ -18,18 +20,18 @@ type Payload = {
   topics?: string;
   interests?: string;
   consent?: string;
-  passportImage?: string;
-  passportName?: string;
   session?: string;
   source?: string;
 };
 
-const REQUIRED: (keyof Payload)[] = ["name", "organization", "position", "phone", "email"];
+const REQUIRED: (keyof Payload)[] = ["name", "organization", "position", "phone"];
+const PASSPORT_METHODS = ["지금 직접 제출", "담당 매니저에게 제출"] as const;
+const DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/;
 
 const clean = (v: unknown, max: number) =>
   typeof v === "string" ? v.trim().slice(0, max) : "";
 
-/** 베이징 탐방 참가 신청 — 신청서의 초청 코드가 맞아야만 받는다 */
+/** 베이징 탐방 참가 신청 — 신청서의 초청 코드가 맞아야만 받는다. 참가자 각자 신청(인원수 항목 없음) */
 export async function POST(request: Request) {
   let body: Payload;
   try {
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
   }
 
   for (const key of REQUIRED) {
-    if (!body[key] || typeof body[key] !== "string" || !body[key]!.trim()) {
+    if (!body[key] || typeof body[key] !== "string" || !(body[key] as string).trim()) {
       return NextResponse.json(
         { error: `필수 항목이 비어 있습니다: ${key}` },
         { status: 400 }
@@ -54,8 +56,9 @@ export async function POST(request: Request) {
     }
   }
 
+  // 이메일은 받지 않는다(10/30). 옛 폼이 보내면 형식만 확인해 그대로 시트 열에 둔다
   const email = clean(body.email, 200);
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return NextResponse.json({ error: "이메일 형식이 올바르지 않습니다." }, { status: 400 });
   }
   if (body.consent !== "Y") {
@@ -66,12 +69,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "숙소 객실 타입을 골라 주세요." }, { status: 400 });
   }
 
-  // 여권 사본: 브라우저에서 줄인 JPEG data URL만 받는다(최대 약 3MB)
+  // 여권 사본: 제출 방식은 필수. 직접 제출이면 브라우저에서 줄인 JPEG data URL(최대 약 3MB)이 있어야 한다
+  const passportMethod = clean(body.passportMethod, 30);
+  if (!(PASSPORT_METHODS as readonly string[]).includes(passportMethod)) {
+    return NextResponse.json({ error: "여권 사본 제출 방식을 골라 주세요." }, { status: 400 });
+  }
   let passportImage = "";
   let passportMime = "";
-  if (typeof body.passportImage === "string" && body.passportImage) {
-    const m = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(body.passportImage);
-    if (!m || m[2].length > 4_000_000) {
+  if (passportMethod === PASSPORT_METHODS[0]) {
+    const m = typeof body.passportImage === "string" ? DATA_URL.exec(body.passportImage) : null;
+    if (!m) {
+      return NextResponse.json({ error: "여권 사본을 올려 주세요. 지금 어려우시면 담당 매니저에게 제출을 골라 주세요." }, { status: 400 });
+    }
+    if (m[2].length > 4_000_000) {
       return NextResponse.json({ error: "여권 이미지는 JPG·PNG 사진으로 3MB 이하만 올릴 수 있습니다." }, { status: 400 });
     }
     passportMime = m[1];
@@ -84,7 +94,6 @@ export async function POST(request: Request) {
     process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ||
     process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
-  const party = clean(body.party, 30);
   const arrival = clean(body.arrival, 80);
   const flightDetail = clean(body.flightDetail, 200);
   const roommate = clean(body.roommate, 200);
@@ -110,7 +119,7 @@ export async function POST(request: Request) {
         position: clean(body.position, 100),
         phone: clean(body.phone, 30),
         email,
-        party,
+        party: "",
         arrival,
         flightDetail,
         room,
@@ -120,6 +129,7 @@ export async function POST(request: Request) {
         topics,
         interests,
         consent: "Y",
+        passportMethod,
         passportImage,
         passportMime,
         passportName: clean(body.passportName, 200),
@@ -127,9 +137,9 @@ export async function POST(request: Request) {
         // 호환용: 인천 시트(v3)로 폴백될 때 Session 컬럼에 요약이 남도록
         session: [
           clean(body.session, 100) || "베이징 탐방 11/24–27",
-          party ? `인원=${party}` : "",
           arrival ? `항공=${arrival}` : "",
           room ? `숙소=${room}` : "",
+          `여권=${passportMethod}`,
           interests ? `관심=${interests}` : "",
           message ? `요청=${message.slice(0, 300)}` : "",
         ]

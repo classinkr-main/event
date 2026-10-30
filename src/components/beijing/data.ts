@@ -216,9 +216,6 @@ export const QUESTIONS: { no: string; q: string; where: string; who: string; id:
 export type Flight = {
   label: string;
   date: string;
-  /** 탑승권 표기용 영문 날짜·숫자 날짜(바코드 아래) */
-  dateEn: string;
-  dateCode: string;
   airline: string;
   no: string;
   from: { code: string; name: string };
@@ -234,8 +231,6 @@ export const FLIGHTS: { note: string; legs: Flight[] } = {
     {
       label: "가는 편",
       date: "11월 24일 (화)",
-      dateEn: "24 NOV 2026",
-      dateCode: "1124",
       airline: "중국국제항공",
       no: "CA126",
       from: { code: "ICN", name: "인천" },
@@ -248,8 +243,6 @@ export const FLIGHTS: { note: string; legs: Flight[] } = {
     {
       label: "돌아오는 편",
       date: "11월 27일 (금)",
-      dateEn: "27 NOV 2026",
-      dateCode: "1127",
       airline: "아시아나항공",
       no: "OZ336",
       from: { code: "PEK", name: "베이징 서우두" },
@@ -264,7 +257,8 @@ export const FLIGHTS: { note: string; legs: Flight[] } = {
 
 /** 신청서 선택지 — 웹 신청서와 구글폼이 같은 문구를 쓴다 */
 export const FORM_OPTIONS = {
-  party: ["1명 (본인)", "2명", "3명 이상"],
+  /** 여권 사본 제출 방식(필수) — 지금 올리거나, 접수 후 담당 매니저에게 따로 보낸다 */
+  passportMethod: ["지금 직접 제출", "담당 매니저에게 제출"],
   flight: ["안내 항공편 이용 (11/24 CA126 · 11/27 OZ336)", "다른 항공편 이용", "미정"],
   room: ["더블 (950위안 · 조식 1인)", "트윈 (1,050위안 · 조식 2인)", "숙소 직접 예약"],
   topics: [
@@ -278,7 +272,7 @@ export const FORM_OPTIONS = {
     "학원 규모 확장과 시스템화",
   ],
   consent:
-    "ClassIn Korea는 본 행사 운영을 위해 성명, 직책, 연락처, 이메일, 소속 기관명, 여권 사본, 숙소·항공 선호 정보를 수집합니다. 행사 운영, 숙소 예약, 기관 방문 사전 조율에만 쓰고 행사 종료 후 즉시 폐기합니다. 동의하지 않으시면 참가 신청이 제한될 수 있습니다.",
+    "ClassIn Korea는 본 행사 운영을 위해 성명, 직책, 연락처, 소속 기관명, 여권 사본, 숙소·항공 선호 정보를 수집합니다. 행사 운영, 숙소 예약, 기관 방문 사전 조율에만 쓰고 행사 종료 후 즉시 폐기합니다. 동의하지 않으시면 참가 신청이 제한될 수 있습니다.",
 };
 
 /** 숙소 — 크라운 플라자 베이징 중관춘. 가격은 1박 현지 통화, 원화는 1위안 ≈ 200원 어림 */

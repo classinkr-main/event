@@ -16,8 +16,9 @@ type SubmittedData = {
   organization: string;
   position: string;
   phone: string;
-  email: string;
-  party: string;
+  email?: string;
+  passportMethod: string;
+  passportName: string;
   arrival: string;
   flightDetail: string;
   room: string;
@@ -26,14 +27,15 @@ type SubmittedData = {
   question: string;
   topics: string;
   interests: string;
-  passportName: string;
 };
 
-const PARTY_OPTIONS = FORM_OPTIONS.party;
 const FLIGHT_OPTIONS = FORM_OPTIONS.flight;
 const ROOM_OPTIONS = FORM_OPTIONS.room;
 const TOPIC_OPTIONS = FORM_OPTIONS.topics;
+const PASSPORT_METHODS = FORM_OPTIONS.passportMethod;
+const DIRECT = PASSPORT_METHODS[0];
 const PASSPORT_MAX_SIDE = 1600;
+const PASSPORT_MAX_CHARS = 2_500_000; // 약 1.8MB
 
 /** 여권 사진을 브라우저에서 줄여 JPEG data URL로. 휴대폰 원본(수 MB)을 그대로 보내지 않기 위해 */
 async function fileToJpegDataUrl(file: File): Promise<string> {
@@ -54,24 +56,38 @@ async function fileToJpegDataUrl(file: File): Promise<string> {
   ctx.drawImage(bitmap, 0, 0, w, h);
   bitmap.close?.();
   let out = canvas.toDataURL("image/jpeg", 0.85);
-  if (out.length > 2_500_000) out = canvas.toDataURL("image/jpeg", 0.7);
+  for (const q of [0.7, 0.55]) {
+    if (out.length <= PASSPORT_MAX_CHARS) break;
+    out = canvas.toDataURL("image/jpeg", q);
+  }
   return out;
 }
 
-/** 참가 신청 = 종이 탑승권. 본권에 입력, 스텁에 관심 일정. 접수되면 이름이 인쇄된 탑승권 + 스탬프 */
 export default function BjRegisterForm({ source, prefillCode }: { source?: string; prefillCode?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [phone, setPhone] = useState("");
+  const [method, setMethod] = useState("");
+  const [passport, setPassport] = useState<File | null>(null);
   const [arrival, setArrival] = useState(FLIGHT_OPTIONS[0]);
   const [room, setRoom] = useState("");
   const [topics, setTopics] = useState<string[]>([]);
-  const [passport, setPassport] = useState<File | null>(null);
   const [submitted, setSubmitted] = useState<SubmittedData | null>(null);
   const { list: interests, remove, clear } = useInterests();
   const interestLabels = interests.map((id) => INTEREST_LABELS[id] ?? id);
 
   const toggleTopic = (t: string) => setTopics((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
+
+  function resetForm(form: HTMLFormElement) {
+    form.reset();
+    setPhone("");
+    setMethod("");
+    setPassport(null);
+    setArrival(FLIGHT_OPTIONS[0]);
+    setRoom("");
+    setTopics([]);
+    clear();
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -79,16 +95,19 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
     setErrorMsg("");
     const form = e.currentTarget;
     const fd = new FormData(form);
-    const payload: Record<string, string> = {};
+    const payload: Record<string, unknown> = {};
     fd.forEach((v, k) => {
       if (typeof v === "string") payload[k] = v;
     });
-    if (payload.source) payload.source = `${payload.source}/${getStoredChannel()}`;
+    if (typeof payload.source === "string" && payload.source) payload.source = `${payload.source}/${getStoredChannel()}`;
     payload.interests = interestLabels.join(", ");
     payload.topics = topics.join(", ");
     payload.consent = fd.get("consent") ? "Y" : "";
+
+    payload.passportMethod = method;
     try {
-      if (passport) {
+      if (method === DIRECT) {
+        if (!passport) throw new Error("여권 사본을 올려 주세요. 지금 어려우시면 「담당 매니저에게 제출」을 골라 주세요.");
         payload.passportImage = await fileToJpegDataUrl(passport);
         payload.passportName = passport.name;
       }
@@ -101,15 +120,9 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "신청 처리 중 문제가 발생했습니다.");
       }
-      setSubmitted({ ...(payload as unknown as SubmittedData), passportName: passport?.name ?? "" });
+      setSubmitted({ ...(payload as unknown as SubmittedData), passportName: method === DIRECT ? passport?.name ?? "" : "" });
       setStatus("success");
-      form.reset();
-      setPhone("");
-      setArrival(FLIGHT_OPTIONS[0]);
-      setRoom("");
-      setTopics([]);
-      setPassport(null);
-      clear();
+      resetForm(form);
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "알 수 없는 오류");
       setStatus("error");
@@ -132,24 +145,21 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
       on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
     }`;
 
+  const fileClass =
+    "field !py-2 file:mr-3 file:border file:border-[var(--paper-line-2)] file:bg-transparent file:px-3 file:py-1 file:text-xs file:text-[var(--ink)]";
+
   if (status === "success" && submitted) {
     return (
       <div className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
         <div className="relative">
           {strip("BOARDING PASS /", "접수 완료")}
           <div className="p-6 sm:p-9">
-            <div className="grid grid-cols-[1fr_auto] gap-6">
-              <div>
-                <div className="mono text-[10px] text-[var(--ink-3)]">PASSENGER / 탑승객</div>
-                <div className="serif mt-1 text-2xl sm:text-3xl font-bold">
-                  {submitted.name} <span className="text-base sm:text-lg font-semibold text-[var(--ink-2)]">{submitted.position}</span>
-                </div>
-                <div className="text-sm text-[var(--ink-2)] mt-1">{submitted.organization}</div>
+            <div>
+              <div className="mono text-[10px] text-[var(--ink-3)]">PASSENGER / 탑승객</div>
+              <div className="serif mt-1 text-2xl sm:text-3xl font-bold">
+                {submitted.name} <span className="text-base sm:text-lg font-semibold text-[var(--ink-2)]">{submitted.position}</span>
               </div>
-              <div className="text-right">
-                <div className="mono text-[10px] text-[var(--ink-3)]">PARTY</div>
-                <div className="mt-1 font-bold text-sm sm:text-base">{submitted.party || "-"}</div>
-              </div>
+              <div className="text-sm text-[var(--ink-2)] mt-1">{submitted.organization}</div>
             </div>
             <div className="mt-5 grid grid-cols-[auto_1fr_auto] items-end gap-3 sm:gap-6">
               <TicketField k="FROM" v="ICN" big />
@@ -164,9 +174,17 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
             </div>
             <dl className="mt-5 border-t border-[var(--paper-line)] pt-4 space-y-2 text-sm">
               <div className="grid grid-cols-[4.5rem_1fr] gap-3">
-                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">EMAIL</dt>
-                <dd className="text-[var(--ink)]">{submitted.email}</dd>
+                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">PASSPORT</dt>
+                <dd className="text-[var(--ink)]">
+                  {submitted.passportName ? "접수됨" : "담당 매니저에게 제출 · 접수 후 안내드리는 방법으로 보내 주세요"}
+                </dd>
               </div>
+              {submitted.email && (
+                <div className="grid grid-cols-[4.5rem_1fr] gap-3">
+                  <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">EMAIL</dt>
+                  <dd className="text-[var(--ink)]">{submitted.email}</dd>
+                </div>
+              )}
               {submitted.flightDetail && (
                 <div className="grid grid-cols-[4.5rem_1fr] gap-3">
                   <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">FLIGHT</dt>
@@ -179,10 +197,6 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
                   <dd className="text-[var(--ink)]">{submitted.roommate}</dd>
                 </div>
               )}
-              <div className="grid grid-cols-[4.5rem_1fr] gap-3">
-                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">PASSPORT</dt>
-                <dd className="text-[var(--ink)]">{submitted.passportName ? "접수됨" : "미제출 · 접수 후 담당자에게 보내 주세요"}</dd>
-              </div>
               {submitted.interests && (
                 <div className="grid grid-cols-[4.5rem_1fr] gap-3">
                   <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">INTERESTS</dt>
@@ -298,16 +312,35 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
                 maxLength={13}
               />
             </div>
-            <Field label="EMAIL / 이메일" name="email" type="email" placeholder="name@example.com" required />
-            <div>
-              <Label htmlFor="party">PARTY / 참가 인원</Label>
-              <select id="party" name="party" className="field" defaultValue={PARTY_OPTIONS[0]}>
-                {PARTY_OPTIONS.map((o) => (
-                  <option key={o} value={o}>
-                    {o}
-                  </option>
-                ))}
-              </select>
+
+            <div className="sm:col-span-2">
+              <Label required>PASSPORT / 여권 사본</Label>
+              <div className="flex flex-wrap gap-2 pt-1.5">
+                {PASSPORT_METHODS.map((o) => {
+                  const on = method === o;
+                  return (
+                    <label key={o} className={chip(on)}>
+                      <input type="radio" name="passportMethod" value={o} checked={on} onChange={() => setMethod(o)} className="sr-only" required />
+                      {o}
+                    </label>
+                  );
+                })}
+              </div>
+              {method === DIRECT && (
+                <input
+                  id="passport"
+                  name="passport"
+                  type="file"
+                  accept="image/*"
+                  required
+                  onChange={(e) => setPassport(e.target.files?.[0] ?? null)}
+                  className={`${fileClass} mt-3`}
+                  aria-label="여권 사본 파일"
+                />
+              )}
+              <p className="mt-1.5 text-[11px] text-[var(--ink-3)] leading-relaxed">
+                숙소 예약에 여권 사진면이 필요합니다. 지금 올리기 어려우시면 「담당 매니저에게 제출」을 고르시고 접수 후 안내드리는 방법으로 보내 주세요. 예약이 끝나면 바로 폐기합니다.
+              </p>
             </div>
 
             <div className="sm:col-span-2">
@@ -356,23 +389,6 @@ export default function BjRegisterForm({ source, prefillCode }: { source?: strin
                   maxLength={200}
                 />
               )}
-            </div>
-
-            <div className="sm:col-span-2">
-              <Label htmlFor="passport">
-                PASSPORT / 여권 사본 <span className="font-normal normal-case">(선택)</span>
-              </Label>
-              <input
-                id="passport"
-                name="passport"
-                type="file"
-                accept="image/*"
-                className="field !py-2 file:mr-3 file:border file:border-[var(--paper-line-2)] file:bg-transparent file:px-3 file:py-1 file:text-xs file:text-[var(--ink)]"
-                onChange={(e) => setPassport(e.target.files?.[0] ?? null)}
-              />
-              <p className="mt-1.5 text-[11px] text-[var(--ink-3)] leading-relaxed">
-                숙소 예약에 필요합니다. 사진면을 찍어 올려 주세요. 지금 어려우시면 접수 후 담당자에게 보내 주셔도 됩니다. 예약이 끝나면 바로 폐기합니다.
-              </p>
             </div>
 
             <div className="sm:col-span-2">
