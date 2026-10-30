@@ -197,7 +197,41 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - 사용자 지시 3건: 「이메일은 안 받아도 됨」 → EMAIL 칸 삭제(API도 필수 해제, Email 열은 빈 값으로 유지). 「인원수 빼, 각자 적게」 → PARTY 선택 삭제(참가자 각자 신청, Party 열은 빈 값). 「여권 필수 + 직접 제출/담당 매니저에게 제출 선택」 → `passportMethod` 라디오 필수(「지금 직접 제출」이면 파일 칸이 나타나고 필수, 「담당 매니저에게 제출」이면 파일 없이 접수).
 - API `/api/beijing`: `passportMethod`가 두 값 중 하나가 아니면 400, 직접 제출인데 `passportImage`가 없으면 400. 웹훅에는 `passportMethod`를 같이 보냄 → Apps Script v2.1에서 Passport 열 = Drive 링크 또는 제출 방식 문구(한 줄 수정, 아래 코드 반영). 동의문에서 「이메일」 삭제.
 - 항공편 섹션은 공항 출발 안내판(스플릿 플랩) 디자인으로 교체(`BjFlights.tsx`, `gfx/FlapText.tsx`), 시트와 무관.
-- 구글폼은 손대지 않음: 여전히 이메일·참가 인원 문항과 선택 파일 업로드가 있음(맞추려면 `updateBeijingFormLayout`류 함수로 별도 작업).
+- ✅ 구글폼도 같게(사용자 "구글폼도 마찬가지"): 스크립트에 `updateBeijingFormV3()`(아래, 다시 실행해도 안전) 추가 후 heesung 계정으로 실행 완료(16:42). 「이메일」「참가 인원」 문항 삭제, 동의문에서 이메일 삭제, 「여권 사본」 섹션 안내문 갱신, 섹션 바로 뒤에 **「여권 사본 제출 방식」 객관식 필수**(지금 직접 제출 / 담당 매니저에게 제출) 추가, 파일 업로드 문항은 선택 유지(폼은 조건부 필수 불가) + 도움말. 결과 순서: 참석자 정보(동의·성함·기관·직책·연락처) → 항공편·숙소(항공편·편명·객실·동행·여권 사본 헤더·**제출 방식**·예시 이미지·업로드) → 사전 질문. 응답 탭의 옛 이메일·참가 인원 열은 응답이 없으면 지워도 됨.
+
+```javascript
+/** 10/30: 웹 신청서와 같게 — 「이메일」「참가 인원」 문항 삭제, 「여권 사본 제출 방식」(필수) 추가, 동의문·여권 안내문 갱신. 다시 실행해도 안전 */
+function updateBeijingFormV3() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const T = (it) => it.getTitle().trim();
+  form.getItems().forEach((it) => {
+    if (T(it) === "이메일" || T(it) === "참가 인원") form.deleteItem(it);
+  });
+  form.getItems(FormApp.ItemType.CHECKBOX).forEach((it) => {
+    if (T(it) === "개인정보 수집·이용 동의") it.setHelpText(it.getHelpText().replace("연락처, 이메일, 소속", "연락처, 소속"));
+  });
+  form.getItems(FormApp.ItemType.SECTION_HEADER).forEach((it) => {
+    if (T(it) === "여권 사본") {
+      it.setHelpText("숙소 예약에 여권 사진면이 필요합니다. 지금 올리기 어려우시면 「담당 매니저에게 제출」을 고르시고 접수 후 안내드리는 방법으로 보내 주세요. 예약이 끝나면 바로 폐기합니다.");
+    }
+  });
+  const title = "여권 사본 제출 방식";
+  const found = form.getItems(FormApp.ItemType.MULTIPLE_CHOICE).find((it) => T(it) === title);
+  const mc = found ? found.asMultipleChoiceItem() : form.addMultipleChoiceItem();
+  mc.setTitle(title)
+    .setHelpText("「지금 직접 제출」을 고르셨으면 바로 아래 업로드 칸에 여권 사진면을 올려 주세요.")
+    .setChoiceValues(["지금 직접 제출", "담당 매니저에게 제출"])
+    .setRequired(true);
+  const items = form.getItems();
+  const header = items.find((it) => it.getType() === FormApp.ItemType.SECTION_HEADER && T(it) === "여권 사본");
+  const cur = items.find((it) => T(it) === title);
+  if (header && cur && cur.getIndex() !== header.getIndex() + 1) form.moveItem(cur.getIndex(), header.getIndex() + 1);
+  form.getItems(FormApp.ItemType.FILE_UPLOAD).forEach((it) => {
+    it.setHelpText("「지금 직접 제출」을 고르신 분만 올려 주세요. 여권 사진면 이미지 1장(10MB 이하).");
+  });
+  Logger.log(form.getItems().map((it) => it.getIndex() + " " + it.getType() + " " + T(it)).join("\n"));
+}
+```
 - 로컬 테스트 교훈: `GOOGLE_SHEETS_WEBHOOK_URL_BEIJING`만 비우면 `_INCHEON`으로 폴백해 **인천 시트에 실제 행이 들어감**. 로컬 dev는 `GOOGLE_SHEETS_WEBHOOK_URL*` 네 변수를 모두 빈 값으로 띄울 것(10/30 테스트 행 2건 인천 탭에서 삭제함).
 
 ## 신청 항목 확장 + 구글폼 (2026-10-29 저녁)
