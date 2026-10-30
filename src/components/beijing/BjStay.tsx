@@ -9,7 +9,7 @@ export default function BjStay() {
   return (
     <Split id="stay" title="숙소" lead={`숙소는 ${HOTEL.name}입니다. 객실 타입과 요금을 미리 확인해 주세요.`}>
       <Reveal>
-        <div className="glass rounded-3xl p-5 sm:p-7">
+        <div className="border-t border-[var(--line-2)] pt-6 sm:pt-8">
           <div className="flex items-start gap-4">
             <Seal glyph="宿" size={48} className="shrink-0" />
             <div className="min-w-0">
@@ -34,14 +34,14 @@ export default function BjStay() {
             <Image src="/beijing-hotel.jpg" alt="크라운 플라자 베이징 중관춘 야경" fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
           </div>
 
-          <div className="mt-3 sm:mt-4 grid sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="mt-6 sm:mt-8 grid sm:grid-cols-2 gap-x-8 gap-y-5">
             {HOTEL.rooms.map((r) => (
-              <div key={r.type} className="rounded-2xl border border-[var(--line)] bg-white/[0.03] p-4 sm:p-5">
+              <div key={r.type} className="border-t border-[var(--line-2)] pt-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="font-medium">
                     {r.type} <span className="text-xs text-[var(--ink-3)] ml-1">{r.en}</span>
                   </div>
-                  <span className="shrink-0 text-xs text-[var(--ink-2)] px-2.5 py-1 rounded-full border border-[var(--line-2)]">{r.breakfast}</span>
+                  <span className="shrink-0 text-xs text-[var(--ink-2)]">{r.breakfast}</span>
                 </div>
                 <div className="mt-3 text-2xl sm:text-[1.75rem] font-medium tracking-tight tabular-nums leading-none">
                   {r.cny}
@@ -52,7 +52,7 @@ export default function BjStay() {
             ))}
           </div>
 
-          <p className="mt-4 text-[13px] text-[var(--ink-3)] leading-relaxed">{HOTEL.rateNote}</p>
+          <p className="mt-6 pt-4 border-t border-[var(--line)] text-[13px] text-[var(--ink-3)] leading-relaxed">{HOTEL.rateNote}</p>
           <p className="mt-2 text-[13px] text-[var(--ink-2)] leading-relaxed">{HOTEL.payNote}</p>
 
           <a

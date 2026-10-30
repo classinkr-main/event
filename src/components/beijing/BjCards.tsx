@@ -18,10 +18,10 @@ function pick(rows: Org["rows"]): Org["rows"] {
 export default function BjCards() {
   return (
     <Split id="people" title="만나는 사람들" lead="세션과 방문에서 만나는 여섯 곳." wide>
-      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-x-8 gap-y-8 sm:gap-y-10">
         {ORGS.map((o, i) => (
           <Reveal key={o.name} delay={(i % 3) * 60} className="h-full">
-            <div className="glass rounded-3xl p-5 sm:p-6 h-full flex flex-col">
+            <div className="border-t border-[var(--line-2)] pt-5 h-full flex flex-col">
               <div className="flex items-start justify-between gap-3">
                 <Seal glyph={o.glyph} size={48} />
                 <span className="text-xs text-[var(--ink-3)] text-right pt-1">{o.when}</span>
@@ -41,9 +41,9 @@ export default function BjCards() {
           </Reveal>
         ))}
       </div>
-      <div className="mt-4 sm:mt-5 grid md:grid-cols-2 gap-4 sm:gap-5">
+      <div className="mt-8 sm:mt-10 grid md:grid-cols-2 gap-x-8 gap-y-8">
         <Reveal>
-          <div className="glass rounded-3xl p-5 sm:p-6 h-full flex gap-4">
+          <div className="border-t border-[var(--line-2)] pt-5 h-full flex gap-4">
             <Seal glyph="會" size={48} className="shrink-0" />
             <div>
               <div className="text-xl font-medium tracking-tight">GET 교육기술 대회</div>
@@ -53,7 +53,7 @@ export default function BjCards() {
           </div>
         </Reveal>
         <Reveal delay={60}>
-          <div className="glass rounded-3xl p-5 sm:p-6 h-full flex gap-4">
+          <div className="border-t border-[var(--line-2)] pt-5 h-full flex gap-4">
             <Seal glyph="大" size={48} className="shrink-0" />
             <div>
               <div className="text-xl font-medium tracking-tight">베이징 협력 대학</div>

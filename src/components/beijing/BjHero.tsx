@@ -83,22 +83,22 @@ export default function BjHero() {
             </div>
           </div>
 
-          <dl className="reveal glass-strong rounded-3xl p-5 sm:p-6 grid grid-cols-1 gap-y-4 text-sm sm:text-[15px]">
-            <div className="flex gap-4">
+          <dl className="reveal border-t border-white/25 text-sm sm:text-[15px]">
+            <div className="flex gap-4 py-4 border-b border-white/15">
               <dt className="w-10 shrink-0 text-white/55">일정</dt>
               <dd className="font-medium">
                 11월 24일 (화) 저녁 도착
                 <span className="block text-white/70 font-normal">27일 (금) 귀국 · 3박 4일</span>
               </dd>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 py-4 border-b border-white/15">
               <dt className="w-10 shrink-0 text-white/55">장소</dt>
               <dd className="font-medium">
                 베이징
                 <span className="block text-white/70 font-normal">GET 대회장 · ClassIn 본사 · 현지 학원과 대학</span>
               </dd>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4 py-4 border-b border-white/25">
               <dt className="w-10 shrink-0 text-white/55">대상</dt>
               <dd className="font-medium">초청받으신 학원 원장님</dd>
             </div>

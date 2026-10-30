@@ -18,10 +18,10 @@ export default function BjProgram() {
       lead="GET 대회 안에서 ClassIn이 여는 「AI 신교육」 세션. 한국·중국 학원 4곳이 발표합니다."
       band
     >
-      <ol className="glass rounded-3xl px-5 sm:px-7">
+      <ol className="border-t border-[var(--line-2)]">
         {TALKS.map((t, i) => (
           <Reveal key={t.id} delay={i * 40}>
-            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[3.5rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-5 sm:py-6 border-b border-[var(--line)] last:border-b-0 items-start">
+            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[3.5rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-5 sm:py-6 border-b border-[var(--line)] last:border-[var(--line-2)] items-start">
               <span className="text-gradient text-xl sm:text-2xl font-semibold tabular-nums">{t.no}</span>
               <div className="min-w-0">
                 <h3 className="text-lg sm:text-2xl font-medium leading-snug tracking-tight">{t.title}</h3>

@@ -3,7 +3,7 @@ import InterestMark from "./InterestMark";
 import Split from "./Split";
 import { QUESTIONS } from "./data";
 
-/** 현장에서 확인할 질문 — 번호 매긴 목록 */
+/** 현장에서 확인할 질문 — 상자 없이 번호와 가로줄로 나눈 목록 */
 export default function BjQuestions() {
   return (
     <Split
@@ -17,23 +17,24 @@ export default function BjQuestions() {
       }
       lead="관심 가는 항목에 표시해 두면 신청서에 함께 담깁니다."
     >
-      <div className="grid sm:grid-cols-2 gap-4">
+      <ol className="border-t border-[var(--line-2)]">
         {QUESTIONS.map((q, i) => (
-          <Reveal key={q.no} delay={(i % 2) * 60} className="h-full">
-            <div className="glass rounded-2xl p-5 sm:p-6 h-full flex flex-col hover:bg-white/[0.07] transition-colors">
-              <div className="flex items-center justify-between">
-                <span className="text-gradient text-2xl font-semibold tabular-nums">{q.no}</span>
-                <span className="text-xs text-[var(--ink-3)]">{q.where}</span>
+          <Reveal key={q.no} delay={i * 40}>
+            <li className="grid grid-cols-[2.5rem_1fr] sm:grid-cols-[3.5rem_1fr_auto] gap-x-4 sm:gap-x-6 gap-y-3 py-5 sm:py-6 border-b border-[var(--line)] last:border-[var(--line-2)] items-start">
+              <span className="text-gradient text-xl sm:text-2xl font-semibold tabular-nums">{q.no}</span>
+              <div className="min-w-0">
+                <p className="text-lg sm:text-[22px] font-medium leading-snug tracking-tight">{q.q}</p>
+                <p className="mt-2 text-sm text-[var(--ink-2)]">
+                  {q.who} <span className="text-[var(--ink-3)] mx-1.5">·</span> <span className="text-[var(--ink-3)]">{q.where}</span>
+                </p>
               </div>
-              <p className="mt-4 text-lg sm:text-xl font-medium leading-snug tracking-tight flex-1">{q.q}</p>
-              <div className="mt-5 flex items-center justify-between gap-3">
-                <span className="text-sm text-[var(--ink-2)]">{q.who}</span>
+              <div className="col-start-2 sm:col-start-3 pt-0.5">
                 <InterestMark id={q.id} compact />
               </div>
-            </div>
+            </li>
           </Reveal>
         ))}
-      </div>
+      </ol>
     </Split>
   );
 }
