@@ -6,9 +6,6 @@ type Payload = {
   position?: string;
   phone?: string;
   email?: string;
-  passportMethod?: string;
-  passportImage?: string;
-  passportName?: string;
   arrival?: string;
   flightDetail?: string;
   room?: string;
@@ -23,13 +20,11 @@ type Payload = {
 };
 
 const REQUIRED: (keyof Payload)[] = ["name", "organization", "position", "phone"];
-const PASSPORT_METHODS = ["지금 직접 제출", "담당 매니저에게 제출"] as const;
-const DATA_URL = /^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/;
 
 const clean = (v: unknown, max: number) =>
   typeof v === "string" ? v.trim().slice(0, max) : "";
 
-/** 베이징 탐방 참가 신청 — 초청 코드 없이 받는다(10/30). 참가자 각자 신청(인원수 항목 없음) */
+/** 베이징 탐방 참가 신청 — 초청 코드 없이 받는다(10/30). 참가자 각자 신청(인원수 항목 없음). 여권 사본은 받지 않는다(11/2) */
 export async function POST(request: Request) {
   let body: Payload;
   try {
@@ -60,25 +55,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "숙소 객실 타입을 골라 주세요." }, { status: 400 });
   }
 
-  // 여권 사본: 제출 방식은 필수. 직접 제출이면 브라우저에서 줄인 JPEG data URL(최대 약 3MB)이 있어야 한다
-  const passportMethod = clean(body.passportMethod, 30);
-  if (!(PASSPORT_METHODS as readonly string[]).includes(passportMethod)) {
-    return NextResponse.json({ error: "여권 사본 제출 방식을 골라 주세요." }, { status: 400 });
-  }
-  let passportImage = "";
-  let passportMime = "";
-  if (passportMethod === PASSPORT_METHODS[0]) {
-    const m = typeof body.passportImage === "string" ? DATA_URL.exec(body.passportImage) : null;
-    if (!m) {
-      return NextResponse.json({ error: "여권 사본을 올려 주세요. 지금 어려우시면 담당 매니저에게 제출을 골라 주세요." }, { status: 400 });
-    }
-    if (m[2].length > 4_000_000) {
-      return NextResponse.json({ error: "여권 이미지는 JPG·PNG 사진으로 3MB 이하만 올릴 수 있습니다." }, { status: 400 });
-    }
-    passportMime = m[1];
-    passportImage = m[2];
-  }
-
   // 베이징 전용 시트 웹훅. 미설정 시 설명회(인천) 시트로 폴백 — 구 스크립트면 인천 탭 Session 컬럼에 요약이 남는다.
   const sheetsUrl =
     process.env.GOOGLE_SHEETS_WEBHOOK_URL_BEIJING ||
@@ -94,7 +70,7 @@ export async function POST(request: Request) {
   const interests = clean(body.interests, 400);
 
   if (!sheetsUrl) {
-    console.warn("[beijing] No webhook URL configured. Received but not stored.", { ...body, passportImage: passportImage ? `[${passportImage.length} chars]` : "" });
+    console.warn("[beijing] No webhook URL configured. Received but not stored.", body);
     return NextResponse.json({ ok: true, stored: false });
   }
 
@@ -120,17 +96,13 @@ export async function POST(request: Request) {
         topics,
         interests,
         consent: "Y",
-        passportMethod,
-        passportImage,
-        passportMime,
-        passportName: clean(body.passportName, 200),
+        // 여권 사본은 받지 않음(11/2) — Apps Script v2.1은 비어 있으면 Passport 열을 빈 칸으로 둔다
         source: clean(body.source, 200),
         // 호환용: 인천 시트(v3)로 폴백될 때 Session 컬럼에 요약이 남도록
         session: [
           clean(body.session, 100) || "베이징 탐방 11/24–27",
           arrival ? `항공=${arrival}` : "",
           room ? `숙소=${room}` : "",
-          `여권=${passportMethod}`,
           interests ? `관심=${interests}` : "",
           message ? `요청=${message.slice(0, 300)}` : "",
         ]

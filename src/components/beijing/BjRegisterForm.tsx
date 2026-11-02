@@ -17,8 +17,6 @@ type SubmittedData = {
   position: string;
   phone: string;
   email?: string;
-  passportMethod: string;
-  passportName: string;
   arrival: string;
   flightDetail: string;
   room: string;
@@ -32,43 +30,10 @@ type SubmittedData = {
 const FLIGHT_OPTIONS = FORM_OPTIONS.flight;
 const ROOM_OPTIONS = FORM_OPTIONS.room;
 const TOPIC_OPTIONS = FORM_OPTIONS.topics;
-const PASSPORT_METHODS = FORM_OPTIONS.passportMethod;
-const DIRECT = PASSPORT_METHODS[0];
-const PASSPORT_MAX_SIDE = 1600;
-const PASSPORT_MAX_CHARS = 2_500_000; // 약 1.8MB
-
-/** 여권 사진을 브라우저에서 줄여 JPEG data URL로. 휴대폰 원본(수 MB)을 그대로 보내지 않기 위해 */
-async function fileToJpegDataUrl(file: File): Promise<string> {
-  let bitmap: ImageBitmap;
-  try {
-    bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
-  } catch {
-    throw new Error("여권 이미지를 읽지 못했습니다. JPG 또는 PNG 사진으로 올려 주세요.");
-  }
-  const scale = Math.min(1, PASSPORT_MAX_SIDE / Math.max(bitmap.width, bitmap.height));
-  const w = Math.max(1, Math.round(bitmap.width * scale));
-  const h = Math.max(1, Math.round(bitmap.height * scale));
-  const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("이미지 처리를 지원하지 않는 브라우저입니다.");
-  ctx.drawImage(bitmap, 0, 0, w, h);
-  bitmap.close?.();
-  let out = canvas.toDataURL("image/jpeg", 0.85);
-  for (const q of [0.7, 0.55]) {
-    if (out.length <= PASSPORT_MAX_CHARS) break;
-    out = canvas.toDataURL("image/jpeg", q);
-  }
-  return out;
-}
-
 export default function BjRegisterForm({ source }: { source?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [phone, setPhone] = useState("");
-  const [method, setMethod] = useState("");
-  const [passport, setPassport] = useState<File | null>(null);
   const [arrival, setArrival] = useState(FLIGHT_OPTIONS[0]);
   const [room, setRoom] = useState("");
   const [topics, setTopics] = useState<string[]>([]);
@@ -81,8 +46,6 @@ export default function BjRegisterForm({ source }: { source?: string }) {
   function resetForm(form: HTMLFormElement) {
     form.reset();
     setPhone("");
-    setMethod("");
-    setPassport(null);
     setArrival(FLIGHT_OPTIONS[0]);
     setRoom("");
     setTopics([]);
@@ -104,13 +67,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     payload.topics = topics.join(", ");
     payload.consent = fd.get("consent") ? "Y" : "";
 
-    payload.passportMethod = method;
     try {
-      if (method === DIRECT) {
-        if (!passport) throw new Error("여권 사본을 올려 주세요. 지금 어려우시면 「담당 매니저에게 제출」을 골라 주세요.");
-        payload.passportImage = await fileToJpegDataUrl(passport);
-        payload.passportName = passport.name;
-      }
       const res = await fetch("/api/beijing", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -120,7 +77,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "신청 처리 중 문제가 발생했습니다.");
       }
-      setSubmitted({ ...(payload as unknown as SubmittedData), passportName: method === DIRECT ? passport?.name ?? "" : "" });
+      setSubmitted(payload as unknown as SubmittedData);
       setStatus("success");
       resetForm(form);
     } catch (err) {
@@ -144,9 +101,6 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     `cursor-pointer select-none border px-3 py-1.5 text-xs sm:text-[13px] transition-colors ${
       on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
     }`;
-
-  const fileClass =
-    "field !py-2 file:mr-3 file:border file:border-[var(--paper-line-2)] file:bg-transparent file:px-3 file:py-1 file:text-xs file:text-[var(--ink)]";
 
   if (status === "success" && submitted) {
     return (
@@ -173,12 +127,6 @@ export default function BjRegisterForm({ source }: { source?: string }) {
               <TicketField k="PHONE" v={submitted.phone} />
             </div>
             <dl className="mt-5 border-t border-[var(--paper-line)] pt-4 space-y-2 text-sm">
-              <div className="grid grid-cols-[4.5rem_1fr] gap-3">
-                <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">PASSPORT</dt>
-                <dd className="text-[var(--ink)]">
-                  {submitted.passportName ? "접수됨" : "담당 매니저에게 제출 · 접수 후 안내드리는 방법으로 보내 주세요"}
-                </dd>
-              </div>
               {submitted.email && (
                 <div className="grid grid-cols-[4.5rem_1fr] gap-3">
                   <dt className="mono text-[10px] text-[var(--ink-3)] pt-1">EMAIL</dt>
@@ -295,36 +243,6 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                 className="field"
                 maxLength={13}
               />
-            </div>
-
-            <div className="sm:col-span-2">
-              <Label required>PASSPORT / 여권 사본</Label>
-              <div className="flex flex-wrap gap-2 pt-1.5">
-                {PASSPORT_METHODS.map((o) => {
-                  const on = method === o;
-                  return (
-                    <label key={o} className={chip(on)}>
-                      <input type="radio" name="passportMethod" value={o} checked={on} onChange={() => setMethod(o)} className="sr-only" required />
-                      {o}
-                    </label>
-                  );
-                })}
-              </div>
-              {method === DIRECT && (
-                <input
-                  id="passport"
-                  name="passport"
-                  type="file"
-                  accept="image/*"
-                  required
-                  onChange={(e) => setPassport(e.target.files?.[0] ?? null)}
-                  className={`${fileClass} mt-3`}
-                  aria-label="여권 사본 파일"
-                />
-              )}
-              <p className="mt-1.5 text-[11px] text-[var(--ink-3)] leading-relaxed">
-                숙소 예약에 여권 사진면이 필요합니다. 지금 올리기 어려우시면 「담당 매니저에게 제출」을 고르시고 접수 후 안내드리는 방법으로 보내 주세요. 예약이 끝나면 바로 폐기합니다.
-              </p>
             </div>
 
             <div className="sm:col-span-2">

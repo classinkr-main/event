@@ -193,6 +193,39 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - env: `GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA` (Vercel production/preview + .env.local). 미설정 시 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 폴백.
 - 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
 
+## 여권 항목 삭제 (2026-11-02)
+- 사용자 "여권 정보 받을 필요 없대" → 웹 신청서·API·구글폼에서 **여권 사본 관련 항목 전부 삭제**. 10/30의 「여권 제출 방식 필수」는 폐기.
+- 웹 `BjRegisterForm.tsx`: PASSPORT 칸(제출 방식 라디오·파일 업로드·안내문)·브라우저 JPEG 축소 함수·접수 완료 카드의 PASSPORT 줄 삭제. `data.ts` FORM_OPTIONS.passportMethod 삭제, 동의문에서 「여권 사본」 삭제. 여행 메모의 「여권 유효기간 6개월」 줄과 일정의 스탬프 장식은 안내·장식이라 유지.
+- API `/api/beijing`: passportMethod/passportImage/passportName 필드·검사 삭제, 웹훅에도 보내지 않음. **Apps Script는 그대로**(v2.1 `savePassport_(data) || data.passportMethod || ""` → Passport 열이 빈 칸으로 남음). 시트 헤더 Passport 열은 이력용으로 둠(지워도 무방).
+- 구글폼: 스크립트에 `updateBeijingFormV4()`(아래, 다시 실행해도 안전) 추가 후 heesung 계정으로 실행 → 「여권 사본」 섹션 헤더·「여권 사본 제출 방식」 객관식·「여권 사진면 업로드」 파일 업로드·여권 예시 이미지 삭제, 동의문·폼 설명에서 여권 문구 삭제. **파일 업로드 문항이 없어지면 응답자 구글 로그인이 더 이상 필요 없음.** 응답 탭 「설문지 응답 시트1」의 여권 열은 응답이 없으면 삭제.
+
+```javascript
+/** 11/2: 여권 사본은 받지 않는다 — 여권 섹션·제출 방식·업로드·예시 이미지 삭제, 동의문·설명 갱신. 다시 실행해도 안전 */
+function updateBeijingFormV4() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const T = (it) => (it.getTitle() || "").trim();
+  const removed = [];
+  form.getItems().forEach((it) => {
+    const t = T(it), type = it.getType();
+    const hit =
+      (type === FormApp.ItemType.SECTION_HEADER && t === "여권 사본") ||
+      (type === FormApp.ItemType.MULTIPLE_CHOICE && t === "여권 사본 제출 방식") ||
+      type === FormApp.ItemType.FILE_UPLOAD ||
+      (type === FormApp.ItemType.IMAGE && (t.indexOf("여권") >= 0 || (it.getHelpText() || "").indexOf("여권") >= 0));
+    if (hit) { removed.push(type + " " + t); form.deleteItem(it); }
+  });
+  // 예시 이미지 제목이 비어 있던 경우: 이미지가 하나만 남아 있으면 그것이 여권 예시
+  const imgs = form.getItems(FormApp.ItemType.IMAGE);
+  if (imgs.length === 1) { removed.push("IMAGE(only) " + T(imgs[0])); form.deleteItem(imgs[0]); }
+  form.getItems(FormApp.ItemType.CHECKBOX).forEach((it) => {
+    if (T(it) === "개인정보 수집·이용 동의") it.setHelpText(it.getHelpText().replace("소속 기관명, 여권 사본, 숙소", "소속 기관명, 숙소"));
+  });
+  form.setDescription(form.getDescription().replace("작성에 5분쯤 걸리며, 여권 사진면 이미지를 준비해 주세요.", "작성에 3분쯤 걸립니다."));
+  Logger.log("removed:\n" + removed.join("\n"));
+  Logger.log(form.getItems().map((it) => it.getIndex() + " " + it.getType() + " " + T(it)).join("\n"));
+}
+```
+
 ## 웹 신청서 정리 (2026-10-30)
 - 저녁 사용자 "입장 코드 빼자" → **초청 코드 완전 삭제**: 신청서 INVITE CODE 칸, API `matchCode` 검사(401), `?code=` 미리 채움(page.tsx searchParams), `src/lib/beijingInvite.ts` 삭제. env `BEIJING_INVITE_CODES`는 더 이상 안 읽음(Vercel에도 없음). 구글폼은 10/29에 이미 코드 문항을 뺐으니 양쪽 모두 코드 없음. 아래 「초청 코드」 절은 이력용.
 - 사용자 지시 3건: 「이메일은 안 받아도 됨」 → EMAIL 칸 삭제(API도 필수 해제, Email 열은 빈 값으로 유지). 「인원수 빼, 각자 적게」 → PARTY 선택 삭제(참가자 각자 신청, Party 열은 빈 값). 「여권 필수 + 직접 제출/담당 매니저에게 제출 선택」 → `passportMethod` 라디오 필수(「지금 직접 제출」이면 파일 칸이 나타나고 필수, 「담당 매니저에게 제출」이면 파일 없이 접수).
