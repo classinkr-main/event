@@ -197,9 +197,19 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - 사용자 "여권 정보 받을 필요 없대" → 웹 신청서·API·구글폼에서 **여권 사본 관련 항목 전부 삭제**. 10/30의 「여권 제출 방식 필수」는 폐기.
 - 웹 `BjRegisterForm.tsx`: PASSPORT 칸(제출 방식 라디오·파일 업로드·안내문)·브라우저 JPEG 축소 함수·접수 완료 카드의 PASSPORT 줄 삭제. `data.ts` FORM_OPTIONS.passportMethod 삭제, 동의문에서 「여권 사본」 삭제. 여행 메모의 「여권 유효기간 6개월」 줄과 일정의 스탬프 장식은 안내·장식이라 유지.
 - API `/api/beijing`: passportMethod/passportImage/passportName 필드·검사 삭제, 웹훅에도 보내지 않음. **Apps Script는 그대로**(v2.1 `savePassport_(data) || data.passportMethod || ""` → Passport 열이 빈 칸으로 남음). 시트 헤더 Passport 열은 이력용으로 둠(지워도 무방).
-- 구글폼: 스크립트에 `updateBeijingFormV4()`(아래, 다시 실행해도 안전) 추가 후 heesung 계정으로 실행 → 「여권 사본」 섹션 헤더·「여권 사본 제출 방식」 객관식·「여권 사진면 업로드」 파일 업로드·여권 예시 이미지 삭제, 동의문·폼 설명에서 여권 문구 삭제. **파일 업로드 문항이 없어지면 응답자 구글 로그인이 더 이상 필요 없음.** 응답 탭 「설문지 응답 시트1」의 여권 열은 응답이 없으면 삭제.
+- ✅ 구글폼: 스크립트에 `updateBeijingFormV4()`(아래, 다시 실행해도 안전) 추가 후 heesung 계정으로 실행 완료(11/2 18:41) → 「여권 사본」 섹션 헤더·「여권 사본 제출 방식」 객관식·「여권 사진면 업로드」 파일 업로드·여권 예시 이미지 4개 삭제, 동의문·폼 설명에서 여권 문구 삭제. 남은 문항 15개(동의·성함·기관·직책·연락처 / 항공편·편명·객실·동행 / 관심 일정·주제·질문·요청사항). 응답 탭 「설문지 응답 시트1」의 여권 열 O·P(응답 0건) 삭제 완료.
+- ✅ 폼 로그인 제한은 사용자가 직접 해제(11/2, 「Published」→Responders 「링크가 있는 모든 사용자」) → viewform 비로그인 200. 폼 설명 마지막 줄 「작성에 5분쯤 걸리며, 여권 사진면 이미지가 필요하니 미리 준비해 주세요」는 V4의 치환 문구와 달라 안 바뀌었음 → `fixBeijingFormDescV4()`(정규식 치환, 아래) 실행으로 「작성에 3분쯤 걸립니다.」로 교체 완료. 교훈: 폼 문구는 10/29 줄바꿈 개편 때 바뀌었으니 치환 전에 실제 문구를 먼저 로그로 뽑을 것.
 
 ```javascript
+/** 11/2: 폼 설명 마지막 줄의 여권 준비 안내 삭제. 다시 실행해도 안전 */
+function fixBeijingFormDescV4() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const d = form.getDescription();
+  const nd = d.replace(/작성에 5분쯤 걸리며[^\n]*여권[^\n]*/, "작성에 3분쯤 걸립니다.");
+  form.setDescription(nd);
+  Logger.log("changed=" + (d !== nd) + " stillHasPassport=" + (nd.indexOf("여권") >= 0));
+}
+
 /** 11/2: 여권 사본은 받지 않는다 — 여권 섹션·제출 방식·업로드·예시 이미지 삭제, 동의문·설명 갱신. 다시 실행해도 안전 */
 function updateBeijingFormV4() {
   const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
