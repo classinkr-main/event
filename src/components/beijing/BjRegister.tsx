@@ -8,7 +8,7 @@ export default function BjRegister({ source }: { source?: string }) {
         <Reveal className="mb-10 sm:mb-12 max-w-2xl">
           <h2 className="serif text-[2rem] sm:text-5xl md:text-[3.25rem] font-semibold leading-[1.12] tracking-tight">참가 신청</h2>
           <p className="mt-4 text-[15px] sm:text-lg text-[var(--ink-2)] leading-relaxed">
-            탑승권을 채워 제출해 주세요. 세부 사항은 접수 후 개별 안내드립니다.
+            탑승권을 채워 제출해 주세요. 일행이 있으면 대표자 한 분이 동행까지 함께 신청해 주세요. 세부 사항은 접수 후 개별 안내드립니다.
           </p>
         </Reveal>
         <Reveal>

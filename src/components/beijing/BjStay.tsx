@@ -39,7 +39,7 @@ export default function BjStay() {
               <div key={r.type} className="border-t border-[var(--line-2)] pt-4">
                 <div className="flex items-center justify-between gap-3">
                   <div className="font-medium">
-                    {r.type} <span className="text-xs text-[var(--ink-3)] ml-1">{r.en}</span>
+                    {r.use} · {r.type} <span className="text-xs text-[var(--ink-3)] ml-1">{r.en}</span>
                   </div>
                   <span className="shrink-0 text-xs text-[var(--ink-2)]">{r.breakfast}</span>
                 </div>

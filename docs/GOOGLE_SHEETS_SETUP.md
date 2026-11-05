@@ -193,6 +193,56 @@ https://meets.classin.co.kr/0709-10incheon?utm_source=instagram
 - env: `GOOGLE_SHEETS_WEBHOOK_URL_HAKWONJEONJA` (Vercel production/preview + .env.local). 미설정 시 `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON`으로 폴백.
 - 상담 신청: `/api/consult`가 `type: "consult"`로 전송 → 첫 탭에 기록(헤더 자동 생성). 방문: `/api/track`은 여전히 인천 시트 Visits 탭(Path `/hakwonjeonja`).
 
+## 대표자 한 명이 동행까지 신청 (2026-11-05)
+- 계기: 11/5 새벽 윤유경플러스학원 신청(원장 여·본부장 남)이 「트윈 (조식 2인)」을 고르고 "다른 방을 써야 한다"고 적음. 「더블/트윈」이 침대 종류인데 조식 1인/2인 때문에 「1명용/2명용」으로 읽혔고, 10/30 「각자 신청」 전제가 신청서 어디에도 안 적혀 있었음. 사용자 "각자 제출이면 안 되는데" → **대표자 1건 + 동행 명단** 구조로 변경(본인 불참 체크는 사용자 지시로 제외).
+- 웹 `data.ts` FORM_OPTIONS.room = 「1인 1실 · 더블 (950위안 · 조식 1인)」「2인 1실 · 트윈 (1,050위안 · 조식 2인)」「숙소 직접 예약」. HOTEL.rooms에 `use`(1인 1실/2인 1실) 추가 → 숙소 섹션 `BjStay.tsx`에 「1인 1실 · 더블」로 표기. 동의문에 「동행 참가자의 성명·직책」 추가. `BjRegister.tsx` 머리글에 "일행이 있으면 대표자 한 분이 동행까지 함께 신청해 주세요".
+- 웹 `BjRegisterForm.tsx`: 대표자 객실 아래 **COMPANIONS / 동행 참가자** 반복 입력(이름·직책·객실 필수, 최대 9명, 「+ 동행 추가」/「삭제」). 객실이 「2인 1실」이면 **WITH / 함께 쓰실 분** = 같은 신청서의 다른 이름이 칩으로 뜨고(누르면 채워짐) 직접 입력도 가능. 이름 칸은 칩 목록 때문에 controlled로 바꿈. 제출 버튼에 인원수 표시, 접수 완료 탑승권에 PARTY(N명)·COMPANIONS 명단.
+- API `/api/beijing`: `companions` 배열(이름·직책·객실 없으면 400, 10명 이상 400). **시트에는 사람마다 한 행**을 순서대로 보냄(대표 행 → 동행 행). Party 열 = 대표 「대표 · N명」, 동행 「동행 · 대표 ○○○ (N명)」. 동행 행은 Organization·Phone·Arrival·FlightDetail·Source를 대표자 값으로, Message·Question·Topics·Interests는 빈 값. 동행 행 저장이 실패하면 502 + "다시 제출하지 말고 담당자에게" 문구(대표 행은 이미 저장됨). **Apps Script 웹훅은 손 안 댐**(`data.party`를 Party 열에 그대로 씀).
+- 구글폼: `updateBeijingFormV5()`(아래, 다시 실행해도 안전) — 「숙소 객실 타입」→「본인 객실」로 제목·선택지·도움말 교체, 「트윈이면 함께 쓰실 분」→「2인 1실이면 함께 쓰실 분」, 그 바로 뒤에 서술형 **「동행 참가자」**(한 줄에 한 분: 이름 · 직책 · 객실) 추가, 동의문·폼 설명 갱신. 폼은 반복 입력이 안 되니 서술형으로 받고 운영자가 시트에 옮긴다.
+- 로컬 검증: dev는 `GOOGLE_SHEETS_WEBHOOK_URL*` 네 변수 + `COMPASS_VISIT_*` 빈 값으로 띄우고(`-H 0.0.0.0 -p 3499`), curl로 API(동행 1명 → rows 2, 객실 누락 → 400), 헤드리스 크롬 CDP로 모바일 390·데스크톱 1280 폼·접수 완료 캡처(Reveal은 `.reveal-3d`에 `.in` 강제).
+
+```javascript
+/** 11/5: 대표자 한 명이 동행까지 신청 — 객실 선택지를 인원 기준으로, 「동행 참가자」 서술형 추가, 동의문·설명 갱신. 다시 실행해도 안전 */
+function updateBeijingFormV5() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const T = (it) => it.getTitle().trim();
+  const ROOMS = ["1인 1실 · 더블 (950위안 · 조식 1인)", "2인 1실 · 트윈 (1,050위안 · 조식 2인)", "숙소 직접 예약"];
+  let roomItem = null, mateItem = null, companionsItem = null;
+  form.getItems().forEach((it) => {
+    const t = T(it);
+    if (t === "숙소 객실 타입" || t === "본인 객실") roomItem = it;
+    if (t === "트윈이면 함께 쓰실 분" || t === "2인 1실이면 함께 쓰실 분") mateItem = it;
+    if (t === "동행 참가자") companionsItem = it;
+  });
+  if (roomItem) {
+    roomItem.asMultipleChoiceItem()
+      .setTitle("본인 객실")
+      .setHelpText("크라운 플라자 베이징 중관춘(5성급), 1박 기준. 1인 1실 더블 950위안(약 19만 원, 조식 1인) · 2인 1실 트윈 1,050위안(약 21만 원, 조식 2인). 숙박비는 자기 부담이며 예약·결제 방법은 접수 후 안내드립니다.")
+      .setChoiceValues(ROOMS)
+      .setRequired(true);
+  }
+  if (mateItem) mateItem.asTextItem().setTitle("2인 1실이면 함께 쓰실 분").setHelpText("예: ○○학원 홍길동");
+  if (!companionsItem) {
+    companionsItem = form.addParagraphTextItem();
+    if (mateItem) form.moveItem(companionsItem.getIndex(), mateItem.getIndex() + 1);
+  }
+  companionsItem.asParagraphTextItem()
+    .setTitle("동행 참가자")
+    .setHelpText("함께 오시는 분이 있으면 대표자가 여기에 적어 주세요. 한 줄에 한 분씩: 이름 · 직책 · 객실(1인 1실 / 2인 1실 / 직접 예약). 예: 홍승현 · 본부장 · 1인 1실. 동행의 연락처는 대표자 번호로 갈음합니다.")
+    .setRequired(false);
+  form.getItems(FormApp.ItemType.CHECKBOX).forEach((it) => {
+    if (T(it) !== "개인정보 수집·이용 동의") return;
+    const h = it.getHelpText();
+    const nh = h.indexOf("동행 참가자") >= 0 ? h : h.replace(/숙소·항공 선호 정보를 수집합니다/, "숙소·항공 선호 정보와 동행 참가자의 성명·직책을 수집합니다");
+    Logger.log("consent changed=" + (h !== nh) + " | " + nh);
+    if (h !== nh) it.setHelpText(nh);
+  });
+  const d = form.getDescription();
+  if (d.indexOf("동행까지") < 0) form.setDescription(d + "\n일행이 있으면 대표자 한 분이 동행까지 함께 신청해 주세요.");
+  Logger.log("room=" + !!roomItem + " mate=" + !!mateItem + " companions=" + !!companionsItem + " | titles=" + form.getItems().map(T).join(" / "));
+}
+```
+
 ## 여권 항목 삭제 (2026-11-02)
 - 사용자 "여권 정보 받을 필요 없대" → 웹 신청서·API·구글폼에서 **여권 사본 관련 항목 전부 삭제**. 10/30의 「여권 제출 방식 필수」는 폐기.
 - 웹 `BjRegisterForm.tsx`: PASSPORT 칸(제출 방식 라디오·파일 업로드·안내문)·브라우저 JPEG 축소 함수·접수 완료 카드의 PASSPORT 줄 삭제. `data.ts` FORM_OPTIONS.passportMethod 삭제, 동의문에서 「여권 사본」 삭제. 여행 메모의 「여권 유효기간 6개월」 줄과 일정의 스탬프 장식은 안내·장식이라 유지.
