@@ -11,8 +11,14 @@ import { useInterests } from "./interests";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-/** 동행 참가자 — 대표 신청자가 같은 신청서에 함께 적는다(11/5). 연락처는 대표자 번호로 갈음 */
-type Companion = { id: number; name: string; position: string; room: string; roommate: string };
+/**
+ * 객실 상태(대표자·동행 공통). 11/5: 대표 신청자가 동행 참가자를 같은 신청서에 적는다.
+ * 2인 1실을 고르고 「함께 쓰실 분」에서 같은 신청서의 사람을 고르면(mateId) 그 사람은 자동으로 같은 방으로 묶여
+ * 객실을 다시 고르지 않는다. 다른 기관 사람과 쓰면 mateText에 적는다.
+ */
+type RoomPick = { room: string; mateId: number | null; mateText: string };
+type Companion = RoomPick & { id: number; name: string; position: string };
+type Person = RoomPick & { id: number; name: string };
 
 type SubmittedData = {
   name: string;
@@ -28,14 +34,18 @@ type SubmittedData = {
   question: string;
   topics: string;
   interests: string;
-  companions: Omit<Companion, "id">[];
+  companions: { name: string; position: string; room: string; roommate: string }[];
 };
 
 const FLIGHT_OPTIONS = FORM_OPTIONS.flight;
 const ROOM_OPTIONS = FORM_OPTIONS.room;
+const SINGLE = ROOM_OPTIONS[0];
+const TWIN = ROOM_OPTIONS[1];
 const TOPIC_OPTIONS = FORM_OPTIONS.topics;
 const MAX_COMPANIONS = 9;
+const REP_ID = 0;
 const shortRoom = (room: string) => (room ? room.split(" (")[0] : "-");
+const EMPTY_PICK: RoomPick = { room: "", mateId: null, mateText: "" };
 
 export default function BjRegisterForm({ source }: { source?: string }) {
   const [status, setStatus] = useState<Status>("idle");
@@ -43,8 +53,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [arrival, setArrival] = useState(FLIGHT_OPTIONS[0]);
-  const [room, setRoom] = useState("");
-  const [roommate, setRoommate] = useState("");
+  const [rep, setRep] = useState<RoomPick>(EMPTY_PICK);
   const [companions, setCompanions] = useState<Companion[]>([]);
   const nextId = useRef(1);
   const [topics, setTopics] = useState<string[]>([]);
@@ -54,27 +63,71 @@ export default function BjRegisterForm({ source }: { source?: string }) {
 
   const toggleTopic = (t: string) => setTopics((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
 
-  const addCompanion = () =>
-    setCompanions((cur) =>
-      cur.length >= MAX_COMPANIONS ? cur : [...cur, { id: nextId.current++, name: "", position: "", room: "", roommate: "" }]
-    );
-  const updateCompanion = (id: number, patch: Partial<Companion>) =>
-    setCompanions((cur) => cur.map((c) => (c.id === id ? { ...c, ...patch } : c)));
-  const removeCompanion = (id: number) => setCompanions((cur) => cur.filter((c) => c.id !== id));
+  /** 신청서에 적힌 사람 전부(대표자 = id 0) */
+  const people: Person[] = [{ id: REP_ID, name, ...rep }, ...companions];
+  const personOf = (id: number) => people.find((p) => p.id === id);
+  const nameOf = (id: number) => (personOf(id)?.name ?? "").trim();
+  /** 나를 같은 방으로 지목한 사람(있으면 내 객실은 자동으로 2인 1실) */
+  const linkerOf = (id: number) => people.find((p) => p.id !== id && p.room === TWIN && p.mateId === id);
+  /** 이미 다른 사람과 묶인 사람인지 */
+  const pairedElsewhere = (p: Person, self: number) =>
+    (p.room === TWIN && p.mateId !== null && p.mateId !== self) || people.some((q) => q.id !== self && q.id !== p.id && q.room === TWIN && q.mateId === p.id);
+  /** 「함께 쓰실 분」 후보: 같은 신청서의 다른 사람 중 이름이 있고 아직 안 묶인 사람 */
+  const mateChoices = (self: number) => people.filter((p) => p.id !== self && p.name.trim() && !pairedElsewhere(p, self));
 
-  /** 같은 신청서에 적힌 다른 사람 이름 — 「함께 쓰실 분」 고르기용 */
-  const namesExcept = (self: number | null) =>
-    [self === null ? "" : name, ...companions.filter((c) => c.id !== self).map((c) => c.name)]
-      .map((n) => n.trim())
-      .filter(Boolean);
+  const updatePick = (id: number, patch: Partial<RoomPick>) => {
+    if (id === REP_ID) setRep((cur) => ({ ...cur, ...patch }));
+    else setCompanions((cur) => cur.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+  };
+  const pickRoom = (id: number, room: string) => updatePick(id, { room, mateId: null, mateText: "" });
+  const pickMate = (id: number, mateId: number | null) => {
+    updatePick(id, { mateId, mateText: "" });
+    // 상대는 내 방으로 묶이니 상대가 걸어 둔 지목은 푼다
+    if (mateId !== null) updatePick(mateId, { mateId: null });
+  };
+
+  /** 제출·요약용: 사람별 최종 객실과 함께 쓰는 사람 */
+  const resolve = (p: Person) => {
+    const linker = linkerOf(p.id);
+    if (linker) return { room: TWIN, roommate: linker.name.trim() };
+    if (p.room === TWIN) return { room: TWIN, roommate: p.mateId !== null ? nameOf(p.mateId) : p.mateText.trim() };
+    return { room: p.room, roommate: "" };
+  };
+
+  /** 객실 요약: 몇 개를 쓰고 누가 어느 방인지 */
+  const roomSummary = () => {
+    const singles: string[] = [];
+    const twins: string[] = [];
+    const own: string[] = [];
+    const label = (p: Person) => p.name.trim() || (p.id === REP_ID ? "대표자" : "동행");
+    people.forEach((p) => {
+      if (linkerOf(p.id)) return; // 상대 방에 포함
+      if (p.room === SINGLE) singles.push(label(p));
+      else if (p.room === TWIN) twins.push(p.mateId !== null ? `${label(p)}+${nameOf(p.mateId) || "동행"}` : p.mateText.trim() ? `${label(p)}+${p.mateText.trim()}` : `${label(p)}+미정`);
+      else if (p.room === ROOM_OPTIONS[2]) own.push(label(p));
+    });
+    const parts = [
+      singles.length ? `1인 1실 ${singles.length}개 (${singles.join(", ")})` : "",
+      twins.length ? `2인 1실 ${twins.length}개 (${twins.join(", ")})` : "",
+      own.length ? `직접 예약 ${own.length}명` : "",
+    ].filter(Boolean);
+    return { count: singles.length + twins.length, text: parts.join(" · ") };
+  };
+
+  const addCompanion = () =>
+    setCompanions((cur) => (cur.length >= MAX_COMPANIONS ? cur : [...cur, { id: nextId.current++, name: "", position: "", ...EMPTY_PICK }]));
+  const updateCompanion = (id: number, patch: Partial<Companion>) => setCompanions((cur) => cur.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+  const removeCompanion = (id: number) => {
+    setCompanions((cur) => cur.filter((c) => c.id !== id).map((c) => (c.mateId === id ? { ...c, mateId: null } : c)));
+    setRep((cur) => (cur.mateId === id ? { ...cur, mateId: null } : cur));
+  };
 
   function resetForm(form: HTMLFormElement) {
     form.reset();
     setName("");
     setPhone("");
     setArrival(FLIGHT_OPTIONS[0]);
-    setRoom("");
-    setRoommate("");
+    setRep(EMPTY_PICK);
     setCompanions([]);
     setTopics([]);
     clear();
@@ -88,20 +141,22 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     const fd = new FormData(form);
     const payload: Record<string, unknown> = {};
     fd.forEach((v, k) => {
-      // 동행 칸(c-*)은 상태에서 따로 담는다
-      if (typeof v === "string" && !k.startsWith("c-")) payload[k] = v;
+      // 객실 칸(room·c-*)은 상태에서 계산해 담는다
+      if (typeof v === "string" && !k.startsWith("c-") && k !== "room") payload[k] = v;
     });
     if (typeof payload.source === "string" && payload.source) payload.source = `${payload.source}/${getStoredChannel()}`;
     payload.interests = interestLabels.join(", ");
     payload.topics = topics.join(", ");
     payload.consent = fd.get("consent") ? "Y" : "";
-    payload.roommate = room === ROOM_OPTIONS[1] ? roommate.trim() : "";
-    payload.companions = companions.map((c) => ({
-      name: c.name.trim(),
-      position: c.position.trim(),
-      room: c.room,
-      roommate: c.room === ROOM_OPTIONS[1] ? c.roommate.trim() : "",
-    }));
+    const mine = resolve(people[0]);
+    payload.room = mine.room;
+    payload.roommate = mine.roommate;
+    payload.companions = companions.map((c) => ({ name: c.name.trim(), position: c.position.trim(), ...resolve(c) }));
+    if (!mine.room) {
+      setErrorMsg("숙소 객실을 골라 주세요.");
+      setStatus("error");
+      return;
+    }
 
     try {
       const res = await fetch("/api/beijing", {
@@ -138,44 +193,74 @@ export default function BjRegisterForm({ source }: { source?: string }) {
       on ? "border-[var(--accent)] bg-[var(--accent-soft)] text-[var(--accent)] font-semibold" : "border-[var(--paper-line-2)] text-[var(--ink-2)] hover:border-[var(--ink)]"
     }`;
 
-  /** 객실 선택 칩 + 2인 1실이면 함께 쓰실 분 */
-  const roomPicker = (groupName: string, value: string, onPick: (v: string) => void, mate: string, onMate: (v: string) => void, others: string[]) => (
-    <>
-      <div className="flex flex-wrap gap-2 pt-1.5">
-        {ROOM_OPTIONS.map((o) => {
-          const on = value === o;
-          return (
-            <label key={o} className={chip(on)}>
-              <input type="radio" name={groupName} value={o} checked={on} onChange={() => onPick(o)} className="sr-only" required />
-              {o}
-            </label>
-          );
-        })}
-      </div>
-      {value === ROOM_OPTIONS[1] && (
-        <div className="mt-3">
-          <Label>WITH / 함께 쓰실 분</Label>
-          {others.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-1 pb-2">
-              {others.map((n) => (
-                <button key={n} type="button" onClick={() => onMate(n)} className={chip(mate === n)}>
-                  {n}
-                </button>
-              ))}
-            </div>
-          )}
-          <input
-            type="text"
-            value={mate}
-            onChange={(e) => onMate(e.target.value)}
-            placeholder={others.length > 0 ? "위에서 고르거나 직접 입력 (예: ○○학원 홍길동)" : "예: ○○학원 홍길동"}
-            className="field"
-            maxLength={200}
-          />
+  /** 객실 고르기: 누가 나를 같은 방으로 지목했으면 자동으로 묶인 상태만 보여 준다 */
+  const roomPicker = (p: Person, groupName: string) => {
+    const linker = linkerOf(p.id);
+    if (linker) {
+      return (
+        <div className="pt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <span className={chip(true)}>{TWIN}</span>
+          <span className="text-[13px] text-[var(--ink-2)]">
+            <span className="font-semibold text-[var(--ink)]">{linker.name.trim()}</span> 님과 같은 방 · 객실 하나를 씁니다
+          </span>
+          <button type="button" onClick={() => pickMate(linker.id, null)} className="text-[11px] text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4">
+            따로 고르기
+          </button>
         </div>
-      )}
-    </>
-  );
+      );
+    }
+    const choices = mateChoices(p.id);
+    return (
+      <>
+        <div className="flex flex-wrap gap-2 pt-1.5">
+          {ROOM_OPTIONS.map((o) => {
+            const on = p.room === o;
+            return (
+              <label key={o} className={chip(on)}>
+                <input type="radio" name={groupName} value={o} checked={on} onChange={() => pickRoom(p.id, o)} className="sr-only" required />
+                {o}
+              </label>
+            );
+          })}
+        </div>
+        {p.room === TWIN && (
+          <div className="mt-3">
+            <Label>
+              WITH / 함께 쓰실 분 <span className="font-normal normal-case">(고르면 그분 객실도 같은 방으로 묶입니다)</span>
+            </Label>
+            {choices.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-1 pb-2">
+                {choices.map((q) => (
+                  <button key={q.id} type="button" onClick={() => pickMate(p.id, p.mateId === q.id ? null : q.id)} className={chip(p.mateId === q.id)}>
+                    {q.name.trim()}
+                  </button>
+                ))}
+              </div>
+            )}
+            {p.mateId !== null ? (
+              <p className="text-[13px] text-[var(--ink-2)]">
+                <span className="font-semibold text-[var(--ink)]">{nameOf(p.mateId)}</span> 님과 같은 방 · 객실 하나를 씁니다
+              </p>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  value={p.mateText}
+                  onChange={(e) => updatePick(p.id, { mateText: e.target.value })}
+                  placeholder={choices.length > 0 ? "위에서 고르거나, 다른 기관 분이면 직접 입력 (예: ○○학원 홍길동)" : "다른 기관 분이면 직접 입력 (예: ○○학원 홍길동)"}
+                  className="field"
+                  maxLength={200}
+                />
+                {choices.length === 0 && companions.length === 0 && p.id === REP_ID && (
+                  <p className="mt-1.5 text-[12px] text-[var(--ink-3)]">함께 오시는 분은 아래 「동행 추가」로 적으면 여기서 고를 수 있습니다.</p>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </>
+    );
+  };
 
   if (status === "success" && submitted) {
     const party = 1 + submitted.companions.length;
@@ -312,6 +397,8 @@ export default function BjRegisterForm({ source }: { source?: string }) {
     );
   }
 
+  const summary = companions.length > 0 ? roomSummary() : null;
+
   return (
     <form onSubmit={handleSubmit} className="paper grid grid-cols-1 md:grid-cols-[1.75fr_1fr]">
       {source && <input type="hidden" name="source" value={source} />}
@@ -371,7 +458,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
 
             <div className="sm:col-span-2">
               <Label required>ROOM / 숙소 <span className="font-normal normal-case">(크라운 플라자 베이징 중관춘 · 숙박은 자기 부담)</span></Label>
-              {roomPicker("room", room, setRoom, roommate, setRoommate, namesExcept(null))}
+              {roomPicker(people[0], "room")}
             </div>
 
             <div className="sm:col-span-2">
@@ -408,14 +495,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                   </div>
                   <div className="mt-3">
                     <Label required>ROOM / 객실</Label>
-                    {roomPicker(
-                      `c-room-${c.id}`,
-                      c.room,
-                      (v) => updateCompanion(c.id, { room: v }),
-                      c.roommate,
-                      (v) => updateCompanion(c.id, { roommate: v }),
-                      namesExcept(c.id)
-                    )}
+                    {roomPicker(c, `c-room-${c.id}`)}
                   </div>
                 </div>
               ))}
@@ -425,6 +505,12 @@ export default function BjRegisterForm({ source }: { source?: string }) {
                     + 동행 추가
                   </button>
                 </div>
+              )}
+              {summary && summary.text && (
+                <p className="mt-4 border-t border-[var(--paper-line)] pt-3 text-[13px] text-[var(--ink-2)]">
+                  <span className="mono text-[10px] text-[var(--ink-3)] mr-2">ROOMS</span>
+                  객실 {summary.count}개 · {summary.text}
+                </p>
               )}
             </div>
 
