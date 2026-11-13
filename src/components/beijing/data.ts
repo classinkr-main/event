@@ -300,14 +300,14 @@ export const STAMPS: { shape: "round" | "rect"; color: "blue" | "red" | "green";
   { shape: "rect", color: "blue", top: "BEIJING CAPITAL · PEK", center: "27 NOV 2026", bottom: "DEPARTURE", rot: 8 },
 ];
 
-/** 이번 여정에서 만나는 사람과 숫자로 만든 질문 */
+/** 현장에서 확인할 주제 — 발표 제목처럼 명사형(「~나」「~가능한가」 의문형 금지) */
 export const QUESTIONS: { no: string; q: string; where: string; who: string; id: string }[] = [
-  { no: "01", q: "학습 데이터와 AI로 맞춤 수업은 어떻게 하나", where: "11.25 포럼", who: "정율사관학원 곽정율", id: "s1" },
-  { no: "02", q: "온라인으로 큰 회사가 왜 오프라인 학습센터를 늘리나", where: "11.26 방문", who: "가오투", id: "d3-gaotu" },
-  { no: "03", q: "본사 없는 학원, 가능한가", where: "11.26 본사", who: "리루이", id: "d3-lirui" },
-  { no: "04", q: "SNS 콘텐츠로 원생을 모으는 구조는 어떻게 만드나", where: "11.25 포럼", who: "ClassIn 콘텐츠 마케팅 완셴하오", id: "f-wan" },
-  { no: "05", q: "1:1 맞춤 학원은 현장에서 어떻게 움직이나", where: "11.27 방문", who: "쉐팡교육", id: "d4-xuefang" },
-  { no: "06", q: "현장 문제 95%를 AI가 처리하는 학원은 어떻게 돌아가나", where: "11.26 본사", who: "즈즈교육 리줘", id: "d3-lizhuo" },
+  { no: "01", q: "학습 데이터와 AI로 하는 맞춤 수업", where: "11.25 포럼", who: "정율사관학원 곽정율", id: "s1" },
+  { no: "02", q: "온라인 교육 기업이 오프라인 학습센터를 늘리는 이유", where: "11.26 방문", who: "가오투", id: "d3-gaotu" },
+  { no: "03", q: "본사 없이 돌아가는 학원 조직", where: "11.26 본사", who: "리루이", id: "d3-lirui" },
+  { no: "04", q: "SNS 콘텐츠로 원생을 모으는 구조", where: "11.25 포럼", who: "ClassIn 콘텐츠 마케팅 완셴하오", id: "f-wan" },
+  { no: "05", q: "1:1 맞춤 학원의 현장 운영", where: "11.27 방문", who: "쉐팡교육", id: "d4-xuefang" },
+  { no: "06", q: "현장 문제 95%를 AI로 처리하는 학원 운영", where: "11.26 본사", who: "즈즈교육 리줘", id: "d3-lizhuo" },
 ];
 
 /** 항공편 — 함께 이동을 권하는 편. 항공은 각자 직접 예약 */

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const navItems = [
   { href: "#letter", label: "초청의 글" },
-  { href: "#questions", label: "질문" },
+  { href: "#questions", label: "주제" },
   { href: "#journey", label: "일정" },
   { href: "#program", label: "GET 대회" },
   { href: "#people", label: "사람들" },

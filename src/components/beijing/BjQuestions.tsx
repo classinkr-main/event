@@ -3,7 +3,7 @@ import InterestMark from "./InterestMark";
 import Split from "./Split";
 import { QUESTIONS } from "./data";
 
-/** 현장에서 확인할 질문 — 상자 없이 번호와 가로줄로 나눈 목록 */
+/** 현장에서 확인할 주제 — 상자 없이 번호와 가로줄로 나눈 목록 */
 export default function BjQuestions() {
   return (
     <Split
@@ -12,7 +12,7 @@ export default function BjQuestions() {
         <>
           현장에서 확인할
           <br />
-          여섯 가지 질문
+          여섯 가지 주제
         </>
       }
       lead="관심 가는 항목에 표시해 두면 신청서에 함께 담깁니다."
