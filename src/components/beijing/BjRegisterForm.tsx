@@ -435,7 +435,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
             </div>
 
             <div className="sm:col-span-2">
-              <Label>FLIGHT / 항공편 <span className="font-normal normal-case">(항공은 자기 부담)</span></Label>
+              <Label>FLIGHT / 항공편 <span className="font-normal normal-case">(항공은 각자 직접 예약)</span></Label>
               <div className="flex flex-wrap gap-2 pt-1.5">
                 {FLIGHT_OPTIONS.map((o) => {
                   const on = arrival === o;
@@ -459,7 +459,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
             </div>
 
             <div className="sm:col-span-2">
-              <Label required>ROOM / 숙소 <span className="font-normal normal-case">(크라운 플라자 베이징 중관춘 · 숙박은 자기 부담)</span></Label>
+              <Label required>ROOM / 숙소 <span className="font-normal normal-case">(크라운 플라자 베이징 중관춘 · 숙박비 자기 부담, 현장 결제)</span></Label>
               {roomPicker(people[0], "room")}
             </div>
 
@@ -566,7 +566,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
               {status === "submitting" ? "접수 중..." : companions.length > 0 ? `참가 신청 제출 (${1 + companions.length}명)` : "참가 신청 제출"}
             </button>
             <p className="text-[11px] sm:text-xs text-[var(--ink-3)] leading-relaxed">
-              항공편과 숙박은 자기 부담이며, 예약 방법은 접수 후 개별 안내드립니다.
+              항공편은 각자 직접 예약해 주세요. 숙박비는 자기 부담이며 현장에서 결제하니 카드를 준비해 주세요.
             </p>
           </div>
         </div>

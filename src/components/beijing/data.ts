@@ -313,7 +313,7 @@ export const QUESTIONS: { no: string; q: string; where: string; who: string; id:
   { no: "06", q: "현장 문제 95%를 AI가 처리하는 학원은 어떻게 돌아가나", where: "11.26 본사", who: "즈즈교육 리줘", id: "d3-lizhuo" },
 ];
 
-/** 항공편 — 함께 이동을 권하는 편. 항공은 자기 부담(각자 예약·결제) */
+/** 항공편 — 함께 이동을 권하는 편. 항공은 각자 직접 예약 */
 export type Flight = {
   label: string;
   date: string;
@@ -330,7 +330,7 @@ export type Flight = {
   url: string;
 };
 export const FLIGHTS: { note: string; legs: Flight[] } = {
-  note: "항공편과 숙박은 자기 부담입니다. 아래 항공편으로 함께 이동하시면 현지 동선을 맞추기 쉽습니다.",
+  note: "항공편은 각자 직접 예약해 주세요. 아래 항공편으로 함께 이동하시면 현지 동선을 맞추기 쉽습니다.",
   legs: [
     {
       label: "가는 편",
@@ -391,7 +391,7 @@ export const HOTEL = {
   addressCn: "海淀区知春路106号",
   url: "https://kr.trip.com/hotels/beijing-hotel-detail-430270/crowne-plaza-beijing-zhongguancun-by-ihg/",
   rateNote: "1박 기준 현지 가격입니다. 원화는 1위안 ≈ 200원으로 어림한 금액이라 결제 시점 환율에 따라 달라집니다.",
-  payNote: "숙박비는 자기 부담입니다. 예약과 결제 방법은 접수 후 개별 안내드립니다.",
+  payNote: "숙박비는 자기 부담이며 현장에서 결제합니다. 결제할 카드를 준비해 주세요.",
   rooms: [
     { use: "1인 1실", type: "더블", en: "Double", cny: "950", krw: "19만 원", breakfast: "조식 1인" },
     { use: "2인 1실", type: "트윈", en: "Twin", cny: "1,050", krw: "21만 원", breakfast: "조식 2인" },

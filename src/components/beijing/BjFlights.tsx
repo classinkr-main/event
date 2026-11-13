@@ -5,7 +5,7 @@ import Split from "./Split";
 import TicketField from "./TicketField";
 import { FLIGHTS } from "./data";
 
-/** 항공편 — 가는 편·돌아오는 편을 종이 탑승권(본권 + 절취 스텁)으로. 자기 부담 안내 */
+/** 항공편 — 가는 편·돌아오는 편을 종이 탑승권(본권 + 절취 스텁)으로. 직접 예약 안내 */
 export default function BjFlights() {
   return (
     <Split id="flights" title="항공편" lead={FLIGHTS.note} wide>
