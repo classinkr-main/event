@@ -712,4 +712,26 @@ function updateBeijingFormV6() {
   });
 }
 ```
-- 남은 차이: 구글폼 「관심 있는 일정」 선택지는 옛 일정 그대로(11/25 AI 신교육 특별 세션 / 11/26 쉐팡교육 방문 / 11/26 CTO 제품 로드맵 / 11/26 샹량교육 발표 / 11/26 리루이 발표 / 11/27 협력 대학 방문). 웹은 11/13 최종 일정안으로 바뀜.
+
+## 「관심 있는 일정」 선택지 최종 일정안 반영 (2026-11-13)
+- ✅ `updateBeijingFormV7()`(아래, 다시 실행해도 안전) heesung 계정으로 실행 완료(11/13 16:34), 공개 viewform 확인. 폼 응답은 0건이었음.
+- 이전: 11/25 GET 메인 포럼 / 11/25 AI 신교육 특별 세션 / 11/26 쉐팡교육 방문 / 11/26 CTO 제품 로드맵 / 11/26 샹량교육 발표 / 11/26 리루이 발표 / 11/27 협력 대학 방문
+- 이후(웹 INTEREST_LABELS와 같은 문구, 11/25 포럼 개별 발표는 「ClassIn AI 포럼」 하나로): 11/25 GET 메인 포럼 / 11/25 ClassIn AI 포럼 / 11/26 가오투 방문 / 11/26 리루이 발표 / 11/26 리줘 발표 / 11/26 샤오허교육 발표 / 11/26 ClassIn AI 제품 시연 / 11/27 쉐팡교육 방문 / 11/27 베이징대학교
+
+```javascript
+function updateBeijingFormV7() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const CHOICES = [
+    "11/25 GET 메인 포럼", "11/25 ClassIn AI 포럼",
+    "11/26 가오투 방문", "11/26 리루이 발표", "11/26 리줘 발표", "11/26 샤오허교육 발표", "11/26 ClassIn AI 제품 시연",
+    "11/27 쉐팡교육 방문", "11/27 베이징대학교",
+  ];
+  form.getItems(FormApp.ItemType.CHECKBOX).forEach((it) => {
+    if (it.getTitle().trim() !== "관심 있는 일정") return;
+    const cb = it.asCheckboxItem();
+    const other = cb.hasOtherOption();
+    cb.setChoiceValues(CHOICES);
+    cb.showOtherOption(other);
+  });
+}
+```
