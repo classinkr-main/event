@@ -95,7 +95,7 @@ export default function BjHero() {
               <dt className="w-10 shrink-0 text-white/55">장소</dt>
               <dd className="font-medium">
                 베이징
-                <span className="block text-white/70 font-normal">GET 대회장 · ClassIn 본사 · 현지 학원과 대학</span>
+                <span className="block text-white/70 font-normal">GET 대회 참석, ClassIn 본사와 현지 학원·대학 방문</span>
               </dd>
             </div>
             <div className="flex gap-4 py-4 border-b border-white/25">
