@@ -1,4 +1,7 @@
-/** /beijing 콘텐츠 원본 — ClassIn 본사 초안 PDF(2026-10-01) 기준. 세부 일정·연사는 최종안에 따라 바뀔 수 있음 */
+/**
+ * /beijing 콘텐츠 원본 — ClassIn 본사 초안 PDF(2026-10-01) 기준. 세부 일정·연사는 최종안에 따라 바뀔 수 있음.
+ * 11/25 GET 대회(메인 포럼·分论坛「共潮生」·본사 교류 만찬)는 2026-11-13 GET 포스터(海报) 기준 확정 일정.
+ */
 
 export const EVENT = {
   start: "2026-11-24T00:00:00+09:00",
@@ -38,9 +41,9 @@ export const DAYS: Day[] = [
     label: "GET 대회",
     theme: "중국 교육기술 연례 행사",
     stops: [
-      { id: "d2-forum", time: "오전", title: "GET 대회 메인 포럼", sub: "신윈난 크라운플라자 호텔" },
-      { id: "d2-session", time: "오후", title: "ClassIn「AI 신교육」특별 세션", sub: "한국·중국 학원 4곳 발표" },
-      { time: "저녁", title: "교류 만찬" },
+      { id: "d2-forum", time: "오전", title: "GET 대회 메인 포럼", sub: "신윈난 크라운플라자 호텔 · 쉰진치 ClassIn 부사장 발표" },
+      { id: "d2-session", time: "13:50", title: "ClassIn AI 신교육 포럼「共潮生」", sub: "연사 7명, 17:40까지" },
+      { time: "18:30", title: "교류 만찬 · ClassIn 본사", sub: "베이징 쓰퉁빌딩(四通大厦), 스마트 교실 둘러보기. 20:30까지" },
     ],
   },
   {
@@ -69,11 +72,101 @@ export const DAYS: Day[] = [
   },
 ];
 
-export const TALKS = [
-  { id: "s1", no: "01", title: "AI가 바꾸는 미래 교실: BYOD와 AI 수업 분석", speaker: "한국 정율사관 창업자", note: "세부 주제 협의 중" },
-  { id: "s2", no: "02", title: "학원은 ‘뉴미디어 모집’ 전쟁을 어떻게 이기는가", speaker: "유명 교육 크리에이터" },
-  { id: "s3", no: "03", title: "국제 교육의 디지털 전환, 현장 사례", speaker: "신동방 국제교육" },
-  { id: "s4", no: "04", title: "지역 학원의 전자칠판 돌파 전략: 상호작용과 입소문", speaker: "충칭 훠광교육" },
+/** 11/25 GET 대회 — 2026 GET 教育科技大会 포스터 기준 */
+export const GET_EVENT = {
+  name: "2026 GET 교육기술 대회",
+  cn: "2026 GET 教育科技大会",
+  motto: "사랑과 함께, AI와 함께 키운다",
+  mottoCn: "与爱共生，与AI同育",
+  dates: "11월 25–26일",
+  venue: "베이징 신윈난 크라운플라자 호텔",
+  venueCn: "北京新云南皇冠假日酒店",
+};
+
+export type Speaker = { name: string; cn: string; roles: string[]; photo: string };
+export type Talk = Speaker & { id?: string; start: string; end: string; title: string };
+
+/** 메인 포럼(主会场) 발표 */
+export const KEYNOTE: Speaker & { id: string; title: string } = {
+  id: "d2-forum",
+  title: "흐름은 정해졌다: 학원 업계의 다음 10년",
+  name: "쉰진치",
+  cn: "荀金旗",
+  roles: ["ClassIn(翼鸥教育) 부사장"],
+  photo: "/beijing/get/sp-xun.jpg",
+};
+
+/** 분과 포럼(分论坛) 「共潮生 · ClassIn AI 新教培生态论坛」 */
+export const FORUM = { cn: "共潮生", name: "ClassIn AI 신교육 생태 포럼", time: "13:50–17:40" };
+
+export const TALKS: Talk[] = [
+  {
+    start: "13:50", end: "14:00",
+    title: "사회 · 개회",
+    name: "주정위", cn: "朱正宇",
+    roles: ["ClassIn(翼鸥教育) 화베이 지역 KA 총괄"],
+    photo: "/beijing/get/sp-zhu.jpg",
+  },
+  {
+    id: "f-song", start: "14:00", end: "14:40",
+    title: "겹겹의 도전 앞에 선 학원 업계",
+    name: "쑹쥔보", cn: "宋军波",
+    roles: ["ClassIn(翼鸥教育) 창업자"],
+    photo: "/beijing/get/sp-song.jpg",
+  },
+  {
+    id: "s1", start: "14:40", end: "15:20",
+    title: "AI가 바꾸는 미래 교실: BYOD와 AI 수업 분석",
+    name: "곽정율", cn: "郭政律",
+    roles: ["한국 정율사관학원 창업자", "SBS 인터뷰 출연, 스마트 교실 현장 전문가"],
+    photo: "/beijing/get/sp-kwak.jpg",
+  },
+  {
+    id: "f-wan", start: "15:20", end: "16:00",
+    title: "콘텐츠 시대 학원의 곱셈: 뉴미디어 선순환 구조 만들기",
+    name: "완셴하오", cn: "万贤浩",
+    roles: ["ClassIn 콘텐츠 마케팅 책임자", "전 대형 플랫폼 콘텐츠 분야 책임자"],
+    photo: "/beijing/get/sp-wan.jpg",
+  },
+  {
+    id: "f-fan", start: "16:00", end: "16:40",
+    title: "1인 강사의 지렛대: WorkBuddy로 45일 만에 「상담 → 진단 → 온라인 판매 → 전용 작업대」 수익 구조 만들기",
+    name: "판스촹", cn: "范士闯",
+    roles: ["칭화대 졸업, 23년 차 독립 수학 강사", "WorkBuddy로 개인 AI 수업 작업대 구축"],
+    photo: "/beijing/get/sp-fan.jpg",
+  },
+  {
+    id: "f-chen", start: "16:40", end: "17:00",
+    title: "ClassIn과 WorkBuddy, 현장 적용 경험",
+    name: "천광", cn: "陈光",
+    roles: ["ClassIn AI 제품 책임자"],
+    photo: "/beijing/get/sp-chen.jpg",
+  },
+  {
+    id: "f-li", start: "17:00", end: "17:40",
+    title: "소규모 반, 2교사 수업에서 AI 교실까지: 세 세대 교실 설계의 원리와 AI 실천",
+    name: "리루이", cn: "李睿",
+    roles: ["숴투커지(烁途科技) 창업자, 『产品之核』 저자", "전 TAL(好未来) 교육상품 설계 총괄"],
+    photo: "/beijing/get/sp-li.jpg",
+  },
+];
+
+/** 11/25 저녁 교류 만찬(新教培同路人交流晚宴) */
+export const DINNER = {
+  time: "18:30–20:30",
+  place: "ClassIn 본사",
+  placeSub: "베이징 쓰퉁빌딩(四通大厦)",
+  points: ["다음 세대 스마트 교실과 가정 학습 공간 둘러보기", "AI 교육의 흐름과 ClassIn 제품의 새 구조"],
+};
+
+/** 지난 GET(2025) 현장 사진 */
+export const GET_RECAP = [
+  { src: "/beijing/get/get2025-1.jpg", alt: "GET 2025 분과 포럼 무대" },
+  { src: "/beijing/get/get2025-2.jpg", alt: "GET 2025 포럼장을 가득 채운 참석자" },
+  { src: "/beijing/get/get2025-3.jpg", alt: "GET 2025 발표를 촬영하는 참석자들" },
+  { src: "/beijing/get/get2025-4.jpg", alt: "GET 2025 무대 발표" },
+  { src: "/beijing/get/get2025-5.jpg", alt: "GET 2025 메인 홀" },
+  { src: "/beijing/get/get2025-6.jpg", alt: "GET 2025 연사 발표" },
 ];
 
 export type Org = {
@@ -88,41 +181,16 @@ export type Org = {
 export const ORGS: Org[] = [
   {
     glyph: "정",
-    name: "한국 정율사관",
-    when: "11/25 세션 1 발표",
+    name: "정율사관학원 · 곽정율",
+    cn: "韩国「政律史官学院」",
+    when: "11/25 14:40 포럼 발표",
     summary: "한국 학원. 2023년 ClassIn 도입 후 전 캠퍼스 스마트교실 전환, SBS 보도",
     rows: [
       ["개요", "한국 학원, 설립 약 20년"],
       ["전환", "2023년 ClassIn 도입 후 전 캠퍼스 스마트교실로 전환"],
       ["특징", "BYOD 수업에 AI 수업 분석을 더해 운영"],
       ["평가", "한국 학원가에서 영향력이 크며 SBS 특집 보도"],
-      ["발표", "한국의 스마트 수업 현장, 상호작용 수업, AI 보조 수업 사례를 GET 대회에서 공유"],
-    ],
-  },
-  {
-    glyph: "新",
-    name: "신동방 국제교육",
-    cn: "新东方国际教育",
-    when: "11/25 세션 3 발표",
-    summary: "중국 최대 교육그룹 신동방의 국제교육 부문. 47개 도시 운영",
-    rows: [
-      ["개요", "중국 최대 교육그룹 신동방의 핵심 사업부. 1993년 베이징 신동방 해외시험부에서 출발, 2020년 11월 국제교육 부문으로 개편"],
-      ["규모", "유아부터 성인까지 전 연령 국제교육, 47개 도시 운영"],
-      ["과정", "유학 시험(IELTS·TOEFL·SAT/ACT), 국제학교 입시, AP·A-Level·IB 등 국제 교과, 대학 예비과정"],
-    ],
-  },
-  {
-    glyph: "火",
-    name: "충칭 훠광교육",
-    cn: "火光教育 · 火光课堂",
-    when: "11/25 세션 4 발표",
-    summary: "2020년 설립 충칭 지역 1위권 이과 학원. 누적 수강생 14만 명+",
-    rows: [
-      ["개요", "2020년 6월 설립, 충칭 지역 대표 심화 학원. 2025년 말까지 누적 수강생 14만 명+"],
-      ["대상", "충칭 지역 초·중·고 이과(수학·물리·화학) 심화"],
-      ["과정", "K12 이과 전 과정, A3~A7 수준별 반 편성"],
-      ["성과", "중학교 진학 합격률 90%+, 명문 고교 합격률 75%+, 최근 3년 경시반 우수"],
-      ["발표", "「지역 학원의 전자칠판 돌파 전략: 상호작용과 입소문」. 지역 학원이 BYOD와 AI 수업으로 성장한 이야기"],
+      ["발표", "「AI가 바꾸는 미래 교실: BYOD와 AI 수업 분석」. 한국의 스마트 교실과 AI 수업 분석 사례"],
     ],
   },
   {
@@ -160,14 +228,14 @@ export const ORGS: Org[] = [
     glyph: "李",
     name: "리루이",
     cn: "李睿",
-    when: "11/26 16:00 발표",
-    summary: "중국 최대 학원그룹 TAL(好未来) 교육상품 설계 총괄 출신. 지금은 AI 교육 창업",
+    when: "11/25 17:00 포럼 · 11/26 16:00 본사",
+    summary: "중국 최대 학원그룹 TAL(好未来) 교육상품 설계 총괄 출신. 지금은 AI 교육 창업(숴투커지 烁途科技)",
     rows: [
       ["학력", "칭화대 법학 학사·석사"],
       ["경력", "TAL(쉐얼쓰) 교육상품 설계 총괄. 2010년 고화질 녹화 온라인 강의, 2015년 「라이브 2교사 대형반」 등 업계를 바꾼 두 세대 상품을 주도"],
       ["저서", "『产品之核(상품의 핵심)』, 중국 지식 콘텐츠 앱 ‘더다오(得到)’ 강좌 운영"],
       ["현재", "AI+교육 창업. 중국 유명 신년 강연 ‘시간의 친구’ 2026 사례로 선정"],
-      ["발표", "「AI는 어떻게 학원의 ‘본사’를 없앴나」. AI로 학원 조직을 다시 짜는 이야기"],
+      ["발표", "11/25 「세 세대 교실 설계의 원리와 AI 실천」, 11/26 「AI는 어떻게 학원의 ‘본사’를 없앴나」"],
     ],
   },
 ];
@@ -175,16 +243,18 @@ export const ORGS: Org[] = [
 /** 관심 표시 id → 신청서 칩 라벨 */
 export const INTEREST_LABELS: Record<string, string> = {
   "d2-forum": "11/25 GET 메인 포럼",
-  "d2-session": "11/25 AI 신교육 특별 세션",
+  "d2-session": "11/25 ClassIn AI 포럼",
+  "f-song": "11/25 포럼 · 쑹쥔보",
+  s1: "11/25 포럼 · 곽정율",
+  "f-wan": "11/25 포럼 · 완셴하오",
+  "f-fan": "11/25 포럼 · 판스촹",
+  "f-chen": "11/25 포럼 · 천광",
+  "f-li": "11/25 포럼 · 리루이",
   "d3-xuefang": "11/26 쉐팡교육 방문",
   "d3-cto": "11/26 CTO 제품 로드맵",
   "d3-xiangliang": "11/26 샹량교육 발표",
   "d3-lirui": "11/26 리루이 발표",
   "d4-univ": "11/27 협력 대학 방문",
-  s1: "세션 1 · 정율사관",
-  s2: "세션 2 · 뉴미디어 모집",
-  s3: "세션 3 · 신동방 국제교육",
-  s4: "세션 4 · 훠광교육",
 };
 
 export const STATS = [
@@ -204,10 +274,10 @@ export const STAMPS: { shape: "round" | "rect"; color: "blue" | "red" | "green";
 
 /** 이번 여정에서 만나는 사람과 숫자로 만든 질문 */
 export const QUESTIONS: { no: string; q: string; where: string; who: string; id: string }[] = [
-  { no: "01", q: "AI 수업 분석은 학원 운영을 얼마나 바꿨나", where: "11.25 세션", who: "한국 정율사관", id: "s1" },
+  { no: "01", q: "AI 수업 분석은 학원 운영을 얼마나 바꿨나", where: "11.25 포럼", who: "정율사관학원 곽정율", id: "s1" },
   { no: "02", q: "수강 완료율 73%는 어떻게 나왔나", where: "11.26 본사", who: "샹량교육", id: "d3-xiangliang" },
   { no: "03", q: "본사 없는 학원, 가능한가", where: "11.26 본사", who: "리루이", id: "d3-lirui" },
-  { no: "04", q: "지역 학원이 14만 명을 모은 방법", where: "11.25 세션", who: "충칭 훠광교육", id: "s4" },
+  { no: "04", q: "뉴미디어로 원생을 모으는 선순환은 어떻게 만드나", where: "11.25 포럼", who: "ClassIn 콘텐츠 마케팅 완셴하오", id: "f-wan" },
   { no: "05", q: "1:1 맞춤 학원은 현장에서 어떻게 움직이나", where: "11.26 방문", who: "쉐팡교육", id: "d3-xuefang" },
   { no: "06", q: "ClassIn 제품은 어디로 가나", where: "11.26 본사", who: "ClassIn CTO", id: "d3-cto" },
 ];

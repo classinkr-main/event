@@ -6,7 +6,7 @@ const navItems = [
   { href: "#letter", label: "초청의 글" },
   { href: "#questions", label: "질문" },
   { href: "#journey", label: "일정" },
-  { href: "#program", label: "세션" },
+  { href: "#program", label: "GET 대회" },
   { href: "#people", label: "사람들" },
 ];
 

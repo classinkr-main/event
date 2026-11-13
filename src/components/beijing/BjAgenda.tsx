@@ -13,7 +13,7 @@ export default function BjAgenda() {
     <Split
       id="journey"
       title="일정 한눈에"
-      lead="본사 초안 기준입니다. 세부 일정은 확정되는 대로 개별 안내드립니다."
+      lead="11월 25일 GET 대회는 확정 일정, 나머지 날은 본사 초안 기준입니다. 세부 일정은 확정되는 대로 개별 안내드립니다."
       wide
     >
       <div className="border-t border-[var(--line-2)]">

@@ -58,8 +58,10 @@ export default function BjRegisterForm({ source }: { source?: string }) {
   const nextId = useRef(1);
   const [topics, setTopics] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState<SubmittedData | null>(null);
-  const { list: interests, remove, clear } = useInterests();
-  const interestLabels = interests.map((id) => INTEREST_LABELS[id] ?? id);
+  const { list: allInterests, remove, clear } = useInterests();
+  /** 일정이 바뀌어 사라진 옛 관심 표시(예: 11/25 옛 세션 s2~s4)는 빼고 쓴다 */
+  const interests = allInterests.filter((id) => id in INTEREST_LABELS);
+  const interestLabels = interests.map((id) => INTEREST_LABELS[id]);
 
   const toggleTopic = (t: string) => setTopics((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]));
 
@@ -593,7 +595,7 @@ export default function BjRegisterForm({ source }: { source?: string }) {
               <p className="mt-2 text-[13px] text-[var(--ink-2)] leading-relaxed">
                 아직 표시한 일정이 없습니다. <a href="#questions" className="underline underline-offset-4">질문</a>,{" "}
                 <a href="#journey" className="underline underline-offset-4">여권</a>,{" "}
-                <a href="#program" className="underline underline-offset-4">프로그램</a>에서 관심 표시를 누르면 여기에 담겨 함께 접수됩니다.
+                <a href="#program" className="underline underline-offset-4">GET 대회</a>에서 관심 표시를 누르면 여기에 담겨 함께 접수됩니다.
               </p>
             ) : (
               <ul className="mt-2 flex flex-wrap gap-1.5">
