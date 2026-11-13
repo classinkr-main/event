@@ -5,7 +5,6 @@ import BjLetter from "./BjLetter";
 import BjQuestions from "./BjQuestions";
 import BjAgenda from "./BjAgenda";
 import BjProgram from "./BjProgram";
-import BjGetRecap from "./BjGetRecap";
 import BjCards from "./BjCards";
 import BjFlights from "./BjFlights";
 import BjStay from "./BjStay";
@@ -30,7 +29,6 @@ export default function BjPage({ source }: { source?: string }) {
       <BjQuestions />
       <BjAgenda />
       <BjProgram />
-      <BjGetRecap />
       <BjCards />
       <BjFlights />
       <BjStay />

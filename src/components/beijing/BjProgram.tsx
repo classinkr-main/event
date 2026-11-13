@@ -2,7 +2,7 @@ import Image from "next/image";
 import Reveal from "@/components/hakwonjeonja/fx/Reveal";
 import InterestMark from "./InterestMark";
 import Split from "./Split";
-import { DINNER, FORUM, GET_EVENT, KEYNOTE, TALKS } from "./data";
+import { DINNER, FORUM, GET_EVENT, GET_RECAP, KEYNOTE, TALKS } from "./data";
 
 function Avatar({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
   return (
@@ -42,6 +42,14 @@ export default function BjProgram() {
           <div className="mt-0.5 text-xs text-[var(--ink-3)]">
             {GET_EVENT.dates} · {GET_EVENT.venue} <span className="whitespace-nowrap">({GET_EVENT.venueCn})</span>
           </div>
+          <div className="mt-4 grid grid-cols-3 gap-1.5 sm:gap-2">
+            {GET_RECAP.map((p) => (
+              <div key={p.src} className="relative aspect-[4/3] rounded-lg sm:rounded-xl overflow-hidden bg-white/5">
+                <Image src={p.src} alt={p.alt} fill sizes="(min-width: 1024px) 18vw, 33vw" className="object-cover" />
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-[var(--ink-3)]">2025년 GET 대회</p>
         </div>
       </Reveal>
 

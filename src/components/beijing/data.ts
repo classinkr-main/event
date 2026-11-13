@@ -165,14 +165,11 @@ export const DINNER = {
   points: ["새 스마트 교실과 가정 학습 공간 둘러보기", "ClassIn의 새 AI 제품 소개"],
 };
 
-/** 지난 GET(2025) 현장 사진 */
+/** 지난 GET(2025) 현장 사진 — GET 대회 섹션 안에 한 줄로 */
 export const GET_RECAP = [
   { src: "/beijing/get/get2025-1.jpg", alt: "GET 2025 분과 포럼 무대" },
   { src: "/beijing/get/get2025-2.jpg", alt: "GET 2025 포럼장을 가득 채운 참석자" },
-  { src: "/beijing/get/get2025-3.jpg", alt: "GET 2025 발표를 촬영하는 참석자들" },
-  { src: "/beijing/get/get2025-4.jpg", alt: "GET 2025 무대 발표" },
   { src: "/beijing/get/get2025-5.jpg", alt: "GET 2025 메인 홀" },
-  { src: "/beijing/get/get2025-6.jpg", alt: "GET 2025 연사 발표" },
 ];
 
 export type Org = {

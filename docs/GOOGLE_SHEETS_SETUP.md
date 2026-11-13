@@ -685,3 +685,31 @@ function doPost(e) {
 - 신청: source `dongtan-1130/<채널>`, 이메일 선택, `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON` 으로 전송. Apps Script 에 dongtan 분기가 없어 **첫 탭(청라, 송도)에 쌓임**.
 - 시트 보기 탭 **「동탄 11/30 신청」**(sheetId 1433151056): 첫 탭 + (있으면) "동탄 11/30" 탭에서 Source 가 `dongtan` 으로 시작하는 행만 최신순으로 모음. 수식 탭이라 직접 입력 금지. 2026-11-13 운영 시험 신청 1건으로 적재·표시 확인 후 첫 탭에서 그 행 삭제.
 - 별도 탭에 쌓고 싶으면 송도처럼 Apps Script 에 `dongtan` 분기("동탄 11/30" 탭) 추가 후 재배포(사람 클릭). 안 해도 보기 탭으로 운영 지장 없음.
+
+## 자기 부담 안내 분리 (2026-11-13)
+- 사용자 「항공은 직접 예약, 숙소는 자기 부담인데 현장 결제라 카드 준비」 → 웹(커밋 f2e8b60)과 구글폼 모두 항공·숙소 문구를 나눔.
+- ✅ 구글폼: 스크립트에 `updateBeijingFormV6()`(아래, 다시 실행해도 안전) 추가 후 heesung 계정으로 실행 완료(11/13 15:27) → 폼 설명·「항공편 · 숙소」 머리글·「항공편」·「본인 객실」 도움말 4곳 변경, 공개 viewform에서 새 문구 확인.
+- 치환 전 실제 문구 확인: 폼 설명과 「항공편 · 숙소」 머리글은 「항공편과 숙박은 자기 부담입니다.」 + 줄바꿈 + 「예약 방법은 접수 후 개별 안내드립니다.」였음(줄바꿈 때문에 정규식 `\s*` 사용).
+
+```javascript
+/** 11/13: 자기 부담 안내를 항공·숙소로 나눔 — 항공은 각자 직접 예약, 숙박비는 자기 부담·현장 결제(카드 준비). 다시 실행해도 안전 */
+function updateBeijingFormV6() {
+  const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
+  const OLD_BOTH = /항공편과 숙박은 자기 부담입니다\.\s*예약 방법은 접수 후 개별 안내드립니다\./;
+  const NEW_BOTH = "항공편은 각자 직접 예약해 주세요.\n숙박비는 자기 부담이며 현장에서 결제합니다. 결제할 카드를 준비해 주세요.";
+  const d = form.getDescription();
+  const nd = d.replace(OLD_BOTH, NEW_BOTH);
+  Logger.log("desc changed=" + (d !== nd));
+  if (d !== nd) form.setDescription(nd);
+  form.getItems().forEach((it) => {
+    const t = it.getTitle().trim();
+    const h = it.getHelpText();
+    let nh = h;
+    if (t === "항공편 · 숙소") nh = h.replace(OLD_BOTH, NEW_BOTH);
+    if (t === "항공편") nh = h.replace("항공은 자기 부담입니다.", "항공은 각자 직접 예약해 주세요.");
+    if (t === "본인 객실") nh = h.replace("숙박비는 자기 부담이며 예약·결제 방법은 접수 후 안내드립니다.", "숙박비는 자기 부담이며 현장에서 결제합니다. 결제할 카드를 준비해 주세요.");
+    if (nh !== h) { it.setHelpText(nh); Logger.log("changed [" + t + "] => " + nh); }
+  });
+}
+```
+- 남은 차이: 구글폼 「관심 있는 일정」 선택지는 옛 일정 그대로(11/25 AI 신교육 특별 세션 / 11/26 쉐팡교육 방문 / 11/26 CTO 제품 로드맵 / 11/26 샹량교육 발표 / 11/26 리루이 발표 / 11/27 협력 대학 방문). 웹은 11/13 최종 일정안으로 바뀜.
