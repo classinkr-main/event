@@ -44,7 +44,7 @@ export const DAYS: Day[] = [
     stops: [
       { id: "d2-forum", time: "오전", title: "GET 대회 메인 포럼", sub: "신윈난 크라운플라자 호텔 · 쉰진치 ClassIn 부사장 발표" },
       { time: "점심", title: "점심 · ClassIn 부스", sub: "GET 대회장 ClassIn 부스" },
-      { id: "d2-session", time: "13:50", title: "ClassIn AI 포럼「共潮生」", sub: "연사 7명, 17:40까지" },
+      { id: "d2-session", time: "13:50", title: "ClassIn AI 새 학원 생태계 포럼「共潮生」", sub: "연사 7명, 17:40까지" },
       { time: "18:30", title: "교류 만찬 · ClassIn 본사", sub: "베이징 쓰퉁빌딩(四通大厦), 스마트 교실 둘러보기. 20:30까지" },
     ],
   },
@@ -103,7 +103,7 @@ export const KEYNOTE: Speaker & { id: string; title: string } = {
 };
 
 /** 분과 포럼(分论坛) 「共潮生 · ClassIn AI 新教培生态论坛」 */
-export const FORUM = { cn: "共潮生", name: "ClassIn AI 포럼", time: "13:50–17:40" };
+export const FORUM = { cn: "共潮生", name: "ClassIn AI 새 학원 생태계 포럼", time: "13:50–17:40" };
 
 export const TALKS: Talk[] = [
   {
@@ -179,9 +179,25 @@ export type Org = {
   when: string;
   summary: string;
   rows: [string, string][];
+  /** 카드에 보일 줄(순서대로). 없으면 BjCards PRIORITY로 2줄 */
+  keys?: string[];
 };
 
 export const ORGS: Org[] = [
+  {
+    glyph: "高",
+    name: "가오투",
+    cn: "高途",
+    when: "11/26 09:30 방문",
+    summary: "뉴욕증시(NYSE)에 상장한 중국 온라인 교육 기업의 학원 브랜드. 명사 라이브 강의에 보조 교사를 붙이는 듀얼 티처 모델로 성장했고, 2023년부터 오프라인 학습센터를 늘리는 중. 2025년 ‘All with AI’ 전략으로 AI 학습 서비스 기업으로 전환하고 있다.",
+    keys: ["상장", "규모", "전환", "AI"],
+    rows: [
+      ["상장", "모기업 跟谁学가 2019년 6월 뉴욕증시(NYSE) 상장. 중국 온라인 교육 기업 최초"],
+      ["규모", "누적 수강생 9천만 명에 가까움(2025년 4월). 2025 회계연도 순매출 61.47억 위안(약 1조 2천억 원), 총 결제액 69.04억 위안"],
+      ["전환", "2023년부터 오프라인 학습센터를 ‘두 번째 성장곡선’으로 확대. 전국 18개 성·직할시에 캠퍼스·거점"],
+      ["AI", "2025년 ‘All with AI’ 선언. 듀얼 티처(명사 강의 + 보조 교사)에 AI 학습 동반을 더한 트리플 티처 모델로 확장"],
+    ],
+  },
   {
     glyph: "정",
     name: "정율사관학원 · 곽정율",
@@ -193,19 +209,6 @@ export const ORGS: Org[] = [
       ["특징", "BYOD 수업에 AI 수업 분석을 더해 운영"],
       ["평가", "한국 학원가에서 영향력이 크며 SBS 특집 보도"],
       ["발표", "「BYOD, 맞춤형 학습의 시대를 열다: 클래스인 스마트교실에서 학습 데이터와 AI로 구현하는 인터랙티브 수업」"],
-    ],
-  },
-  {
-    glyph: "高",
-    name: "가오투",
-    cn: "高途",
-    when: "11/26 09:30 방문",
-    summary: "온라인 라이브 수업으로 큰 중국 교육 기업. 2023년부터 오프라인 학습센터를 늘리는 중, 누적 수강생 약 9천만 명",
-    rows: [
-      ["개요", "2014년 천샹둥(陈向东)이 세운 초·중·고 온라인 교육 기업. 2019년 중국 온라인 교육 기업 중 처음으로 뉴욕증권거래소 상장"],
-      ["전환", "2023년부터 오프라인 학습센터를 「두 번째 성장 축」으로 늘림. 전국 18개 성·직할시에 캠퍼스"],
-      ["규모", "누적 수강생 약 9천만 명(2025년 4월). 2025 회계연도 매출 61.47억 위안(약 1조 2천억 원)"],
-      ["특징", "주강사 + 보조강사 「2교사」 수업을 2025년 「All with AI」로 주강사 · 보조강사 · AI 학습 도우미 「3교사」 체제로 바꿈"],
     ],
   },
   {
@@ -269,7 +272,7 @@ export const ORGS: Org[] = [
 /** 관심 표시 id → 신청서 칩 라벨 */
 export const INTEREST_LABELS: Record<string, string> = {
   "d2-forum": "11/25 GET 메인 포럼",
-  "d2-session": "11/25 ClassIn AI 포럼",
+  "d2-session": "11/25 ClassIn AI 새 학원 생태계 포럼",
   "f-song": "11/25 포럼 · 쑹쥔보",
   s1: "11/25 포럼 · 곽정율",
   "f-wan": "11/25 포럼 · 완셴하오",

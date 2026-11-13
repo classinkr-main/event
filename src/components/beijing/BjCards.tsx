@@ -4,7 +4,8 @@ import Split from "./Split";
 import { ORGS, type Org } from "./data";
 
 const PRIORITY = ["발표", "성과", "규모", "강사진", "현재", "전환", "특징"];
-function pick(rows: Org["rows"]): Org["rows"] {
+function pick(rows: Org["rows"], keys?: string[]): Org["rows"] {
+  if (keys) return keys.map((k) => rows.find((x) => x[0] === k)).filter((r): r is [string, string] => !!r);
   const out: Org["rows"] = [];
   for (const label of PRIORITY) {
     const r = rows.find((x) => x[0] === label);
@@ -30,7 +31,7 @@ export default function BjCards() {
               {o.cn && <div className="text-xs text-[var(--ink-3)] mt-0.5">{o.cn}</div>}
               <p className="mt-3 text-[13px] text-[var(--ink-2)] leading-relaxed">{o.summary}</p>
               <dl className="mt-4 pt-3 border-t border-[var(--line)] space-y-2">
-                {pick(o.rows).map(([k, v]) => (
+                {pick(o.rows, o.keys).map(([k, v]) => (
                   <div key={k} className="grid grid-cols-[2.6rem_1fr] gap-2">
                     <dt className="text-[11px] text-[var(--ink-3)] pt-0.5">{k}</dt>
                     <dd className="text-[12.5px] leading-relaxed text-[var(--ink-2)]">{v}</dd>
