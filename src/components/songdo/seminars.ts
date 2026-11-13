@@ -19,7 +19,8 @@ export type Seminar = {
   road: string; // 인천 연수구 해돋이로 160-14
   floor: string; // 5층 504호
   mapQuery: string; // 네이버 지도 검색어
-  proofLead: string; // 「10곳 중 7곳」 앞 문장
+  proofLead: string; // 굵은 숫자 앞 문장
+  proofNum: string; // 굵게 보이는 실적(10곳 중 7곳)
   heroImg: string;
   heroImgM: string;
 };
@@ -41,6 +42,7 @@ export const SONGDO: Seminar = {
   floor: "5층 504호",
   mapQuery: "엔에스 수능관학원",
   proofLead: "지난 7월 송도 1차 설명회 참석 학원",
+  proofNum: "10곳 중 7곳",
   heroImg: "/songdo/hero-junhyuk.jpg",
   heroImgM: "/songdo/hero-junhyuk-m.jpg",
 };
@@ -62,7 +64,8 @@ export const DONGTAN: Seminar = {
   road: "경기 화성시 동탄구 동탄솔빛로 58",
   floor: "3층",
   mapQuery: "경기 화성시 동탄구 동탄솔빛로 58",
-  proofLead: "지난 7월 송도 설명회 참석 학원",
+  proofLead: "직전 10월 송도 설명회 참석자",
+  proofNum: "10명 중 8명",
   heroImg: "/songdo/hero-junhyuk.jpg",
   heroImgM: "/songdo/hero-junhyuk-m.jpg",
 };

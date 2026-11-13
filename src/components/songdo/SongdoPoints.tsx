@@ -49,7 +49,7 @@ export default function SongdoPoints({ ev }: { ev: Seminar }) {
         <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 text-sm sm:text-base text-white/70">
           <p>
             {ev.proofLead}{" "}
-            <b className="text-white font-bold">10곳 중 7곳</b>이 현장에서 도입을 확약했습니다.
+            <b className="text-white font-bold">{ev.proofNum}</b>이 현장에서 도입을 확약했습니다.
           </p>
           <span className="self-start sm:self-auto shrink-0 text-xs sm:text-sm font-bold text-[var(--accent-text)] border border-[var(--accent-from)] rounded px-3 py-1.5">
             설명회 참석자 한정 프로모션 혜택
