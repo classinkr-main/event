@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 
 /** 2단 섹션 — 왼쪽 큰 제목(고정), 오른쪽 내용 */
 export default function Split({

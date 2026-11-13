@@ -1,4 +1,4 @@
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import BjRegisterForm from "./BjRegisterForm";
 
 export default function BjRegister({ source }: { source?: string }) {

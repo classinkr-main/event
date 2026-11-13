@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import InterestMark from "./InterestMark";
 import Split from "./Split";
 import { DINNER, FORUM, GET_EVENT, GET_RECAP, KEYNOTE, TALKS } from "./data";

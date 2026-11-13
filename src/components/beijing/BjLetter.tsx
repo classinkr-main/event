@@ -1,4 +1,4 @@
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import Seal from "./gfx/Seal";
 import Split from "./Split";
 

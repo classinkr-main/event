@@ -1,4 +1,4 @@
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import Split from "./Split";
 import { NOTES } from "./data";
 

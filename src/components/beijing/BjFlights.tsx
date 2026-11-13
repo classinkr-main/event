@@ -1,4 +1,4 @@
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import Barcode from "./gfx/Barcode";
 import PlaneLine from "./gfx/PlaneLine";
 import Split from "./Split";

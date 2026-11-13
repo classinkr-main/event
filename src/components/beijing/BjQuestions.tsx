@@ -1,4 +1,4 @@
-import Reveal from "@/components/hakwonjeonja/fx/Reveal";
+import Reveal from "@/components/fx/Reveal";
 import InterestMark from "./InterestMark";
 import Split from "./Split";
 import { QUESTIONS } from "./data";

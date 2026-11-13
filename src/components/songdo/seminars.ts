@@ -1,6 +1,6 @@
 /**
  * 학원 원장님 대상 오프라인 설명회(ClassIn Meets) 신청 페이지 — 지역마다 바뀌는 값.
- * 송도(10/29) 페이지 틀을 그대로 쓰고, 새 지역은 여기에 한 묶음 추가 + src/app/<slug>/page.tsx 만 만들면 된다.
+ * 송도(10/29) 페이지 틀에서 시작(송도 페이지는 2026-11-13 정리). 새 지역은 여기에 한 묶음 추가 + src/app/<slug>/page.tsx 만 만들면 된다.
  * 신청 저장: /api/register 의 SEMINAR_SOURCES 에 source 접두어(slug)도 넣을 것.
  */
 export type Seminar = {
@@ -25,28 +25,6 @@ export type Seminar = {
   heroImgM: string;
   heroSize?: string; // 가로 화면 배경 크기(없으면 cover)
   heroPos?: string; // 가로 화면 배경 위치(없으면 70% 42%)
-};
-
-export const SONGDO: Seminar = {
-  slug: "songdo",
-  city: "송도",
-  cityEn: "SONGDO",
-  region: "SONGDO · INCHEON",
-  md: "10.29",
-  dateKo: "10월 29일",
-  dow: "목",
-  time: "오전 11시 – 오후 1시",
-  startTime: "오전 11시",
-  session: "송도 · 10월 29일 (목) 11:00",
-  badge: "10/29 (목) 11AM",
-  venue: "엔에스 수능관학원",
-  road: "인천 연수구 해돋이로 160-14",
-  floor: "5층 504호",
-  mapQuery: "엔에스 수능관학원",
-  proofLead: "지난 7월 송도 1차 설명회 참석 학원",
-  proofNum: "10곳 중 7곳",
-  heroImg: "/songdo/hero-junhyuk.jpg",
-  heroImgM: "/songdo/hero-junhyuk-m.jpg",
 };
 
 /** 동탄(11/30) — 끝 시간은 표기하지 않음, 히어로는 사람 없는 빈 교실(11/13 결정, 전단지와 같은 사진). 칠판이 오른쪽에 오게 화면 폭의 135%로 깔고 왼쪽 맞춤 */
