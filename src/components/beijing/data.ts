@@ -55,8 +55,8 @@ export const DAYS: Day[] = [
     stops: [
       { id: "d3-xuefang", time: "오전", title: "쉐팡교육(学方) 방문", sub: "베이징 개인 맞춤형 학원" },
       { id: "d3-cto", time: "14:00", title: "ClassIn CTO · AI 시대 제품 로드맵", sub: "ClassIn 베이징 본사" },
-      { id: "d3-xiangliang", time: "15:00", title: "온라인 강좌 하나로 수강생 0명에서 1만 명까지", sub: "샹량교육(向量教育)" },
-      { id: "d3-lirui", time: "16:00", title: "AI는 어떻게 학원의 ‘본사’를 없앴나", sub: "리루이(李睿)" },
+      { id: "d3-xiangliang", time: "15:00", title: "AI 간판 강좌로 수강생 0명에서 1만 명까지", sub: "샹량교육(向量教育)" },
+      { id: "d3-lirui", time: "16:00", title: "본사 없는 학원: AI로 다시 짠 학원 조직", sub: "리루이(李睿)" },
       { time: "19:00", title: "초청 만찬" },
     ],
   },
@@ -89,7 +89,7 @@ export type Talk = Speaker & { id?: string; start: string; end: string; title: s
 /** 메인 포럼(主会场) 발표 */
 export const KEYNOTE: Speaker & { id: string; title: string } = {
   id: "d2-forum",
-  title: "학원 업계, 앞으로 10년",
+  title: "정해진 흐름, 학원 업계의 다음 10년",
   name: "쉰진치",
   cn: "荀金旗",
   roles: ["ClassIn 부사장"],
@@ -109,7 +109,7 @@ export const TALKS: Talk[] = [
   },
   {
     id: "f-song", start: "14:00", end: "14:40",
-    title: "위기가 겹친 학원 업계, 어떻게 버티나",
+    title: "겹겹의 도전 속 학원 업계",
     name: "쑹쥔보", cn: "宋军波",
     roles: ["ClassIn 창업자"],
     photo: "/beijing/get/sp-song.jpg",
@@ -123,28 +123,28 @@ export const TALKS: Talk[] = [
   },
   {
     id: "f-wan", start: "15:20", end: "16:00",
-    title: "SNS 콘텐츠로 원생이 모이는 구조 만들기",
+    title: "콘텐츠 시대의 학원 성장 공식: SNS 선순환 구조 만들기",
     name: "완셴하오", cn: "万贤浩",
     roles: ["ClassIn 콘텐츠 마케팅 책임자", "대형 IT 기업 콘텐츠 담당 출신"],
     photo: "/beijing/get/sp-wan.jpg",
   },
   {
     id: "f-fan", start: "16:00", end: "16:40",
-    title: "혼자 가르치는 강사가 WorkBuddy로 45일 만에 수익 구조를 만든 방법",
+    title: "1인 강사의 레버리지: WorkBuddy로 45일 만에 완성한 수익 모델",
     name: "판스촹", cn: "范士闯",
     roles: ["칭화대 출신, 혼자 수학을 가르친 지 23년", "WorkBuddy로 자기만의 AI 수업 환경을 꾸림"],
     photo: "/beijing/get/sp-fan.jpg",
   },
   {
     id: "f-chen", start: "16:40", end: "17:00",
-    title: "ClassIn과 WorkBuddy를 수업에 함께 써 본 이야기",
+    title: "ClassIn + WorkBuddy, 수업 현장 적용 사례",
     name: "천광", cn: "陈光",
     roles: ["ClassIn AI 제품 책임자"],
     photo: "/beijing/get/sp-chen.jpg",
   },
   {
     id: "f-li", start: "17:00", end: "17:40",
-    title: "소수반, 2교사 수업, 그리고 AI 교실: 수업 설계는 어떻게 바뀌어 왔나",
+    title: "소수반 · 2교사 수업 · AI 교실: 세 번의 수업 설계 변화와 AI 활용",
     name: "리루이", cn: "李睿",
     roles: ["AI 교육 회사 숴투커지(烁途科技) 대표, 『产品之核』 저자", "전 TAL(好未来) 수업 상품 기획 총괄"],
     photo: "/beijing/get/sp-li.jpg",
@@ -220,7 +220,7 @@ export const ORGS: Org[] = [
       ["수업", "온라인 라이브 + 오프라인 교재 병행. 온라인 수업을 ClassIn으로 안정적으로 운영"],
       ["관리", "한 반을 주강사, 조교팀, 전담 담임(월 1회 학부모 상담) 세 사람이 함께 맡음"],
       ["성과", "더우인(중국판 틱톡) 강좌 수강 완료율 약 73%(업계 평균 약 45%). 2026년 6월 상표 등록"],
-      ["발표", "「온라인 강좌 하나로 수강생 0명에서 1만 명까지」"],
+      ["발표", "「AI 간판 강좌로 수강생 0명에서 1만 명까지」"],
     ],
   },
   {
@@ -234,7 +234,7 @@ export const ORGS: Org[] = [
       ["경력", "TAL(쉐얼쓰) 수업 상품 기획 총괄. 2010년 고화질 녹화 강의, 2015년 「라이브 2교사 대형반」을 만들어 업계 흐름을 바꿈"],
       ["저서", "『产品之核(상품의 핵심)』, 중국 지식 콘텐츠 앱 ‘더다오(得到)’ 강좌 운영"],
       ["현재", "AI 교육 창업. 중국의 유명 신년 강연 ‘시간의 친구’ 2026에 사례로 소개됨"],
-      ["발표", "11/25 「수업 설계는 어떻게 바뀌어 왔나」, 11/26 「AI는 어떻게 학원의 ‘본사’를 없앴나」"],
+      ["발표", "11/25 「세 번의 수업 설계 변화와 AI 활용」, 11/26 「본사 없는 학원: AI로 다시 짠 학원 조직」"],
     ],
   },
 ];
