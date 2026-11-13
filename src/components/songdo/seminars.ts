@@ -23,6 +23,8 @@ export type Seminar = {
   proofNum: string; // 굵게 보이는 실적(10곳 중 7곳)
   heroImg: string;
   heroImgM: string;
+  heroSize?: string; // 가로 화면 배경 크기(없으면 cover)
+  heroPos?: string; // 가로 화면 배경 위치(없으면 70% 42%)
 };
 
 export const SONGDO: Seminar = {
@@ -47,7 +49,7 @@ export const SONGDO: Seminar = {
   heroImgM: "/songdo/hero-junhyuk-m.jpg",
 };
 
-/** 동탄(11/30) — 끝 시간은 표기하지 않음(11/13 결정). 사진은 송도와 같은 준혁님 발표 장면(전단지와 동일) */
+/** 동탄(11/30) — 끝 시간은 표기하지 않음, 히어로는 사람 없는 빈 교실(11/13 결정, 전단지와 같은 사진). 칠판이 오른쪽에 오게 화면 폭의 135%로 깔고 왼쪽 맞춤 */
 export const DONGTAN: Seminar = {
   slug: "dongtan",
   city: "동탄",
@@ -66,8 +68,10 @@ export const DONGTAN: Seminar = {
   mapQuery: "경기 화성시 동탄구 동탄솔빛로 58",
   proofLead: "직전 10월 송도 설명회 참석자",
   proofNum: "10명 중 8명",
-  heroImg: "/songdo/hero-junhyuk.jpg",
-  heroImgM: "/songdo/hero-junhyuk-m.jpg",
+  heroImg: "/dongtan/hero-room.jpg",
+  heroImgM: "/dongtan/hero-room-m.jpg",
+  heroSize: "135% auto",
+  heroPos: "0% 42%",
 };
 
 const DOW_LONG: Record<string, string> = { 월: "월요일", 화: "화요일", 수: "수요일", 목: "목요일", 금: "금요일", 토: "토요일", 일: "일요일" };

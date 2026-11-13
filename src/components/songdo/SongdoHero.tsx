@@ -17,7 +17,7 @@ export default function SongdoHero({ ev }: { ev: Seminar }) {
       <div aria-hidden className="absolute inset-0 portrait:hidden">
         <div
           className="absolute inset-0 bg-cover bg-[70%_42%]"
-          style={{ backgroundImage: `url('${ev.heroImg}')` }}
+          style={{ backgroundImage: `url('${ev.heroImg}')`, backgroundSize: ev.heroSize, backgroundPosition: ev.heroPos }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#050807]/60 via-[#050807]/15 to-[#050807]" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,7,0.92)_0%,rgba(5,8,7,0.78)_40%,rgba(5,8,7,0.35)_60%,rgba(5,8,7,0)_76%)]" />
