@@ -722,7 +722,7 @@ function updateBeijingFormV6() {
 function updateBeijingFormV7() {
   const form = FormApp.openById("17Q-z7aUbbUXTYdiKuQuJlcY_G7fMH05noj3Jdk0gTxk");
   const CHOICES = [
-    "11/25 GET 메인 포럼", "11/25 ClassIn AI 포럼",
+    "11/25 GET 메인 포럼", "11/25 ClassIn AI 새 학원 생태계 포럼",
     "11/26 가오투 방문", "11/26 리루이 발표", "11/26 리줘 발표", "11/26 샤오허교육 발표", "11/26 ClassIn AI 제품 시연",
     "11/27 쉐팡교육 방문", "11/27 베이징대학교",
   ];
@@ -735,3 +735,4 @@ function updateBeijingFormV7() {
   });
 }
 ```
+- 11/13 17:51 포럼 이름 변경(사용자 지시 「ClassIn AI 새 학원 생태계 포럼」)에 맞춰 V7 선택지 문구를 고쳐 다시 실행 → 「11/25 ClassIn AI 새 학원 생태계 포럼」. 응답 0건.
