@@ -1,3 +1,5 @@
+import type { Seminar } from "./seminars";
+
 const points = [
   {
     n: "밤 시간 매출",
@@ -11,7 +13,7 @@ const points = [
   },
 ];
 
-export default function SongdoPoints() {
+export default function SongdoPoints({ ev }: { ev: Seminar }) {
   return (
     <section id="points" className="relative py-20 sm:py-32">
       <div className="max-w-4xl mx-auto px-6 sm:px-10">
@@ -38,15 +40,15 @@ export default function SongdoPoints() {
         </ul>
 
         <div className="mt-6 panel-cta px-6 py-5 sm:px-8 sm:py-6 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="text-base sm:text-lg font-bold">10월 29일 (목),</span>
+          <span className="text-base sm:text-lg font-bold">{ev.dateKo} ({ev.dow}),</span>
           <span className="font-display text-lg sm:text-2xl font-bold">
-            송도 오프라인 설명회에서 답을 확인하세요.
+            {ev.city} 오프라인 설명회에서 답을 확인하세요.
           </span>
         </div>
 
         <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 text-sm sm:text-base text-white/70">
           <p>
-            지난 7월 송도 1차 설명회 참석 학원{" "}
+            {ev.proofLead}{" "}
             <b className="text-white font-bold">10곳 중 7곳</b>이 현장에서 도입을 확약했습니다.
           </p>
           <span className="self-start sm:self-auto shrink-0 text-xs sm:text-sm font-bold text-[var(--accent-text)] border border-[var(--accent-from)] rounded px-3 py-1.5">

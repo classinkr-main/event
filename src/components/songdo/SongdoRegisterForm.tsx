@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { getStoredChannel } from "@/lib/inflow";
+import type { Seminar } from "./seminars";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -30,7 +31,7 @@ function formatKoreanPhone(input: string): string {
   return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
 }
 
-export default function SongdoRegisterForm({ source }: { source?: string }) {
+export default function SongdoRegisterForm({ source, ev }: { source?: string; ev: Seminar }) {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [phone, setPhone] = useState("");
@@ -137,7 +138,7 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
   return (
     <form onSubmit={handleSubmit} className="panel p-5 sm:p-10">
       {source && <input type="hidden" name="source" value={source} />}
-      <input type="hidden" name="session" value="송도 · 10월 29일 (목) 11:00" />
+      <input type="hidden" name="session" value={ev.session} />
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <Field label="이름" name="name" placeholder="홍길동" required autoComplete="name" />
         <Field label="학원명" name="organization" placeholder="○○학원" required autoComplete="organization" />
@@ -167,11 +168,11 @@ export default function SongdoRegisterForm({ source }: { source?: string }) {
         <div className="sm:col-span-2">
           <div className="panel-sm px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3">
             <div>
-              <div className="text-base sm:text-lg font-semibold text-white/90">엔에스 수능관학원 · 5층 504호</div>
-              <div className="mt-0.5 text-sm text-white/50">인천 연수구 해돋이로 160-14</div>
+              <div className="text-base sm:text-lg font-semibold text-white/90">{ev.venue} · {ev.floor}</div>
+              <div className="mt-0.5 text-sm text-white/50">{ev.road}</div>
             </div>
             <span className="shrink-0 text-xs tracking-[0.15em] rounded-full border border-[var(--accent-from)]/40 px-3 py-1.5 text-[var(--accent-text)]">
-              10/29 (목) 11AM
+              {ev.badge}
             </span>
           </div>
         </div>

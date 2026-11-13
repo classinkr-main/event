@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { getStoredChannel } from "@/lib/inflow";
 
-const SENT_KEY = "songdo-visit-sent";
-const UNIQUE_KEY = "songdo-visited";
 
 /** 방문 로그 → /api/track (시트 Visits 탭 + Compass page_visits). 전단지 QR은 UTM 없이 들어와 qr-direct 로 집계 */
-export default function SongdoVisitTracker() {
+export default function SongdoVisitTracker({ slug }: { slug: string }) {
   useEffect(() => {
+    const SENT_KEY = `${slug}-visit-sent`;
+    const UNIQUE_KEY = `${slug}-visited`;
     try {
       if (sessionStorage.getItem(SENT_KEY)) return;
       sessionStorage.setItem(SENT_KEY, "1");
@@ -39,7 +39,7 @@ export default function SongdoVisitTracker() {
     }).catch(() => {
       // 트래킹 실패가 페이지 동작에 영향을 주지 않도록 무시
     });
-  }, []);
+  }, [slug]);
 
   return null;
 }

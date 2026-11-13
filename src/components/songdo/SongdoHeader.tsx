@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Seminar } from "./seminars";
 
 const navItems = [
   { href: "#event", label: "일시 · 장소" },
   { href: "#register", label: "참가 신청" },
 ];
 
-export default function SongdoHeader() {
+export default function SongdoHeader({ ev }: { ev: Seminar }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function SongdoHeader() {
         >
           <span className="text-base sm:text-lg font-bold tracking-tight">ClassIn</span>
           <span className="hidden sm:inline text-xs tracking-[0.2em] text-white/45">
-            MEETS SONGDO
+            MEETS {ev.cityEn}
           </span>
         </a>
 

@@ -11,6 +11,9 @@ type Payload = {
   source?: string;
 };
 
+// 이메일 선택 + 설명회 시트로 보내는 신청 페이지 source 접두어(src/components/songdo/seminars.ts 의 slug)
+const SEMINAR_SOURCES = ["songdo", "dongtan"];
+
 const REQUIRED: (keyof Payload)[] = [
   "name",
   "organization",
@@ -30,12 +33,12 @@ export async function POST(request: Request) {
     );
   }
 
-  // 송도(10/29) 신청 페이지는 QR·모바일 유입이라 이메일을 선택 항목으로 받는다
+  // 설명회 신청 페이지(송도 10/29·동탄 11/30 …)는 QR·모바일 유입이라 이메일을 선택 항목으로 받는다
   const source = body.source ?? "";
-  const isSongdo = source.startsWith("songdo");
+  const isSeminarQr = SEMINAR_SOURCES.some((s) => source.startsWith(s));
 
   for (const key of REQUIRED) {
-    if (key === "email" && isSongdo) continue;
+    if (key === "email" && isSeminarQr) continue;
     if (!body[key] || typeof body[key] !== "string" || !body[key]!.trim()) {
       return NextResponse.json(
         { error: `필수 항목이 비어 있습니다: ${key}` },
@@ -51,11 +54,11 @@ export async function POST(request: Request) {
     );
   }
 
-  // 설명회 신청(인천·서울·송도)은 같은 웹훅으로 — Apps Script가 source를 보고 탭을 분기
+  // 설명회 신청(인천·서울·송도·동탄)은 같은 웹훅으로 — Apps Script가 source를 보고 탭을 분기(분기 없는 source 는 첫 탭)
   const isMeets =
     source.startsWith("0709-10incheon") ||
     source.startsWith("seoul-mokdong") ||
-    isSongdo;
+    isSeminarQr;
   const sheetsUrl = isMeets
     ? process.env.GOOGLE_SHEETS_WEBHOOK_URL_INCHEON ??
       process.env.GOOGLE_SHEETS_WEBHOOK_URL

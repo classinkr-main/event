@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { Seminar } from "./seminars";
 
-export default function SongdoFloatingCTA() {
+export default function SongdoFloatingCTA({ ev }: { ev: Seminar }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -45,8 +46,8 @@ export default function SongdoFloatingCTA() {
     >
       <div className="max-w-2xl mx-auto rounded-full bg-[#0f1512]/95 backdrop-blur-xl border border-white/10 pl-5 pr-2 py-2 flex items-center justify-between gap-3 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)]">
         <div className="min-w-0">
-          <div className="text-xs text-white/55 truncate">10월 29일 (목) 오전 11시 · 엔에스 수능관학원</div>
-          <div className="text-sm sm:text-base font-bold text-white truncate">송도 설명회 무료 참석 신청</div>
+          <div className="text-xs text-white/55 truncate">{ev.dateKo} ({ev.dow}) {ev.startTime} · {ev.venue}</div>
+          <div className="text-sm sm:text-base font-bold text-white truncate">{ev.city} 설명회 무료 참석 신청</div>
         </div>
         <a
           href="#register"

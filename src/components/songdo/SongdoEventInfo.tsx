@@ -1,6 +1,7 @@
-const MAP_URL = "https://map.naver.com/p/search/" + encodeURIComponent("엔에스 수능관학원");
+import { addr, dowLong, type Seminar } from "./seminars";
 
-export default function SongdoEventInfo() {
+export default function SongdoEventInfo({ ev }: { ev: Seminar }) {
+  const MAP_URL = "https://map.naver.com/p/search/" + encodeURIComponent(ev.mapQuery);
   return (
     <section id="event" className="relative py-20 sm:py-32">
       <div className="max-w-6xl mx-auto px-6 sm:px-10">
@@ -9,10 +10,10 @@ export default function SongdoEventInfo() {
             EVENT OVERVIEW
           </p>
           <h2 className="font-display text-3xl sm:text-5xl md:text-6xl font-bold">
-            송도에서 만납니다.
+            {ev.city}에서 만납니다.
           </h2>
           <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 max-w-2xl mx-auto">
-            10월 29일 목요일 오전 11시,<br className="hidden sm:block" /> 클래스인을 실제로 도입한 <span className="whitespace-nowrap">엔에스 수능관학원</span>에서 진행됩니다.
+            {ev.dateKo} {dowLong(ev)} {ev.startTime},<br className="hidden sm:block" /> 클래스인을 실제로 도입한 <span className="whitespace-nowrap">{ev.venue}</span>에서 진행됩니다.
           </p>
         </div>
 
@@ -20,18 +21,18 @@ export default function SongdoEventInfo() {
           <div className="flex items-start gap-4 sm:gap-5">
             <div className="shrink-0 rounded-md border border-[var(--accent-from)]/40 bg-[var(--accent-from)]/10 px-3.5 sm:px-4 py-2.5 sm:py-3 text-center min-w-[68px] sm:min-w-[80px]">
               <div className="font-display text-lg sm:text-2xl font-bold text-[var(--accent-text)]">
-                10.29
+                {ev.md}
               </div>
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[10px] sm:text-xs tracking-[0.25em] text-white/40 mb-1.5">
-                SONGDO · INCHEON
+                {ev.region}
               </div>
               <div className="font-display text-xl sm:text-3xl font-bold leading-snug">
-                2026년 10월 29일 (목)
+                2026년 {ev.dateKo} ({ev.dow})
               </div>
               <div className="mt-1 text-sm sm:text-base text-white/50">
-                오전 11시 – 오후 1시 · 무료 참석
+                {ev.time} · 무료 참석
               </div>
             </div>
           </div>
@@ -48,9 +49,9 @@ export default function SongdoEventInfo() {
                 />
               </svg>
               <div className="min-w-0">
-                <div className="text-lg sm:text-2xl font-semibold">엔에스 수능관학원</div>
+                <div className="text-lg sm:text-2xl font-semibold">{ev.venue}</div>
                 <div className="mt-1.5 text-sm sm:text-base text-white/60">
-                  인천 연수구 해돋이로 160-14 5층 504호
+                  {addr(ev)}
                 </div>
                 <a
                   href={MAP_URL}

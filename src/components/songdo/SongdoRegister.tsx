@@ -1,6 +1,7 @@
 import SongdoRegisterForm from "./SongdoRegisterForm";
+import type { Seminar } from "./seminars";
 
-export default function SongdoRegister({ source }: { source?: string }) {
+export default function SongdoRegister({ source, ev }: { source?: string; ev: Seminar }) {
   return (
     <section id="register" className="relative py-20 sm:py-32">
       <div className="max-w-3xl mx-auto px-6 sm:px-10">
@@ -12,11 +13,11 @@ export default function SongdoRegister({ source }: { source?: string }) {
             무료 참석 신청
           </h2>
           <p className="mt-4 sm:mt-6 text-base sm:text-xl text-white/60 leading-relaxed">
-            10월 29일 (목) 오전 11시,<br className="hidden sm:block" /> <span className="whitespace-nowrap">엔에스 수능관학원</span>에서 뵙겠습니다.
+            {ev.dateKo} ({ev.dow}) {ev.startTime},<br className="hidden sm:block" /> <span className="whitespace-nowrap">{ev.venue}</span>에서 뵙겠습니다.
           </p>
         </div>
 
-        <SongdoRegisterForm source={source} />
+        <SongdoRegisterForm source={source} ev={ev} />
       </div>
     </section>
   );
