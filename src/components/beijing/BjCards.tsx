@@ -56,9 +56,9 @@ export default function BjCards() {
           <div className="border-t border-[var(--line-2)] pt-5 h-full flex gap-4">
             <Seal glyph="大" size={48} className="shrink-0" />
             <div>
-              <div className="text-xl font-medium tracking-tight">베이징 협력 대학</div>
-              <div className="text-xs text-[var(--ink-3)] mt-1">11월 27일 오전 방문</div>
-              <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink-2)]">산학 협력과 인재 양성을 주제로 교류합니다. 학교명은 최종안에서 확정됩니다.</p>
+              <div className="text-xl font-medium tracking-tight">베이징대학교</div>
+              <div className="text-xs text-[var(--ink-3)] mt-1">11월 27일 11:00 · 확정 전</div>
+              <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink-2)]">캠퍼스를 둘러보고 학생식당에서 점심을 먹습니다.</p>
             </div>
           </div>
         </Reveal>

@@ -12,7 +12,7 @@ export default function BjLetter() {
             <p>원장님께</p>
             <p>올해 11월, 베이징에서 사흘을 함께 보내고자 합니다.</p>
             <p>중국 학원들은 지난 몇 년 사이 AI로 수업과 운영을 크게 바꿨습니다. 그 변화를 만든 사람들을 현장에서 직접 만나는 자리입니다.</p>
-            <p className="text-[var(--ink-2)]">GET 대회의 ClassIn 세션, 본사 CTO의 제품 로드맵, 베이징 학원과 대학 방문을 준비했습니다. 각 현장의 대표를 직접 만나 궁금한 점을 물으실 수 있습니다.</p>
+            <p className="text-[var(--ink-2)]">GET 대회의 ClassIn 포럼, 본사에서 듣는 중국 학원 대표들의 발표, 베이징 학원과 대학 방문을 준비했습니다. 각 현장의 대표를 직접 만나 궁금한 점을 물으실 수 있습니다.</p>
           </div>
           <div className="mt-8 sm:mt-10 pt-6 border-t border-[var(--line)] flex items-center gap-4">
             <Seal glyph="招" size={56} className="-rotate-6" />
