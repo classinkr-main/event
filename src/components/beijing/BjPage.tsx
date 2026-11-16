@@ -9,6 +9,7 @@ import BjCards from "./BjCards";
 import BjFlights from "./BjFlights";
 import BjStay from "./BjStay";
 import BjNotes from "./BjNotes";
+import BjPrep from "./BjPrep";
 import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
 import BjFloatingCTA from "./BjFloatingCTA";
@@ -33,6 +34,7 @@ export default function BjPage({ source }: { source?: string }) {
       <BjFlights />
       <BjStay />
       <BjNotes />
+      <BjPrep />
       <BjRegister source={source} />
       <BjFooter />
       <BjFloatingCTA />
