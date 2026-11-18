@@ -49,7 +49,7 @@ export default function BjCards() {
             <div>
               <div className="text-xl font-medium tracking-tight">GET 교육기술 대회</div>
               <div className="text-xs text-[var(--ink-3)] mt-1">11월 25–26일 · 우리 일행은 25일 참석</div>
-              <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink-2)]">중국 교육기술 업계가 해마다 모이는 대표 행사. ClassIn은 분과 포럼을 열고, 저녁엔 본사에서 교류 만찬을 엽니다.</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-[var(--ink-2)]">교육 전문 매체 졔모두이(芥末堆)가 2015년부터 해마다 여는 중국 교육기술 업계 대표 행사로, 올해 12번째입니다. ClassIn은 분과 포럼을 열고, 저녁엔 본사에서 교류 만찬을 엽니다.</p>
             </div>
           </div>
         </Reveal>
