@@ -31,9 +31,6 @@ export default function BjTopbar() {
             </a>
           ))}
         </nav>
-        <a href="#register" className="bj-btn bj-btn-snow !px-4 !py-2 text-[13px]">
-          참가 신청
-        </a>
       </div>
     </header>
   );

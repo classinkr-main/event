@@ -88,7 +88,7 @@ export default function BjFlights() {
       </div>
       <Reveal>
         <p className="mt-5 text-[13px] text-[var(--ink-3)] leading-relaxed">
-          다른 항공편을 이용하셔도 됩니다. 신청서에 편명과 도착 시각을 적어 주시면 현지 이동을 맞춰 드립니다.
+          다른 항공편을 이용하셔도 됩니다. 편명과 도착 시각을 담당자에게 알려 주시면 현지 이동을 맞춰 드립니다.
         </p>
       </Reveal>
     </Split>

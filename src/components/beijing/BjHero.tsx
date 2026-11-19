@@ -74,9 +74,6 @@ export default function BjHero() {
             </div>
 
             <div className="mt-7 sm:mt-9 flex flex-col sm:flex-row gap-3">
-              <a href="#register" className="bj-btn bj-btn-snow text-[15px]">
-                참가 신청하기
-              </a>
               <a href="#letter" className="bj-btn bj-btn-line text-[15px] !border-white/30">
                 초청의 글
               </a>

@@ -15,7 +15,7 @@ export default function BjQuestions() {
           여섯 가지 주제
         </>
       }
-      lead="관심 가는 항목에 표시해 두면 신청서에 함께 담깁니다."
+      lead="관심 가는 항목에 표시해 두세요."
     >
       <ol className="border-t border-[var(--line-2)]">
         {QUESTIONS.map((q, i) => (

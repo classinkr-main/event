@@ -10,15 +10,13 @@ import BjFlights from "./BjFlights";
 import BjStay from "./BjStay";
 import BjNotes from "./BjNotes";
 import BjPrep from "./BjPrep";
-import BjRegister from "./BjRegister";
 import BjFooter from "./BjFooter";
-import BjFloatingCTA from "./BjFloatingCTA";
 import BjVisitTracker from "./BjVisitTracker";
 import BjHashScroll from "./BjHashScroll";
 import { fontVars } from "./fonts";
 import ZhFonts from "./ZhFonts";
 
-export default function BjPage({ source }: { source?: string }) {
+export default function BjPage() {
   return (
     <main className={`theme-bj ${fontVars}`}>
       <ZhFonts />
@@ -35,9 +33,7 @@ export default function BjPage({ source }: { source?: string }) {
       <BjStay />
       <BjNotes />
       <BjPrep />
-      <BjRegister source={source} />
       <BjFooter />
-      <BjFloatingCTA />
       <BackToTop />
     </main>
   );
