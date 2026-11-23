@@ -43,7 +43,7 @@ export const DAYS: Day[] = [
     theme: "중국 교육기술 연례 행사",
     stops: [
       { id: "d2-forum", time: "09:00", title: "GET 대회 메인 포럼", sub: "신윈난 크라운플라자 호텔 · 쉰진치 ClassIn 부사장 발표" },
-      { time: "12:00", title: "점심 · ClassIn 부스", sub: "GET 대회장 ClassIn 부스. 13:30까지" },
+      { time: "12:00", title: "점심 · 쥔핀쉬안 중식당", sub: "신윈난 크라운플라자 호텔 4층. 13:30까지" },
       { id: "d2-session", time: "13:50", title: "ClassIn AI 새 학원 생태계 포럼「共潮生」", sub: "연사 7명, 17:40까지" },
       { time: "18:30", title: "교류 만찬 · ClassIn 본사", sub: "베이징 쓰퉁빌딩(四通大厦), 스마트 교실 둘러보기. 20:30까지" },
     ],
