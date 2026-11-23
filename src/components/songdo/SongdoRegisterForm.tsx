@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getStoredChannel } from "@/lib/inflow";
+import { getStoredInflow } from "@/lib/inflow";
 import type { Seminar } from "./seminars";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -50,10 +50,13 @@ export default function SongdoRegisterForm({ source, ev }: { source?: string; ev
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    const payload: Record<string, unknown> = Object.fromEntries(formData.entries());
+    // 처음 들어온 유입(채널 키 · utm 원문 · 첫 주소) — 시트 「유입」·UTM 칸과 Compass 리드 유입 경로가 이 값에서 나온다(src/lib/inflow.ts)
+    const inflow = getStoredInflow();
     if (typeof payload.source === "string" && payload.source) {
-      payload.source = `${payload.source}/${getStoredChannel()}`;
+      payload.source = `${payload.source}/${inflow.channel}`;
     }
+    payload.inflow = inflow;
 
     try {
       const res = await fetch("/api/register", {
@@ -65,7 +68,7 @@ export default function SongdoRegisterForm({ source, ev }: { source?: string; ev
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "신청 처리 중 문제가 발생했습니다.");
       }
-      setSubmitted(payload as SubmittedData);
+      setSubmitted(payload as unknown as SubmittedData);
       setStatus("success");
       form.reset();
       setPhone("");

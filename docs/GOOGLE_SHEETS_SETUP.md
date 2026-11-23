@@ -1,5 +1,47 @@
 # 구글 시트 연동 가이드
 
+## 지금 구조 (v5, 2026-11-23) — 먼저 읽을 것
+
+```
+meets.classin.co.kr/<설명회>   신청 폼 → /api/register ─┬→ Compass /api/webhook/event-signup  (콜 목록 리드 · 결과를 시트 「Compass」 칸에)
+                                                        └→ Apps Script 웹앱 → 「신청」 탭
+                               방문 → /api/track ───────┬→ Apps Script 웹앱 → 「방문」 탭
+                                                        └→ Compass /api/webhook/page-visit (crm.page_visits → Compass /visits)
+```
+
+- 시트: 「[MKT] 설명회 신청 페이지 유입 리드」. 스크립트 정본은 `docs/apps-script/seminar-sheet.gs` — 편집기에 통째로 붙여 넣고 **배포 → 배포 관리 → ✏️ → 버전: 새 버전 → 배포**(웹앱 주소 그대로, 사람이 눌러야 한다).
+- **「신청」 탭** 왼쪽: 신청 시각(한국) · 페이지(「동탄 11/30」) · 유입(「인스타 광고」·「전단지 QR」) · 이름 · 학원 · 직책 · 전화 · 이메일 · 일정 · Compass(들어감·실패·꺼짐). 오른쪽: 신청 ID · utm 다섯 칸(utm_content = 광고 ID) · 첫 주소 · Source 원문.
+- **「방문」 탭** 왼쪽: 방문 시각 · 페이지 · 유입 · 기기 · 첫 방문. 오른쪽: 채널 키 · Referrer · Path · UserAgent.
+- 새 설명회를 열어도 스크립트는 그대로다 — 탭이 페이지마다 갈리지 않고 「페이지」 칸으로 거른다. 코드는 `src/lib/pages.ts` 의 `SEMINARS` 에 그 묶음을 더하면 「페이지」 이름이 나온다.
+- 옛 탭(청라, 송도 · 송도 10/29 · 서울 목동 · Visits)과 보기 탭(「송도 10/29 신청」·「동탄 11/30 신청」)은 그대로 둔다. 새 판 배포 전에는 신청이 옛 꼴로 첫 탭에 들어간다(사이트가 옛 칸 이름도 같이 보낸다 — 배포 순서 상관없음).
+  「동탄 11/30 신청」 보기 탭 수식은 2026-11-23 에 「신청」 탭의 동탄 줄(A·D~I·R 칸)도 합치도록 고쳤다 — 새 판 배포 뒤에도 그 탭 하나로 동탄 신청을 다 본다.
+
+### 유입(채널) 값 — `src/lib/inflow.ts`
+
+| 유입 | 채널 키 | 언제 |
+|---|---|---|
+| 인스타 광고 · 페이스북 광고 · 메타 광고 | `ig-ad` · `fb-ad` · `meta-ad` | 메타 광고 링크(`utm_source=ig|fb…` + `utm_medium=paid`) |
+| 인스타그램 · 페이스북 | `instagram` · `facebook` | 광고 아닌 게시물·프로필 링크, 인앱 브라우저, referrer |
+| **전단지 QR** | `qr` | 링크에 `?utm_source=qr` — **QR 은 이 꼴로 인쇄한다**(아래) |
+| QR·직접 접속 | `qr-direct` | referrer·utm 없음 — 태그 없는 옛 QR·주소 직접 입력·북마크가 섞인다 |
+| 카카오톡 · 네이버 · 구글 … | `kakao` · `naver` · `google` | 카톡 인앱 브라우저·검색 등 |
+
+- 봇은 본문 UA 가 비었거나 본문·헤더 UA 가 봇이면 버린다(2026-11-13 광고 검수 시각의 UA 없는 페이스북 방문 13건 같은 것).
+- Compass 는 채널 키로 bucket 을 가른다: `qr`·`qr-direct` → QR, `-ad` 로 끝나면 광고, 나머지 기타(Compass ADR-0102).
+
+### QR 링크 — 인쇄 전에 꼭
+
+전단지·포스터 QR 에는 utm 을 붙인다. 그래야 카톡 공유·주소 직접 입력과 갈린다:
+
+```
+https://meets.classin.co.kr/<slug>?utm_source=qr&utm_campaign=<slug>-<MMDD>&utm_content=<놓는 곳>
+```
+
+예: `https://meets.classin.co.kr/dongtan?utm_source=qr&utm_campaign=dongtan-1130&utm_content=flyer-a5`. 동탄 11/30 전단지는 이미 태그 없이 인쇄돼 「QR·직접 접속」으로 잡힌다.
+
+---
+
+
 신청 폼이 제출되면 구글 시트 한 줄로 자동 저장되도록 설정하는 절차입니다. 한 번만 세팅해두면 됩니다.
 
 ## 1단계 — 구글 시트 만들기

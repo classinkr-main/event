@@ -29,6 +29,10 @@ GitHub에 올린 코드를 Vercel에 연결해서 실제 인터넷 주소(URL)�
 | Key | Value |
 |---|---|
 | `GOOGLE_SHEETS_WEBHOOK_URL` | Apps Script 배포 URL (`https://script.google.com/macros/s/.../exec`) |
+| `GOOGLE_SHEETS_WEBHOOK_URL_INCHEON` | 설명회 시트 Apps Script 웹앱 URL — 신청 「신청」 탭 · 방문 「방문」 탭(`docs/apps-script/seminar-sheet.gs`) |
+| `COMPASS_VISIT_URL` · `COMPASS_VISIT_TOKEN` | Compass 방문 웹훅(`https://mkt.classin.co.kr/api/webhook/page-visit`) · Compass `VISIT_INGEST_TOKEN` 과 같은 값 |
+| `COMPASS_SIGNUP_TOKEN` | Compass 신청 웹훅 토큰 — Compass `EVENT_SIGNUP_TOKEN` 과 같은 값. 없으면 신청이 Compass 로 안 가고 시트 「Compass」 칸에 「꺼짐」 |
+| `COMPASS_SIGNUP_URL` (선택) | 기본은 `COMPASS_VISIT_URL` 의 `page-visit` → `event-signup` |
 
 > 이거 빼먹으면 폼 제출은 되는데 시트에 저장이 안 됩니다.
 
